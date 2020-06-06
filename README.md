@@ -6,12 +6,13 @@
 - Developing in Visual Studio Community 2019
   - Build system = CMake
   - Compiler = Ninja
+  - x64
 
 - Open and build in Visual Studio Community 2019
 
 - if forking this repo download and place the SFML sources files / binaries in `libraries`
   - This project is current using the following verison of SFML
-https://www.sfml-dev.org/files/SFML-2.5.1-windows-gcc-7.3.0-mingw-32-bit.zip
 
+https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 
 
