@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 
-project(Anatar)
+project(Annatar)
 
 ## If you want to link SFML statically
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -28,7 +28,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_BINARY_DIR}")
 
 # Define sources and executable
-set(EXECUTABLE_NAME "Anatar")
+set(EXECUTABLE_NAME "Annatar")
 add_executable(${EXECUTABLE_NAME}
  main.cc
  player.cc
@@ -46,4 +46,8 @@ set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
 include(CPack)
 
-target_link_libraries(Anatar sfml-graphics sfml-audio)
+target_link_libraries(Annatar sfml-graphics sfml-audio)
+
+add_custom_command(TARGET Annatar POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:Annatar>/assets)

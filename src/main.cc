@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Version " << Anarion_VERSION_MAJOR << "." << Anarion_VERSION_MINOR << std::endl;
+  std::cout << "Version " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
 
   sf::RenderWindow renderWindow(sf::VideoMode(800, 600), "Demo");
 

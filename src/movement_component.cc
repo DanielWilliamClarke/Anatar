@@ -15,8 +15,7 @@ MovementComponent::MovementComponent(sf::Sprite& sprite, sf::FloatRect bounds)
 	maxThrust(sf::Vector2f(.0f, -9.81f)),
 	mass(0.01f),
 	force(.0f),
-	movementSpeed(3.0f),
-	lastDirection(MOVING_DOWN)
+	movementSpeed(3.0f)
 {
 }
 
@@ -29,8 +28,7 @@ const unsigned int MovementComponent::Integrate(const float& dt)
 	lastPosition = position;
 	position = IntegrateMovement(HandleInput(), dt);
 	sprite.setPosition(position);
-	lastDirection = CalculateDirection();
-	return lastDirection;
+	return CalculateDirection();
 }
 
 void MovementComponent::Interpolate(const float& interp)
@@ -135,5 +133,5 @@ const unsigned int MovementComponent::CalculateDirection() const
 		}
 	}
 
-	return lastDirection;
+	return IDLE;
 }

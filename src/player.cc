@@ -11,6 +11,7 @@ Player::Player(
 	animationComponent(animationComponent),
 	movementComponent(movementComponent)
 {
+  animationComponent->AddAnimation(movementComponent->IDLE,			0.1, 0, 2, 0, 2, 24, 25);
   animationComponent->AddAnimation(movementComponent->MOVING_UP,    0.1, 0, 0, 2, 0, 24, 25);
   animationComponent->AddAnimation(movementComponent->MOVING_RIGHT, 0.1, 0, 1, 2, 1, 24, 25);
   animationComponent->AddAnimation(movementComponent->MOVING_DOWN,  0.1, 0, 2, 2, 2, 24, 25);

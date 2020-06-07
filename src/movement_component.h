@@ -25,7 +25,6 @@ private:
 	// Sprite Position
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
-	int lastDirection; 
 
 	// Physics
 	sf::Vector2f gravity;
