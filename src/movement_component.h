@@ -5,9 +5,10 @@
 class MovementComponent
 {
 public:
-	MovementComponent(sf::Sprite& sprite, sf::FloatRect bounds);
+	MovementComponent(sf::FloatRect bounds);
 	virtual ~MovementComponent();
 
+	void SetSprite(std::shared_ptr<sf::Sprite> sprite);
 	const unsigned int Integrate(const float& dt);
 	void Interpolate(const float& interp);
 
@@ -15,12 +16,13 @@ public:
 
 private:
 
+	sf::Vector2f GetCenter() const;
 	sf::Vector2f HandleInput();
 	sf::Vector2f IntegrateMovement(sf::Vector2f movement, const float& dt);
 	sf::Vector2f Bound(sf::Vector2f newPosition);
 	const unsigned int CalculateDirection() const;
 
-	sf::Sprite& sprite;
+	std::shared_ptr<sf::Sprite> sprite;
 
 	// Sprite Position
 	sf::Vector2f position;

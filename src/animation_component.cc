@@ -1,8 +1,10 @@
+#include <SFML/Graphics.hpp>
+
 #include "animation_component.h"
 #include "animation.h"
 
-AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet)
-	:sprite(sprite), textureSheet(textureSheet), lastAnimation(NULL), priorityAnimation(NULL)
+AnimationComponent::AnimationComponent()
+	: lastAnimation(NULL), priorityAnimation(NULL)
 {}
 
 AnimationComponent::~AnimationComponent()
@@ -14,15 +16,18 @@ const bool& AnimationComponent::IsDone(const int key)
 	return this->animations[key]->IsDone();
 }
 
+void AnimationComponent::SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet) {
+	this->sprite = sprite;
+	this->textureSheet = textureSheet;
+	this->sprite->setTexture(*textureSheet);
+}
+
 //Functions
-void AnimationComponent::AddAnimation(const int key,
-	float frameDuration,
+void AnimationComponent::AddAnimation(const int key, float frameDuration,
 	int startFrameX, int startFrameY, int framesX, int framesY, int width, int height)
 {
-	this->animations[key] = std::make_shared<Animation>(
-		this->sprite, this->textureSheet,
-		frameDuration,
-		startFrameX, startFrameY, framesX, framesY, width, height);
+	this->animations[key] = std::make_shared<Animation>(this->sprite, this->textureSheet,
+		frameDuration, startFrameX, startFrameY, framesX, framesY, width, height);
 }
 
 const bool& AnimationComponent::Play(const int key, const bool priority)

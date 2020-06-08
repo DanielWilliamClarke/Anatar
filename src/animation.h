@@ -5,9 +5,8 @@ class Animation
 {
 public:
 
-	Animation(sf::Sprite& sprite, sf::Texture& textureSheet,
-		float frameDuration,
-		int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
+	Animation(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet,
+		float frameDuration, int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
 
 	virtual ~Animation();
 
@@ -20,8 +19,8 @@ private:
 	void NextFrame();
 
 	//Variables
-	sf::Sprite& sprite;
-	sf::Texture& textureSheet;
+	std::shared_ptr<sf::Sprite> sprite;
+	std::shared_ptr<sf::Texture> textureSheet;
 
 	int width;
 	int height;

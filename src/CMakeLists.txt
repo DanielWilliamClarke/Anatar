@@ -31,11 +31,13 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(EXECUTABLE_NAME "Annatar")
 add_executable(${EXECUTABLE_NAME}
  main.cc
+ game.cc
  player.cc
  fps.cc 
  animation_component.cc
  animation.cc
- movement_component.cc)
+ movement_component.cc
+)
 
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

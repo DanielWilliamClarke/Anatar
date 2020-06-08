@@ -4,11 +4,8 @@
 #include <iostream>
 #include "movement_component.h"
 
-MovementComponent::MovementComponent(sf::Sprite& sprite, sf::FloatRect bounds)
-	: sprite(sprite),
-	position(sprite.getPosition()),
-	lastPosition(position),
-	bounds(bounds), 
+MovementComponent::MovementComponent(sf::FloatRect bounds)
+	: bounds(bounds), 
 	velocity(sf::Vector2f(.0f, .0f)),
 	gravity(sf::Vector2f(.0f, 9.81f)),
 	thrust(sf::Vector2f(.0f, -9.81f)),
@@ -23,18 +20,32 @@ MovementComponent::~MovementComponent()
 {
 }
 
+void MovementComponent::SetSprite(std::shared_ptr<sf::Sprite> sprite) {
+	this->sprite = sprite;
+	this->position = this->GetCenter();
+	this->sprite->setPosition(this->position);
+	lastPosition = position;
+}
+
+sf::Vector2f MovementComponent::GetCenter() const
+{
+	return sf::Vector2f(
+		this->bounds.width / 2,
+		this->bounds.height / 2);
+}
+
 const unsigned int MovementComponent::Integrate(const float& dt)
 {
 	lastPosition = position;
 	position = IntegrateMovement(HandleInput(), dt);
-	sprite.setPosition(position);
+	sprite->setPosition(position);
 	return CalculateDirection();
 }
 
 void MovementComponent::Interpolate(const float& interp)
 {
 	const auto positionInterp = Bound(position * interp + lastPosition * (1.0f - interp));
-	sprite.setPosition(positionInterp);
+	sprite->setPosition(positionInterp);
 }
 
 sf::Vector2f MovementComponent::HandleInput() {
@@ -83,7 +94,7 @@ sf::Vector2f MovementComponent::IntegrateMovement(sf::Vector2f movement, const f
 
 sf::Vector2f MovementComponent::Bound(sf::Vector2f newPosition)
 {
-	const auto spriteBounds = sprite.getGlobalBounds();
+	const auto spriteBounds = sprite->getGlobalBounds();
 
 	if (newPosition.x <= bounds.left)
 	{

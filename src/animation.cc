@@ -1,8 +1,7 @@
 #include "animation.h"
 
-Animation::Animation(sf::Sprite& sprite, sf::Texture& textureSheet,
-	float frameDuration,
-	int startFrameX, int startFrameY, int framesX, int framesY, int width, int height)
+Animation::Animation(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet,
+	float frameDuration, int startFrameX, int startFrameY, int framesX, int framesY, int width, int height)
 	: sprite(sprite), textureSheet(textureSheet),
 	frameDuration(frameDuration), done(false),
 	width(width), height(height)
@@ -10,9 +9,7 @@ Animation::Animation(sf::Sprite& sprite, sf::Texture& textureSheet,
 	this->startRect = sf::IntRect(startFrameX * width, startFrameY * height, width, height);
 	this->currentRect = this->startRect;
 	this->endRect = sf::IntRect(framesX * width, framesY * height, width, height);
-
-	this->sprite.setTexture(this->textureSheet, true);
-	this->sprite.setTextureRect(this->startRect);
+	this->sprite->setTextureRect(this->startRect);
 }
 
 Animation::~Animation() 
@@ -63,7 +60,7 @@ void Animation::NextFrame()
 		this->done = true;
 	}
 
-	this->sprite.setTextureRect(this->currentRect);
+	this->sprite->setTextureRect(this->currentRect);
 	this->clockAnimate.restart();
 }
 
