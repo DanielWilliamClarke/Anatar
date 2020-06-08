@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include "movement_component.h"
+#include "player_input.h"
 
 MovementComponent::MovementComponent(sf::FloatRect bounds)
 	: bounds(bounds), 
@@ -34,10 +35,10 @@ sf::Vector2f MovementComponent::GetCenter() const
 		this->bounds.height / 2);
 }
 
-const unsigned int MovementComponent::Integrate(const float& dt)
+const unsigned int MovementComponent::Integrate(Input in, const float& dt)
 {
 	lastPosition = position;
-	position = IntegrateMovement(HandleInput(), dt);
+	position = IntegrateMovement(in, dt);
 	sprite->setPosition(position);
 	return CalculateDirection();
 }
@@ -48,30 +49,11 @@ void MovementComponent::Interpolate(const float& interp)
 	sprite->setPosition(positionInterp);
 }
 
-sf::Vector2f MovementComponent::HandleInput() {
-	sf::Vector2f movement;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		movement.y = -movementSpeed;
-	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		movement.y = movementSpeed;
-	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		movement.x = -movementSpeed;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		movement.x = movementSpeed;
-	}
-
-	// Just to test gravity
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+sf::Vector2f MovementComponent::IntegrateMovement(Input in, const float& dt)
+{
+	if (in.falling)
 	{
 		thrust = sf::Vector2f(0.0f, 0.0f);
 	}
@@ -81,15 +63,11 @@ sf::Vector2f MovementComponent::HandleInput() {
 		velocity.y = 0;
 	}
 
-	return movement;
-}
-
-sf::Vector2f MovementComponent::IntegrateMovement(sf::Vector2f movement, const float& dt)
-{
 	auto force = gravity + thrust;
 	auto acceleration = force / mass; // 2nd derivative
-	velocity += acceleration * dt;
-	return Bound(position + movement + velocity * dt);
+	velocity += acceleration * dt; // 1st derivative
+	auto scaledMovement = in.movement * movementSpeed;
+	return Bound(position + scaledMovement + velocity * dt);
 }
 
 sf::Vector2f MovementComponent::Bound(sf::Vector2f newPosition)

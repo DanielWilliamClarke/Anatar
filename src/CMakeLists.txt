@@ -33,6 +33,7 @@ add_executable(${EXECUTABLE_NAME}
  main.cc
  game.cc
  player.cc
+ player_input.cc
  fps.cc 
  animation_component.cc
  animation.cc

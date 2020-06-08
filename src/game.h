@@ -8,6 +8,7 @@ namespace sf {
 
 class Fps;
 class Player;
+class PlayerInput;
 
 class Game 
 {
@@ -30,6 +31,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<Player> player;
+	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<sf::Clock> clock;
 
 	float dt;

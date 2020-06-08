@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+struct Input;
 
 class MovementComponent
 {
@@ -9,7 +10,7 @@ public:
 	virtual ~MovementComponent();
 
 	void SetSprite(std::shared_ptr<sf::Sprite> sprite);
-	const unsigned int Integrate(const float& dt);
+	const unsigned int Integrate(Input in, const float& dt);
 	void Interpolate(const float& interp);
 
 	enum movementStates { IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN };
@@ -17,8 +18,7 @@ public:
 private:
 
 	sf::Vector2f GetCenter() const;
-	sf::Vector2f HandleInput();
-	sf::Vector2f IntegrateMovement(sf::Vector2f movement, const float& dt);
+	sf::Vector2f IntegrateMovement(Input in, const float& dt);
 	sf::Vector2f Bound(sf::Vector2f newPosition);
 	const unsigned int CalculateDirection() const;
 

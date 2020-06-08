@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "game.h"
-#include "player.h"
 #include "fps.h"
+#include "player.h"
+#include "player_input.h"
 #include "animation_component.h"
 #include "movement_component.h"
 
@@ -42,6 +43,7 @@ void Game::InitPlayer()
     auto movementComponent = std::make_shared< MovementComponent>(bounds);
 
     this->player = std::make_shared<Player>(animationComponent, movementComponent);
+    this->playerInput = std::make_shared<PlayerInput>();
 }
 
 void Game::InitFps() 
@@ -63,10 +65,12 @@ void Game::WindowEvents()
 
 void Game::Update() 
 {
+    auto in = this->playerInput->SampleInput();
+
     this->accumulator += this->clock->restart().asSeconds();
-    while (accumulator >= dt)
+    while (this->accumulator >= this->dt)
     {
-        this->player->Update(dt);
+        this->player->Update(in, this->dt);
         this->fps->Update();
         this->accumulator -= this->dt;
     }

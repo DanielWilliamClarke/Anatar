@@ -1,7 +1,10 @@
 #include <iostream>
+
+#include "player.h"
+
+#include "player_input.h"
 #include "animation_component.h"
 #include "movement_component.h"
-#include "player.h"
 
 Player::Player(
 	std::shared_ptr<AnimationComponent> animationComponent,
@@ -24,9 +27,9 @@ Player::Player(
 	this->animationComponent->AddAnimation(movementComponent->MOVING_LEFT, 0.1f, 0, 3, 2, 3, 24, 25);
 }
 
-void Player::Update(float dt)
+void Player::Update(Input in, float dt)
 {
-	const auto direction = movementComponent->Integrate(dt);
+	const auto direction = movementComponent->Integrate(in, dt);
 	animationComponent->Play(direction);
 }
 
