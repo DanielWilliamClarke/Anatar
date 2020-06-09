@@ -4,22 +4,19 @@
 #include "animation.h"
 
 AnimationComponent::AnimationComponent()
-	: lastAnimation(NULL), priorityAnimation(NULL)
+	: lastAnimation(nullptr), priorityAnimation(nullptr)
 {}
-
-AnimationComponent::~AnimationComponent()
-{}
-
-//Accessors
-const bool& AnimationComponent::IsDone(const int key)
-{
-	return this->animations[key]->IsDone();
-}
 
 void AnimationComponent::SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet) {
 	this->sprite = sprite;
 	this->textureSheet = textureSheet;
 	this->sprite->setTexture(*textureSheet);
+}
+
+//Accessors
+const bool& AnimationComponent::IsDone(const int key)
+{
+	return this->animations[key]->IsDone();
 }
 
 //Functions

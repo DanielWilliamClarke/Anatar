@@ -14,7 +14,7 @@ class Game
 {
 public:
 	Game();
-	virtual ~Game();
+	virtual ~Game() = default;
 
 	void Run();
 

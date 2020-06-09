@@ -17,10 +17,6 @@ MovementComponent::MovementComponent(sf::FloatRect bounds)
 {
 }
 
-MovementComponent::~MovementComponent()
-{
-}
-
 void MovementComponent::SetSprite(std::shared_ptr<sf::Sprite> sprite) {
 	this->sprite = sprite;
 	this->position = this->GetCenter();
@@ -48,8 +44,6 @@ void MovementComponent::Interpolate(const float& interp)
 	const auto positionInterp = Bound(position * interp + lastPosition * (1.0f - interp));
 	sprite->setPosition(positionInterp);
 }
-
-
 
 sf::Vector2f MovementComponent::IntegrateMovement(Input in, const float& dt)
 {

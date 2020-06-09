@@ -17,8 +17,9 @@ public:
   Player(
 	  std::shared_ptr<AnimationComponent> animationComponent,
 	  std::shared_ptr<MovementComponent> movementComponent);
-  void Update(Input in, float delta);
-  void Draw(sf::RenderWindow &window, float interp);
+  virtual ~Player() = default;
+  void Update(Input in, float delta) const;
+  void Draw(sf::RenderWindow &window, float interp) const;
 
 private:
 	std::shared_ptr<AnimationComponent> animationComponent;

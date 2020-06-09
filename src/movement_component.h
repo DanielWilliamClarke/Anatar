@@ -7,7 +7,7 @@ class MovementComponent
 {
 public:
 	MovementComponent(sf::FloatRect bounds);
-	virtual ~MovementComponent();
+	virtual ~MovementComponent() = default;
 
 	void SetSprite(std::shared_ptr<sf::Sprite> sprite);
 	const unsigned int Integrate(Input in, const float& dt);

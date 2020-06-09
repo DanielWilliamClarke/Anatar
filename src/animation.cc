@@ -12,9 +12,6 @@ Animation::Animation(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Tex
 	this->sprite->setTextureRect(this->startRect);
 }
 
-Animation::~Animation() 
-{}
-
 const bool& Animation::IsDone() const
 {
 	return this->done;

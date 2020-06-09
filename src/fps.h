@@ -5,6 +5,7 @@ class Fps
 {
 public:
   Fps();
+  virtual ~Fps() = default;
   void Update();
   void Draw(sf::RenderWindow &window);
 

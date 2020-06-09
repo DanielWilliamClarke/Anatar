@@ -17,10 +17,6 @@ Game::Game()
     this->InitPlayer();
 }
 
-Game::~Game() 
-{
-}
-
 void Game::InitWindow()
 {
 	this->window = std::make_shared<sf::RenderWindow>(

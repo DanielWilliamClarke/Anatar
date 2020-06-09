@@ -13,7 +13,7 @@ class AnimationComponent
 {
 public:
 	AnimationComponent();
-	virtual ~AnimationComponent();
+	virtual ~AnimationComponent() = default;
 
 	//Functions
 	void SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet);

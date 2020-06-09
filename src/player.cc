@@ -27,13 +27,13 @@ Player::Player(
 	this->animationComponent->AddAnimation(movementComponent->MOVING_LEFT, 0.1f, 0, 3, 2, 3, 24, 25);
 }
 
-void Player::Update(Input in, float dt)
+void Player::Update(Input in, float dt) const
 {
 	const auto direction = movementComponent->Integrate(in, dt);
 	animationComponent->Play(direction);
 }
 
-void Player::Draw(sf::RenderWindow& window, float interp)
+void Player::Draw(sf::RenderWindow& window, float interp) const
 {
 	movementComponent->Interpolate(interp);
 	window.draw(*sprite);
