@@ -11,12 +11,12 @@ public:
 	virtual ~Animation() = default;
 
 	const bool& IsDone() const;
-	const bool& Play();
-	const bool& Play(float modPercent);
+	const bool& Play(const bool loop = true);
+	const bool& Play(float modPercent, const bool loop = true);
 	void Reset();
 
 private:
-	void NextFrame();
+	void NextFrame(const bool loop);
 
 	//Variables
 	std::shared_ptr<sf::Sprite> sprite;

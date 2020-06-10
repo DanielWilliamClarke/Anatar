@@ -98,18 +98,19 @@ const unsigned int MovementComponent::CalculateDirection() const
 		const auto angle = std::atan2(y, x) * (180.0 / M_PI);
 		const auto snappedAngle = std::round(angle / 90) * 90;
 
-		if (snappedAngle == 0)
-		{
-			return MOVING_LEFT;
-		}
-		else if (snappedAngle == 90)
+		//if (snappedAngle == 0)
+		//{
+		//	return MOVING_LEFT;
+		//}
+		//else
+		if (snappedAngle == 90)
 		{
 			return MOVING_UP;
 		} 
-		else if (snappedAngle == 180)
-		{
-			return MOVING_RIGHT;
-		}
+		//else if (snappedAngle == 180)
+		//{
+		//	return MOVING_RIGHT;
+		//}
 		else if (snappedAngle == -90)
 		{
 			return MOVING_DOWN;

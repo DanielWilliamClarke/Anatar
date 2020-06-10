@@ -17,17 +17,17 @@ const bool& Animation::IsDone() const
 	return this->done;
 }
 
-const bool& Animation::Play()
+const bool& Animation::Play(const bool loop)
 {
 	if (clockAnimate.getElapsedTime().asSeconds() >= this->frameDuration)
 	{
-		NextFrame();
+		NextFrame(loop);
 	}
 
 	return this->done;
 }
 
-const bool& Animation::Play(float modPercent)
+const bool& Animation::Play(float modPercent, const bool loop)
 {
 	if (modPercent < 0.5f)
 	{
@@ -37,13 +37,13 @@ const bool& Animation::Play(float modPercent)
 	const auto frameLength = this->frameDuration * (1 / modPercent);
 	if (this->clockAnimate.getElapsedTime().asSeconds() >= frameLength)
 	{
-		NextFrame();
+		NextFrame(loop);
 	}
 
 	return this->done;
 }
 
-void Animation::NextFrame()
+void Animation::NextFrame(const bool loop)
 {
 	this->done = false;
 	//Animate
@@ -53,7 +53,9 @@ void Animation::NextFrame()
 	}
 	else //Reset
 	{
-		this->currentRect.left = this->startRect.left;
+		if (loop) {
+			this->currentRect.left = this->startRect.left;
+		}
 		this->done = true;
 	}
 

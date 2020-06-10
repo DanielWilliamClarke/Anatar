@@ -12,12 +12,12 @@ Player::Player(
 	std::shared_ptr<MovementComponent> movementComponent,
 	std::shared_ptr<HitboxComponent> hitboxComponent)
 	: Entity{ animationComponent , movementComponent, hitboxComponent },
-	spriteTextureSize(std::make_pair(24, 25)),
+	spriteTextureSize(std::make_pair(33, 26)),
 	spriteScale(3.0f)
 {
 	this->sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
 	this->texture = std::make_shared<sf::Texture>();
-	this->texture->loadFromFile("./assets/pikaFrames.png");
+	this->texture->loadFromFile("./assets/viperFrames.png");
 
 	this->InitPlayer();
 }
@@ -35,17 +35,17 @@ void Player::InitPlayer() const
 
 void Player::SetAnimations() const 
 {
-	this->animationComponent->AddAnimation(this->movementComponent->IDLE,			0.1f, 0, 2, 0, 2, spriteTextureSize.first, spriteTextureSize.second);
-	this->animationComponent->AddAnimation(this->movementComponent->MOVING_UP,		0.1f, 0, 0, 2, 0, spriteTextureSize.first, spriteTextureSize.second);
-	this->animationComponent->AddAnimation(this->movementComponent->MOVING_RIGHT,	0.1f, 0, 1, 2, 1, spriteTextureSize.first, spriteTextureSize.second);
-	this->animationComponent->AddAnimation(this->movementComponent->MOVING_DOWN,	0.1f, 0, 2, 2, 2, spriteTextureSize.first, spriteTextureSize.second);
-	this->animationComponent->AddAnimation(this->movementComponent->MOVING_LEFT,	0.1f, 0, 3, 2, 3, spriteTextureSize.first, spriteTextureSize.second);
+	this->animationComponent->AddAnimation(this->movementComponent->IDLE,			0.2f, 0, 0, 0, 0, spriteTextureSize.first, spriteTextureSize.second);
+	this->animationComponent->AddAnimation(this->movementComponent->MOVING_UP,		0.2f, 0, 1, 2, 1, spriteTextureSize.first, spriteTextureSize.second);
+	//this->animationComponent->AddAnimation(this->movementComponent->MOVING_RIGHT,	0.1f, 0, 1, 2, 1, spriteTextureSize.first, spriteTextureSize.second);
+	this->animationComponent->AddAnimation(this->movementComponent->MOVING_DOWN,	0.2f, 0, 0, 2, 0, spriteTextureSize.first, spriteTextureSize.second);
+	//this->animationComponent->AddAnimation(this->movementComponent->MOVING_LEFT,	0.1f, 0, 3, 2, 3, spriteTextureSize.first, spriteTextureSize.second);
 }
 
 void Player::Update(Input in, float dt) const
 {
 	const auto direction = movementComponent->Integrate(in, dt);
-	animationComponent->Play(direction);
+	animationComponent->Play(direction, false);
 
 	this->hitboxComponent->Update();
 }
