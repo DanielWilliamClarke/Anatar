@@ -26,6 +26,8 @@ configure_file(
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/components")
+include_directories("${PROJECT_SOURCE_DIR}/entity")
+include_directories("${PROJECT_SOURCE_DIR}/factories")
 
 include_directories("${PROJECT_BINARY_DIR}")
 
@@ -34,14 +36,17 @@ set(EXECUTABLE_NAME "Annatar")
 add_executable(${EXECUTABLE_NAME}
  main.cc
  game.cc
- entity.cc
+ entity/entity.cc
+ entity/entity_composition.cc
+ entity/entity_object.cc
  player.cc
  player_input.cc
  fps.cc 
  animation.cc
  components/animation_component.cc
  components/movement_component.cc
- components/hitbox_component.cc)
+ components/hitbox_component.cc
+)
 
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

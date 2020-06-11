@@ -20,7 +20,6 @@ void AnimationComponent::AddAnimation(const int key, float frameDuration,
 		frameDuration, startFrameX, startFrameY, framesX, framesY, width, height);
 }
 
-
 const bool& AnimationComponent::IsDone(const int key)
 {
 	return this->animations[key]->IsDone();

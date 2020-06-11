@@ -6,23 +6,20 @@ struct Input;
 class MovementComponent
 {
 public:
+
 	MovementComponent(sf::FloatRect bounds);
 	virtual ~MovementComponent() = default;
 
-	void SetSprite(std::shared_ptr<sf::Sprite> sprite);
-	const unsigned int Integrate(Input in, const float& dt);
-	void Interpolate(const float& interp);
+	void SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds);
+	const sf::Vector2f GetPosition() const;
+	const sf::Vector2f GetCenter() const;
 
-	enum movementStates { IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN };
+	sf::Vector2f Integrate(Input in, const float& dt);
+	sf::Vector2f Interpolate(const float& interp);
 
 private:
-
-	sf::Vector2f GetCenter() const;
-	sf::Vector2f IntegrateMovement(Input in, const float& dt);
+	
 	sf::Vector2f Bound(sf::Vector2f newPosition);
-	const unsigned int CalculateDirection() const;
-
-	std::shared_ptr<sf::Sprite> sprite;
 
 	// Sprite Position
 	sf::Vector2f position;
@@ -39,4 +36,5 @@ private:
 
 	// Bounds checking
 	sf::FloatRect bounds;
+	sf::FloatRect entityBounds;
 };

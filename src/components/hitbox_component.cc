@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "hitbox_component.h"
 
-HitboxComponent::HitboxComponent(sf::Color outline)
+HitboxComponent::HitboxComponent()
 	: offsetX(0), offsetY(0)
 {
 	this->hitbox.setFillColor(sf::Color::Transparent);
 	this->hitbox.setOutlineThickness(1.f);
-	this->hitbox.setOutlineColor(outline);
+	this->hitbox.setOutlineColor(sf::Color::Green);
 }
 
 void HitboxComponent::SetSprite(std::shared_ptr<sf::Sprite> sprite, float offsetX, float offsetY, float width, float height) {
