@@ -1,11 +1,40 @@
+#include <SFML/Graphics.hpp>
+
 #include "entity.h"
 
-#include "entity_composition.h"
+#include "entity_object.h"
+#include "entity_update.h"
 #include "../components/movement_component.h"
 
-Entity::Entity(
-	std::shared_ptr<EntityComposition> group,
-	std::shared_ptr<MovementComponent> globalMovementComponent)
-	: group(group),
-	globalMovementComponent(globalMovementComponent)
+Entity::Entity(std::shared_ptr<IEntityObjectBuilder> entityBuilder, std::shared_ptr<MovementComponent> globalMovementComponent)
+	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent)
 {}
+
+void Entity::AddObject(std::string name, std::shared_ptr<EntityObject> object)
+{
+	this->objects[name] = object;
+}
+
+std::shared_ptr<EntityObject> Entity::GetObject(std::string name)
+{
+	return this->objects[name];
+}
+
+void Entity::UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const
+{
+	for (auto& up : update)
+	{
+		if (this->objects.count(up.first))
+		{
+			this->objects.at(up.first)->Update(up.second, dt);
+		}
+	}
+}
+
+void Entity::DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const
+{
+	for (auto& obj : this->objects)
+	{
+		obj.second->Draw(target, interPosition);
+	}
+}

@@ -1,7 +1,7 @@
 #include <math.h>
 #include <iostream>
 #include "movement_component.h"
-#include "player_input.h"
+#include "../player/player_input.h"
 
 MovementComponent::MovementComponent(sf::FloatRect bounds)
 	: bounds(bounds),

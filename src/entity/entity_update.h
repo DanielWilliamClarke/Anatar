@@ -3,10 +3,11 @@
 
 struct EntityUpdate 
 {
-	sf::Vector2f newPosition;
-	const int direction;
+	sf::Vector2f position;
+	int direction;
 
-	EntityUpdate(sf::Vector2f newPosition, const int direction)
-		: newPosition(newPosition), direction(direction)
+	EntityUpdate() = default;
+	EntityUpdate(sf::Vector2f position, int direction)
+		: position(position), direction(direction)
 	{}
 };

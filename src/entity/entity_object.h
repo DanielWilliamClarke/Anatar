@@ -3,9 +3,7 @@
 
 #include "entity_update.h"
 
-class IAnimationComponentFactory;
 class AnimationComponent;
-class IHitboxComponentFactory;
 class HitboxComponent;
 
 class EntityObject
@@ -13,11 +11,10 @@ class EntityObject
 public:
 
 	EntityObject(
-		std::shared_ptr<IAnimationComponentFactory> animationComponentFactory,
-		std::shared_ptr<IHitboxComponentFactory> hitboxComponentFactory);
+		std::shared_ptr<AnimationComponent> animationComponent,
+		std::shared_ptr<HitboxComponent> hitboxComponent);
 
 	virtual ~EntityObject() = default;
-
 	
 	void SetPositionOffect(sf::Vector2f offset);
 	void SetTexture(std::shared_ptr<sf::Texture> texture) const;
@@ -31,10 +28,7 @@ public:
 	void Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const;
 
 private:
-	std::shared_ptr<IAnimationComponentFactory> animationComponentFactory;
 	std::shared_ptr<AnimationComponent> animationComponent;
-
-	std::shared_ptr<IHitboxComponentFactory> hitboxComponentFactory;
 	std::shared_ptr<HitboxComponent> hitboxComponent;
 
 	std::shared_ptr<sf::Sprite> sprite;

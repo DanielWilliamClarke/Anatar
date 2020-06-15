@@ -37,10 +37,10 @@ add_executable(${EXECUTABLE_NAME}
  main.cc
  game.cc
  entity/entity.cc
- entity/entity_composition.cc
  entity/entity_object.cc
- player.cc
- player_input.cc
+ player/player_builder.cc
+ player/player.cc
+ player/player_input.cc
  fps.cc 
  animation.cc
  components/animation_component.cc

@@ -1,33 +1,39 @@
 #pragma once 
+#include <SFML/Graphics.hpp>
+
 #include <memory>
+#include <vector>
 
-namespace sf {
-	class Sprite;
-	class Texture;
-	class RenderTarget;
-}
-
-class EntityComposition;
+class IEntityObjectBuilder;
 class MovementComponent;
+class EntityObject;
+
 struct Input;
+struct EntityUpdate;
 
 class Entity {
 
 public:
 	Entity() = default;
 	Entity(
-		std::shared_ptr<EntityComposition> group,
+		std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 		std::shared_ptr<MovementComponent> globalMovementComponent);
 	virtual ~Entity() = default;
 
-	virtual void Update(float dt) const = 0;
+	void AddObject(std::string name, std::shared_ptr<EntityObject> object);
+	std::shared_ptr<EntityObject> GetObject(std::string name);
+
 	virtual void Update(Input in, float dt) const = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 
 protected:
+	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
+	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;
 
-	std::shared_ptr<EntityComposition> group;
+	std::map<std::string, std::shared_ptr<EntityObject>> objects;
+	std::shared_ptr<IEntityObjectBuilder> entityBuilder;
 	std::shared_ptr<MovementComponent> globalMovementComponent;
+
 private:
 
 };
