@@ -10,7 +10,7 @@ class MovementComponent;
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {
 public:
-	PlayerBuilder(std::shared_ptr<MovementComponent> globalMovementComponent);
+	PlayerBuilder() = default;
 	virtual ~PlayerBuilder() = default;
 	virtual EntityManifest Build() const;
 private:

@@ -3,13 +3,8 @@
 #include "player_builder.h"
 
 #include "../components/animation_component.h"
-#include "../components/movement_component.h"
 #include "../components/hitbox_component.h"
 #include "../entity/entity_object.h"
-
-PlayerBuilder::PlayerBuilder(std::shared_ptr<MovementComponent> movementComponent)
-	: Player{}
-{}
 
 EntityManifest PlayerBuilder::Build() const
 {

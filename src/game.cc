@@ -45,9 +45,8 @@ void Game::InitPlayer()
         viewSize.x,
         viewSize.y);
 
+    auto playerBuilder = std::make_shared<PlayerBuilder>();
     auto movementComponent = std::make_shared<MovementComponent>(bounds);
-    auto playerBuilder = std::make_shared<PlayerBuilder>(movementComponent);
-
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
 }
