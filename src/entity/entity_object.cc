@@ -1,7 +1,7 @@
 #include "entity_object.h"
 
-#include "../components/i_animation_component.h"
-#include "../components/i_hitbox_component.h"
+#include "../components/animation/i_animation_component.h"
+#include "../components/hitbox/i_hitbox_component.h"
 
 EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,

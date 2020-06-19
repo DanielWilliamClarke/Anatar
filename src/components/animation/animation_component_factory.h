@@ -1,7 +1,7 @@
 #pragma once
 
 #include "i_animation_component_factory.h"
-#include "../components/animation_component.h"
+#include "animation_component.h"
 
 class AnimationComponentFactory : public IAnimationComponentFactory
 {

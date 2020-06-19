@@ -7,13 +7,13 @@
 #include "player/player.h"
 #include "player/player_input.h"
 
-#include "components/global_movement_component.h"
+#include "components/movement/global_movement_component.h"
 
-#include "factories/animation_component_factory.h"
-#include "components/animation_component.h"
+#include "components/animation/animation_component_factory.h"
+#include "components/animation/animation_component.h"
 
-#include "factories/hitbox_component_factory.h"
-#include "components/hitbox_component.h"
+#include "components/hitbox/hitbox_component_factory.h"
+#include "components/hitbox/hitbox_component.h"
 
 Game::Game() 
     : clock(std::make_shared<sf::Clock>()),

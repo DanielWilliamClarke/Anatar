@@ -1,7 +1,7 @@
 #pragma once
 
 #include "i_hitbox_component_factory.h"
-#include "../components/hitbox_component.h"
+#include "hitbox_component.h"
 
 class HitboxComponentFactory : public IHitboxComponentFactory
 {

@@ -33,16 +33,16 @@ set(EXECUTABLE_NAME "Annatar")
 add_executable(${EXECUTABLE_NAME}
  main.cc
  game.cc
+ fps.cc 
  entity/entity.cc
  entity/entity_object.cc
  player/player_builder.cc
  player/player.cc
  player/player_input.cc
- fps.cc 
- animation.cc
- components/animation_component.cc
- components/hitbox_component.cc
- components/global_movement_component.cc)
+ components/animation/animation.cc
+ components/animation/animation_component.cc
+ components/hitbox/hitbox_component.cc
+ components/movement/global_movement_component.cc)
 
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

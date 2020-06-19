@@ -2,8 +2,8 @@
 
 #include "player_builder.h"
 
-#include "../components/animation_component.h"
-#include "../components/hitbox_component.h"
+#include "../components/animation/animation_component.h"
+#include "../components/hitbox/hitbox_component.h"
 #include "../entity/entity_object.h"
 
 EntityManifest PlayerBuilder::Build() const
