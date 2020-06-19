@@ -5,7 +5,6 @@
 #include "player.h"
 
 class EntityObject;
-class MovementComponent;
 
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {

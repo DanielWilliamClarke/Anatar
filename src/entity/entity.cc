@@ -4,9 +4,11 @@
 
 #include "entity_object.h"
 #include "entity_update.h"
-#include "../components/global_movement_component.h"
+#include "../components/i_global_movement_component.h"
 
-Entity::Entity(std::shared_ptr<IEntityObjectBuilder> entityBuilder, std::shared_ptr<GlobalMovementComponent> globalMovementComponent)
+Entity::Entity(
+	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
+	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent)
 	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent)
 {}
 

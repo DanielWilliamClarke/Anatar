@@ -1,11 +1,11 @@
 #include "entity_object.h"
 
-#include "../components/animation_component.h"
-#include "../components/hitbox_component.h"
+#include "../components/i_animation_component.h"
+#include "../components/i_hitbox_component.h"
 
 EntityObject::EntityObject(
-	std::shared_ptr<AnimationComponent> animationComponent,
-	std::shared_ptr<HitboxComponent> hitboxComponent)
+	std::shared_ptr<IAnimationComponent> animationComponent,
+	std::shared_ptr<IHitboxComponent> hitboxComponent)
 	: animationComponent(animationComponent),
 	hitboxComponent(hitboxComponent),
 	positionOffset(sf::Vector2f(.0f, .0f)),

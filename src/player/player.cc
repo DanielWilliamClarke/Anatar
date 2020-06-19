@@ -16,7 +16,7 @@
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-	std::shared_ptr<GlobalMovementComponent> globalMovementComponent)
+	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent)
 	: Entity{ entityBuilder, globalMovementComponent }
 {
 	this->objects = this->entityBuilder->Build();
