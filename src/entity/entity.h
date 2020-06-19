@@ -5,7 +5,7 @@
 #include <vector>
 
 class IEntityObjectBuilder;
-class MovementComponent;
+class GlobalMovementComponent;
 class EntityObject;
 
 struct Input;
@@ -17,7 +17,7 @@ public:
 	Entity() = default;
 	Entity(
 		std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-		std::shared_ptr<MovementComponent> globalMovementComponent);
+		std::shared_ptr<GlobalMovementComponent> globalMovementComponent);
 	virtual ~Entity() = default;
 
 	void AddObject(std::string name, std::shared_ptr<EntityObject> object);
@@ -32,7 +32,7 @@ protected:
 
 	std::map<std::string, std::shared_ptr<EntityObject>> objects;
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder;
-	std::shared_ptr<MovementComponent> globalMovementComponent;
+	std::shared_ptr<GlobalMovementComponent> globalMovementComponent;
 
 private:
 

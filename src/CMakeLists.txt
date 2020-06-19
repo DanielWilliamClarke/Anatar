@@ -25,9 +25,6 @@ configure_file(
   )
 
 include_directories("${PROJECT_SOURCE_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}/components")
-include_directories("${PROJECT_SOURCE_DIR}/entity")
-include_directories("${PROJECT_SOURCE_DIR}/factories")
 
 include_directories("${PROJECT_BINARY_DIR}")
 
@@ -44,9 +41,8 @@ add_executable(${EXECUTABLE_NAME}
  fps.cc 
  animation.cc
  components/animation_component.cc
- components/movement_component.cc
  components/hitbox_component.cc
-)
+ components/global_movement_component.cc)
 
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

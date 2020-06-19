@@ -7,15 +7,13 @@
 #include "player/player.h"
 #include "player/player_input.h"
 
-#include "components/movement_component.h"
+#include "components/global_movement_component.h"
 
 #include "factories/animation_component_factory.h"
 #include "components/animation_component.h"
 
 #include "factories/hitbox_component_factory.h"
 #include "components/hitbox_component.h"
-
-
 
 Game::Game() 
     : clock(std::make_shared<sf::Clock>()),
@@ -46,7 +44,7 @@ void Game::InitPlayer()
         viewSize.y);
 
     auto playerBuilder = std::make_shared<PlayerBuilder>();
-    auto movementComponent = std::make_shared<MovementComponent>(bounds);
+    auto movementComponent = std::make_shared<GlobalMovementComponent>(bounds);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
 }

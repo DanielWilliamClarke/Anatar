@@ -11,12 +11,12 @@
 
 #include "player_input.h"
 #include "components/animation_component.h"
-#include "components/movement_component.h"
 #include "components/hitbox_component.h"
+#include "components/global_movement_component.h"
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-	std::shared_ptr<MovementComponent> globalMovementComponent)
+	std::shared_ptr<GlobalMovementComponent> globalMovementComponent)
 	: Entity{ entityBuilder, globalMovementComponent }
 {
 	this->objects = this->entityBuilder->Build();

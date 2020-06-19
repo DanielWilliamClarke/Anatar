@@ -11,7 +11,7 @@ public:
 	Player() = default;
 	Player(
 		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
-		std::shared_ptr<MovementComponent> movementComponent);
+		std::shared_ptr<GlobalMovementComponent> movementComponent);
 	virtual ~Player() = default;
 	virtual void Update(Input in, float dt) const;
 	virtual void Draw(sf::RenderTarget& target, float interp) const;

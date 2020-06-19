@@ -1,21 +1,18 @@
 #pragma once
+#include <memory>
 
-namespace sf {
-	class Sprite;
-	class RectangleShape;
-	class RenderTarget;
-}
+#include "i_hitbox_component.h"
 
-class HitboxComponent
+class HitboxComponent: public IHitboxComponent
 {
 public: 
 	HitboxComponent();
 	virtual ~HitboxComponent() = default;
 
-	void SetSprite(std::shared_ptr<sf::Sprite> sprite, float offsetX, float offsetY, float width, float height);
-	void Update();
-	void Draw(sf::RenderTarget& target);
-	bool Intersects(const sf::FloatRect& hitbox);
+	virtual void SetSprite(std::shared_ptr<sf::Sprite> sprite, float offsetX, float offsetY, float width, float height);
+	virtual void Update();
+	virtual void Draw(sf::RenderTarget& target);
+	virtual bool Intersects(const sf::FloatRect& hitbox);
 
 private:
 	std::shared_ptr<sf::Sprite> sprite;

@@ -1,4 +1,3 @@
-#include <SFML/Graphics.hpp>
 #include "hitbox_component.h"
 
 HitboxComponent::HitboxComponent()
