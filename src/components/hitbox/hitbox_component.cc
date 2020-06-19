@@ -1,7 +1,7 @@
 #include "hitbox_component.h"
 
 HitboxComponent::HitboxComponent()
-	: offsetX(0), offsetY(0)
+	: offsetX(0), offsetY(0), required(false)
 {
 	this->hitbox.setFillColor(sf::Color::Transparent);
 	this->hitbox.setOutlineThickness(1.f);
@@ -16,6 +16,7 @@ void HitboxComponent::SetSprite(std::shared_ptr<sf::Sprite> sprite, float offset
 	const auto position = this->sprite->getPosition();
 	this->hitbox.setPosition(position.x + offsetX, position.y + offsetY);
 	this->hitbox.setSize(sf::Vector2f(width, height));
+	required = true;
 }
 
 void HitboxComponent::Update()
@@ -32,4 +33,9 @@ void HitboxComponent::Draw(sf::RenderTarget& target)
 bool HitboxComponent::Intersects(const sf::FloatRect& hitbox)
 {
 	return this->hitbox.getGlobalBounds().intersects(hitbox);
+}
+
+const bool HitboxComponent::IsRequired() const
+{
+	return required;
 }

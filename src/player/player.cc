@@ -32,8 +32,13 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 	{
 		const auto y = lastPosition.y - position.y;
 		const auto x = lastPosition.x - position.x;
-		const auto angle = std::atan2(y, x) * (180.0 / M_PI);
+		const auto angle = std::floor(std::atan2(y, x) * (180.0 / M_PI));
 
+
+		if (angle == 0 || angle == 180) 
+		{
+			return IDLE;
+		}
 		if (angle > 0)
 		{
 			return MOVING_UP;
@@ -54,7 +59,8 @@ void Player::Update(Input in, float dt) const
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
 	std::map<std::string, EntityUpdate> updates;
-	updates["ship"] = EntityUpdate(position, direction);
+	updates["ship"] = EntityUpdate(position, direction, false);
+	updates["exhaust"] = EntityUpdate(position, IDLE);
 	this->UpdateObjects(updates, dt);
 }
 

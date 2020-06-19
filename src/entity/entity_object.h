@@ -5,6 +5,7 @@
 
 class IAnimationComponent;
 class IHitboxComponent;
+class ILocalMovementComponent;
 
 class EntityObject
 {
@@ -12,11 +13,11 @@ public:
 
 	EntityObject(
 		std::shared_ptr<IAnimationComponent> animationComponent,
-		std::shared_ptr<IHitboxComponent> hitboxComponent);
+		std::shared_ptr<IHitboxComponent> hitboxComponent,
+		std::shared_ptr<ILocalMovementComponent> movementComponent);
 
 	virtual ~EntityObject() = default;
 	
-	void SetPositionOffect(sf::Vector2f offset);
 	void SetTexture(std::shared_ptr<sf::Texture> texture) const;
 	void InitAnimationComponent(std::shared_ptr<sf::Texture> texture);
 	void InitHitboxComponent(float offsetX, float offsetY, float width, float height);
@@ -30,8 +31,8 @@ public:
 private:
 	std::shared_ptr<IAnimationComponent> animationComponent;
 	std::shared_ptr<IHitboxComponent> hitboxComponent;
+	std::shared_ptr<ILocalMovementComponent> movementComponent;
 
 	std::shared_ptr<sf::Sprite> sprite;
 	std::shared_ptr<sf::Texture> texture;
-	sf::Vector2f positionOffset;
 };

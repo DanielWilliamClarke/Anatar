@@ -2,20 +2,17 @@
 
 #include "../components/animation/i_animation_component.h"
 #include "../components/hitbox/i_hitbox_component.h"
+#include "../components/movement/i_local_movement_component.h"
 
 EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,
-	std::shared_ptr<IHitboxComponent> hitboxComponent)
+	std::shared_ptr<IHitboxComponent> hitboxComponent,
+	std::shared_ptr<ILocalMovementComponent> movementComponent)
 	: animationComponent(animationComponent),
 	hitboxComponent(hitboxComponent),
-	positionOffset(sf::Vector2f(.0f, .0f)),
+	movementComponent(movementComponent),
 	sprite(std::make_shared<sf::Sprite>())
 {
-}
-
-void EntityObject::SetPositionOffect(sf::Vector2f offset)
-{
-	this->positionOffset = offset;
 }
 
 void EntityObject::SetTexture(std::shared_ptr<sf::Texture> texture) const
@@ -46,18 +43,18 @@ std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const
 
 void EntityObject::Update(EntityUpdate update, float dt) const
 {
-	this->sprite->setPosition(update.position + positionOffset);
-	this->animationComponent->Play(update.direction, false);
-	if (this->hitboxComponent) {
+	this->sprite->setPosition(this->movementComponent->Integrate(update.position, dt));
+	this->animationComponent->Play(update.direction, update.loop);
+	if (this->hitboxComponent->IsRequired()) {
 		this->hitboxComponent->Update();
 	}
 }
 
 void EntityObject::Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const
 {
-	this->sprite->setPosition(interPosition + positionOffset);
+	this->sprite->setPosition(this->movementComponent->Interpolate(interPosition));
 	target.draw(*this->sprite);
-	if (this->hitboxComponent) {
+	if (this->hitboxComponent->IsRequired()) {
 		this->hitboxComponent->Update();
 		this->hitboxComponent->Draw(target);
 	}

@@ -42,7 +42,8 @@ add_executable(${EXECUTABLE_NAME}
  components/animation/animation.cc
  components/animation/animation_component.cc
  components/hitbox/hitbox_component.cc
- components/movement/global_movement_component.cc)
+ components/movement/global_movement_component.cc 
+ components/movement/offset_movement_component.cc)
 
 # Install target
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

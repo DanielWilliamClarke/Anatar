@@ -13,10 +13,11 @@ public:
 	virtual void Update();
 	virtual void Draw(sf::RenderTarget& target);
 	virtual bool Intersects(const sf::FloatRect& hitbox);
-
+	virtual const bool IsRequired() const;
 private:
 	std::shared_ptr<sf::Sprite> sprite;
 	sf::RectangleShape hitbox;
 	float offsetX;
 	float offsetY;
+	bool required;
 };

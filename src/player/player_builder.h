@@ -14,4 +14,5 @@ public:
 	virtual EntityManifest Build() const;
 private:
 	std::shared_ptr<EntityObject> BuildShip() const;
+	std::shared_ptr<EntityObject> BuildExhaust() const;
 };
