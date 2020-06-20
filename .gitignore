@@ -2,4 +2,4 @@
 /out
 /.vs
 /**/*.zip
-/libraries
+/lib
