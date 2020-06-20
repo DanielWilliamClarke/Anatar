@@ -17,9 +17,14 @@ void Entity::AddObject(std::string name, std::shared_ptr<EntityObject> object)
 	this->objects[name] = object;
 }
 
-std::shared_ptr<EntityObject> Entity::GetObject(std::string name)
+void Entity::RemoveObject(std::string name)
 {
-	return this->objects[name];
+	this->objects.erase(name);
+}
+
+std::shared_ptr<EntityObject> Entity::GetObject(std::string name) const
+{
+	return this->objects.at(name);
 }
 
 void Entity::UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const
