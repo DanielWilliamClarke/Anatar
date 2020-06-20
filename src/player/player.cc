@@ -58,10 +58,10 @@ void Player::Update(Input in, float dt) const
 	const auto position = this->globalMovementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	std::map<std::string, EntityUpdate> updates;
-	updates["ship"] = EntityUpdate(position, direction, false);
-	updates["exhaust"] = EntityUpdate(position, IDLE);
-	this->UpdateObjects(updates, dt);
+	this->UpdateObjects({
+		{"ship", EntityUpdate(position, direction, false)},
+		{ "exhaust",  EntityUpdate(position, IDLE) }
+	}, dt);
 }
 
 void Player::Draw(sf::RenderTarget& target, float interp) const
