@@ -1,3 +1,6 @@
+#ifndef ANIMATION_H
+#define ANIMATION_H
+
 #pragma once
 #include <SFML/Graphics.hpp>
 
@@ -32,3 +35,5 @@ private:
 	sf::Clock clockAnimate;
 	bool done;
 };
+
+#endif //ANIMATION_H

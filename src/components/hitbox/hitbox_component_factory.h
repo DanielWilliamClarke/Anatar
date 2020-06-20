@@ -1,3 +1,5 @@
+#ifndef HITBOX_COMPONENT_FACTORY_H
+#define HITBOX_COMPONENT_FACTORY_H
 #pragma once
 
 #include "i_hitbox_component_factory.h"
@@ -12,3 +14,5 @@ public:
 		return std::make_shared<HitboxComponent>();
 	}
 };
+
+#endif //HITBOX_COMPONENT_FACTORY_H

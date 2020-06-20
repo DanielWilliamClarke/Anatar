@@ -1,4 +1,7 @@
+#ifndef PLAYER_BUILDER_H
+#define PLAYER_BUILDER_H
 #pragma once
+
 #include <memory>
 
 #include "../entity/i_entity_builder.h"
@@ -16,3 +19,5 @@ private:
 	std::shared_ptr<EntityObject> BuildShip() const;
 	std::shared_ptr<EntityObject> BuildExhaust() const;
 };
+
+#endif //PLAYER_BUILDER_H

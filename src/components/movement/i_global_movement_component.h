@@ -1,4 +1,7 @@
+#ifndef I_GLOBAL_MOVEMENT_COMPONENT_H
+#define I_GLOBAL_MOVEMENT_COMPONENT_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 
 struct Input;
@@ -16,3 +19,5 @@ public:
 	virtual sf::Vector2f Integrate(Input in, const float& dt) = 0;
 	virtual sf::Vector2f Interpolate(const float& interp) = 0;
 };
+
+#endif //I_GLOBAL_MOVEMENT_COMPONENT_H

@@ -1,3 +1,6 @@
+#ifndef HITBOX_COMPONENT_H
+#define HITBOX_COMPONENT_H
+
 #pragma once
 #include <memory>
 
@@ -21,3 +24,5 @@ private:
 	float offsetY;
 	bool required;
 };
+
+#endif // HITBOX_COMPONENT_H

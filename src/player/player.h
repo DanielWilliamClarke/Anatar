@@ -1,8 +1,11 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-#include "entity/entity.h"
+#include "../entity/entity.h"
 
 class Player : public Entity
 {
@@ -19,3 +22,5 @@ public:
 protected:
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
 };
+
+#endif //PLAYER_H

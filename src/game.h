@@ -1,4 +1,7 @@
+#ifndef GAME_H
+#define GAME_H
 #pragma once
+
 #include <memory>
 
 namespace sf {
@@ -36,3 +39,5 @@ private:
 	float dt;
 	float accumulator;
 };
+
+#endif //GAME_H

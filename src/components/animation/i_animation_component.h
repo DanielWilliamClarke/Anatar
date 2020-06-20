@@ -1,4 +1,6 @@
-#pragma once 
+#ifndef I_ANIMATION_COMPONENT_H
+#define I_ANIMATION_COMPONENT_H
+#pragma once
 #include <memory>
 
 namespace sf {
@@ -19,3 +21,5 @@ public:
 	virtual const bool& Play(const int key, const bool loop = true, const bool priority = false) = 0;;
 	virtual const bool& Play(const int key, const float& modifier, const float& modifierMax, const bool loop = true, const bool priority = false) = 0;;
 };
+
+#endif // I_ANIMATION_COMPONENT_H

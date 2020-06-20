@@ -1,4 +1,7 @@
+#ifndef ENTITY_H
+#define ENTITY_H
 #pragma once 
+
 #include <SFML/Graphics.hpp>
 
 #include <memory>
@@ -37,3 +40,5 @@ protected:
 private:
 
 };
+
+#endif //ENTITY_H

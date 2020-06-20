@@ -1,4 +1,7 @@
+#ifndef FPS_H
+#define FPS_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 
 class Fps
@@ -21,3 +24,5 @@ private:
   sf::Text fps;
   sf::Text dps;
 };
+
+#endif //FPS_H

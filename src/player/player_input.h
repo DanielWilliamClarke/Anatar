@@ -1,3 +1,5 @@
+#ifndef PLAYER_INPUT_H
+#define PLAYER_INPUT_H
 #pragma once 
 
 #include <SFML/Graphics.hpp>
@@ -15,3 +17,5 @@ public:
 	virtual ~PlayerInput() = default;
 	const Input SampleInput() const;
 };
+
+#endif //PLAYER_INPUT_H

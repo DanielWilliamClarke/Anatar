@@ -1,3 +1,6 @@
+#ifndef ANIMATION_COMPONENT_H
+#define ANIMATION_COMPONENT_H
+
 #pragma once
 #include <map>
 #include <memory>
@@ -34,3 +37,5 @@ private:
 	std::shared_ptr<Animation> lastAnimation;
 	std::shared_ptr<Animation> priorityAnimation;
 };
+
+#endif //ANIMATION_COMPONENT_H

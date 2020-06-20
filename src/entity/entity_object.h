@@ -1,4 +1,7 @@
+#ifndef ENTITY_OBJECT_H
+#define ENTITY_OBJECT_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 
 #include "entity_update.h"
@@ -36,3 +39,5 @@ private:
 	std::shared_ptr<sf::Sprite> sprite;
 	std::shared_ptr<sf::Texture> texture;
 };
+
+#endif //ENTITY_OBJECT_H

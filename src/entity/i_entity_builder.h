@@ -1,4 +1,7 @@
+#ifndef I_ENTITY_BUILDER_H
+#define I_ENTITY_BUILDER_H
 #pragma once
+
 #include <memory>
 #include <map>
 #include <string>
@@ -14,3 +17,5 @@ public:
 	virtual ~IEntityObjectBuilder() = default;
 	virtual EntityManifest Build() const = 0;
 };
+
+#endif //I_ENTITY_BUILDER_H

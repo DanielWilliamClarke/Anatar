@@ -1,3 +1,5 @@
+#ifndef ANIMATION_COMPONENT_FACTORY_H
+#define ANIMATION_COMPONENT_FACTORY_H
 #pragma once
 
 #include "i_animation_component_factory.h"
@@ -12,3 +14,5 @@ public:
 		return std::make_shared<AnimationComponent>();
 	}
 };
+
+#endif //ANIMATION_COMPONENT_FACTORY_H

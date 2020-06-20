@@ -1,4 +1,7 @@
+#ifndef ENTITY_UPDATE_H
+#define ENTITY_UPDATE_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 
 struct EntityUpdate 
@@ -12,3 +15,5 @@ struct EntityUpdate
 		: position(position), direction(direction), loop(loop)
 	{}
 };
+
+#endif //ENTITY_UPDATE_H

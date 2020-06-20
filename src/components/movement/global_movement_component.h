@@ -1,3 +1,6 @@
+#ifndef GLOBAL_MOVEMENT_COMPONENT_H
+#define GLOBAL_MOVEMENT_COMPONENT_H
+
 #pragma once
 #include <SFML/Graphics.hpp>
 
@@ -40,3 +43,5 @@ private:
 	sf::FloatRect bounds;
 	sf::FloatRect entityBounds;
 };
+
+#endif //GLOBAL_MOVEMENT_COMPONENT_H
