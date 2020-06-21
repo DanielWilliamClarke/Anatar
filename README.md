@@ -18,10 +18,10 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 
 ## Next Up
 
-- Create base entity class so players and enemies may implement / derive
+- Create base entity class so players and enemies may implement / derive - ✓
 - Create enemies and enemy movement
 - Player weapons
-- Flesh out player
+- Flesh out player 
 - Skin player and enemies using previous assets before new ones are made
 - Player enemy interactions
 - Stage background for fun
