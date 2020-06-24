@@ -59,8 +59,9 @@ void Player::Update(Input in, float dt) const
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
 	this->UpdateObjects({
-		{"ship", EntityUpdate(position, direction, false)},
-		{ "exhaust",  EntityUpdate(position, IDLE) }
+		{ "ship", EntityUpdate(position, direction, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE) },
+		{ "turret",  EntityUpdate(position, IDLE) }
 	}, dt);
 }
 

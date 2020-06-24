@@ -12,10 +12,10 @@ public:
 	OffSetMovementComponent(sf::Vector2f offset);
 	virtual ~OffSetMovementComponent() = default;
 
-	virtual sf::Vector2f Integrate(sf::Vector2f origin, const float& dt) const;
+	virtual sf::Vector2f Integrate(sf::Vector2f origin, const float& dt);
 	virtual sf::Vector2f Interpolate(sf::Vector2f interpPosition) const;
 
-private:
+protected:
 	sf::Vector2f offset;
 };
 

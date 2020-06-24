@@ -4,7 +4,7 @@ OffSetMovementComponent::OffSetMovementComponent(sf::Vector2f offset)
 	: offset(offset) 
 {}
 
-sf::Vector2f OffSetMovementComponent::Integrate(sf::Vector2f origin, const float& dt) const
+sf::Vector2f OffSetMovementComponent::Integrate(sf::Vector2f origin, const float& dt)
 {
 	return origin + offset;
 }

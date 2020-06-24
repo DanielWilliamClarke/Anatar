@@ -6,5 +6,5 @@
 TEST(PlayerBuilderTest, ShouldCreateShipAndExhaust) {
 	PlayerBuilder pb;
 	auto objects = pb.Build();
-	EXPECT_EQ(objects.size(), 2);
+	EXPECT_EQ(objects.size(), 3);
 }
