@@ -15,15 +15,13 @@ set(EXECUTABLE_NAME ${BINARY})
 # Create executable to run game
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 target_link_libraries(${BINARY} PUBLIC 
-    sfml-graphics 
-    sfml-audio
+    ${CONAN_LIBS}
 )
 
 # Create lib for testing purposes
 add_library(${BINARY_LIB} STATIC ${SOURCES})
 target_link_libraries(${BINARY_LIB} PUBLIC
-    sfml-graphics
-    sfml-audio
+    ${CONAN_LIBS}
 )
 
 # Copy assets on post build

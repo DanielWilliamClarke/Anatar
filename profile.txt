@@ -1,0 +1,13 @@
+[settings]
+os=Windows
+arch=x86_64
+compiler=Visual Studio
+compiler.version=16
+
+[options]
+
+[build_requires]
+
+[env]
+CFLAGS=-fpic
+CXXFLAGS=-fpic -std=c++11

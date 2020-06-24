@@ -13,8 +13,13 @@ project(Annatar)
 
 ## If you want to link SFML statically
 set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR "lib/SFML-2.5.1/lib/cmake/SFML")
-find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+
+# Get sfml from conan
+include(conanbuildinfo.cmake)
+conan_basic_setup()
+
+#set(SFML_DIR "lib/SFML-2.5.1/lib/cmake/SFML")
+#find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 # Link gtest - below line found in 
 # https://raw.githubusercontent.com/google/googletest/master/googletest/README.md

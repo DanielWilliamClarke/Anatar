@@ -2,4 +2,9 @@
 /out
 /.vs
 /**/*.zip
-/lib
+/lib/*/*
+/graph_info.json
+/conaninfo.txt
+/conanbuildinfo.txt
+/conanbuildinfo.cmake
+/conan.lock
