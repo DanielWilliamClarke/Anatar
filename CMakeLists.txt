@@ -11,25 +11,12 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /ignore:4099")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /ignore:4099")
 set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4099")
 
-## If you want to link SFML statically
-set(SFML_STATIC_LIBRARIES TRUE)
-
 # Get sfml from conan
-include(conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-
-#set(SFML_DIR "lib/SFML-2.5.1/lib/cmake/SFML")
-#find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-
-# Link gtest - below line found in 
-# https://raw.githubusercontent.com/google/googletest/master/googletest/README.md
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-enable_testing()
-add_subdirectory (lib/googletest)
 
 # Add src
 include_directories(src)
 add_subdirectory (src)
-
 # Add tests
 add_subdirectory (test)

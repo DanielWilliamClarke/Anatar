@@ -27,3 +27,14 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 - Stage background for fun
 - Game states - main menu, gameplay, pause, settings, highscores etc
 - Level design?
+
+## Install Conan packages
+
+```Powershell
+# Install Deps
+cd build
+conan install --build=missing --profile ../profile.txt ..     
+
+# then run cmake
+cmake ..
+```
