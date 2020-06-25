@@ -14,11 +14,13 @@ class PlayerBuilder : public IEntityObjectBuilder, public Player
 public:
 	PlayerBuilder() = default;
 	virtual ~PlayerBuilder() = default;
-	virtual EntityManifest Build() const;
+	virtual EntityManifest Build() override;
 private:
-	std::shared_ptr<EntityObject> BuildShip() const;
-	std::shared_ptr<EntityObject> BuildExhaust() const;
-	std::shared_ptr<EntityObject> BuildTurret() const;
+	void BuildShip();
+	void BuildExhaust();
+	void BuildTurret();
+
+	EntityManifest manifest;
 };
 
 #endif //PLAYER_BUILDER_H

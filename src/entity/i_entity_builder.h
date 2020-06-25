@@ -15,7 +15,7 @@ class IEntityObjectBuilder
 public:
 	IEntityObjectBuilder() = default;
 	virtual ~IEntityObjectBuilder() = default;
-	virtual EntityManifest Build() const = 0;
+	virtual EntityManifest Build() = 0;
 };
 
 #endif //I_ENTITY_BUILDER_H
