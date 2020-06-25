@@ -16,8 +16,8 @@ public:
 		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
 		std::shared_ptr<IGlobalMovementComponent> movementComponent);
 	virtual ~Player() = default;
-	virtual void Update(Input in, float dt) const;
-	virtual void Draw(sf::RenderTarget& target, float interp) const;
+	virtual void Update(Input in, float dt) const override;
+	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 
 protected:
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;

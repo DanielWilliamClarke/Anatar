@@ -11,7 +11,7 @@ class IAnimationComponentFactory
 public:
 	IAnimationComponentFactory() = default;
 	virtual ~IAnimationComponentFactory() = default;
-	virtual std::shared_ptr<AnimationComponent> CreateInstance() = 0;
+	virtual std::shared_ptr<AnimationComponent> CreateInstance() const = 0;
 };
 
 #endif // I_ANIMATION_COMPONENT_FACTORY_H

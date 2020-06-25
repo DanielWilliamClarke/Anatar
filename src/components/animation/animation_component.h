@@ -21,14 +21,14 @@ public:
 	virtual ~AnimationComponent() = default;
 
 	//Functions
-	virtual void SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet);
+	virtual void SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet) override;
 
 	virtual void AddAnimation(const int key, float frameDuration,
-		int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
+		int startFrameX, int startFrameY, int framesX, int framesY, int width, int height) override;
 
-	virtual const bool& IsDone(const int key);
-	virtual const bool& Play(const int key, const bool loop = true, const bool priority = false);
-	virtual const bool& Play(const int key, const float& modifier, const float& modifierMax, const bool loop = true, const bool priority = false);
+	virtual const bool& IsDone(const int key) override;
+	virtual const bool& Play(const int key, const bool loop = true, const bool priority = false) override;
+	virtual const bool& Play(const int key, const float& modifier, const float& modifierMax, const bool loop = true, const bool priority = false) override;
 	
 private:
 	std::shared_ptr<sf::Sprite> sprite;

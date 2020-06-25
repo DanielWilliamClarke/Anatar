@@ -10,7 +10,7 @@ class HitboxComponentFactory : public IHitboxComponentFactory
 public:
 	HitboxComponentFactory() = default;
 	virtual ~HitboxComponentFactory() = default;
-	virtual std::shared_ptr<HitboxComponent> CreateInstance() {
+	virtual std::shared_ptr<HitboxComponent> CreateInstance() const override {
 		return std::make_shared<HitboxComponent>();
 	}
 };

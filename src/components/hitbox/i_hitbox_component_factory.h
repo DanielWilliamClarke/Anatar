@@ -10,7 +10,7 @@ class IHitboxComponentFactory
 public:
 	IHitboxComponentFactory() = default;
 	virtual ~IHitboxComponentFactory() = default;
-	virtual std::shared_ptr<HitboxComponent> CreateInstance() = 0;
+	virtual std::shared_ptr<HitboxComponent> CreateInstance() const = 0;
 };
 
 #endif //I_HITBOX_COMPONENT_FACTORY_H

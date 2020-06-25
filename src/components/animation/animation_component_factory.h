@@ -10,7 +10,7 @@ class AnimationComponentFactory : public IAnimationComponentFactory
 public:
 	AnimationComponentFactory() = default;
 	virtual ~AnimationComponentFactory() = default;
-	virtual std::shared_ptr<AnimationComponent> CreateInstance() {
+	virtual std::shared_ptr<AnimationComponent> CreateInstance() const override {
 		return std::make_shared<AnimationComponent>();
 	}
 };
