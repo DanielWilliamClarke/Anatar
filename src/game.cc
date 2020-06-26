@@ -7,6 +7,9 @@
 #include "player/player.h"
 #include "player/player_input.h"
 
+#include "util/random_number_mersenne_source.cc"
+#include "level/space_level.h"
+
 #include "components/movement/global_movement_component.h"
 
 #include "components/animation/animation_component_factory.h"
@@ -15,22 +18,30 @@
 #include "components/hitbox/hitbox_component_factory.h"
 #include "components/hitbox/hitbox_component.h"
 
-Game::Game() 
+Game::Game()
     : clock(std::make_shared<sf::Clock>()),
     dt(1.0f / 60.0f),
-    accumulator(0.0f)
+    accumulator(0.0f),
+    worldSpeed(40.0f)
 {
     this->InitWindow();
     this->InitFps();
+    this->InitLevel();
     this->InitPlayer();
 }
 
 void Game::InitWindow()
 {
 	this->window = std::make_shared<sf::RenderWindow>(
-		sf::VideoMode(800, 600),
+		sf::VideoMode(1280, 720),
 		"Space Shooter",
 		sf::Style::Titlebar | sf::Style::Close);
+}
+
+void Game::InitLevel()
+{
+    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>();
+    this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
 }
 
 void Game::InitPlayer() 
@@ -73,6 +84,7 @@ void Game::Update()
     this->accumulator += this->clock->restart().asSeconds();
     while (this->accumulator >= this->dt)
     {
+        this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
         this->fps->Update();
         this->accumulator -= this->dt;
@@ -82,7 +94,8 @@ void Game::Update()
 void Game::Draw() 
 {
     auto interp = this->accumulator / this->dt;
-    this->window->clear(sf::Color(255, 255, 255, 255));
+    this->window->clear(sf::Color::Black);
+    this->level->Draw(*this->window);
     this->player->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
     this->window->display();

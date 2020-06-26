@@ -10,6 +10,7 @@ namespace sf {
 }
 
 class Fps;
+class SpaceLevel;
 class Player;
 class PlayerInput;
 
@@ -24,6 +25,7 @@ private:
 
 	void InitWindow();
 	void InitFps();
+	void InitLevel();
 	void InitPlayer();
 
 	void WindowEvents();
@@ -32,12 +34,14 @@ private:
 
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<Fps> fps;
+	std::shared_ptr<SpaceLevel> level;
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<sf::Clock> clock;
 
 	float dt;
 	float accumulator;
+	float worldSpeed;
 };
 
 #endif //GAME_H
