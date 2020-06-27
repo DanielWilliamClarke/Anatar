@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "../util/random_number_mersenne_source.h"
+#include "../util/i_random_number_source.h"
 
 SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
 	: randSource(randSource), viewSize(viewSize)
@@ -11,10 +11,10 @@ SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf:
 	auto starChartY = randSource->Generate(stars.size(), 0, (int)viewSize.y);
 
 	for (auto i = 0; i < stars.size(); i++) {
-		auto star = sf::CircleShape(0.75);
-		star.setFillColor(sf::Color::White);
-		star.setPosition(starChartX[i], starChartY[i]);
-		stars[i] = star;
+		auto& s = stars[i];
+		s = sf::CircleShape(0.75);
+		s.setFillColor(sf::Color::White);
+		s.setPosition((float)starChartX[i], (float)starChartY[i]);
 	}
 }
 
@@ -38,10 +38,10 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 			s.setFillColor(sf::Color(255, 215, 0));
 			s.setRadius(1);
 		}
-		else if (i < 400)
+		else if (i < 375)
 		{
-			paralaxFactor = 0.8f;
-			s.setFillColor(sf::Color(220, 20, 60));
+			paralaxFactor = 1.1f;
+			s.setFillColor(sf::Color(0, 255, 255));
 			s.setRadius(1.5);
 		}
 
@@ -50,7 +50,7 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 		if (starPosition.x < 0) 
 		{
 			starPosition.x = viewSize.x;
-			starPosition.y = randSource->Generate(0, (int)viewSize.y);
+			starPosition.y = (float)randSource->Generate(0, (int)viewSize.y);
 		}
 
 		s.setPosition(starPosition);	

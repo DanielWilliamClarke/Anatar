@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include <chrono>
+
 #include "game.h"
 #include "fps.h"
 
@@ -40,7 +42,8 @@ void Game::InitWindow()
 
 void Game::InitLevel()
 {
-    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>();
+    auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
     this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
 }
 
@@ -55,7 +58,7 @@ void Game::InitPlayer()
         viewSize.y);
 
     auto playerBuilder = std::make_shared<PlayerBuilder>();
-    auto movementComponent = std::make_shared<GlobalMovementComponent>(bounds);
+    auto movementComponent = std::make_shared<GlobalMovementComponent>(bounds, worldSpeed);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
 }

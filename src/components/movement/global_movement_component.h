@@ -12,7 +12,7 @@ class GlobalMovementComponent: public IGlobalMovementComponent
 {
 public:
 
-	GlobalMovementComponent(sf::FloatRect bounds);
+	GlobalMovementComponent(sf::FloatRect bounds, float& worldSpeed);
 	virtual ~GlobalMovementComponent() = default;
 
 	virtual void SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds) override;
@@ -38,6 +38,8 @@ private:
 	float force;
 	float mass;
 	float movementSpeed;
+
+	float& worldSpeed;
 
 	// Bounds checking
 	sf::FloatRect bounds;

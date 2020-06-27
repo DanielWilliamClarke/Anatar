@@ -3,16 +3,17 @@
 #include "global_movement_component.h"
 #include "../../player/player_input.h"
 
-GlobalMovementComponent::GlobalMovementComponent(sf::FloatRect bounds)
+GlobalMovementComponent::GlobalMovementComponent(sf::FloatRect bounds, float& worldSpeed)
 	: bounds(bounds),
 	entityBounds(sf::FloatRect(0, 0, 0, 0)),
 	velocity(sf::Vector2f(.0f, .0f)),
 	gravity(sf::Vector2f(.0f, 9.81f)),
 	thrust(sf::Vector2f(.0f, -9.81f)),
 	maxThrust(sf::Vector2f(.0f, -9.81f)),
-	mass(0.01f),
+	mass(1.0f),
 	force(.0f),
-	movementSpeed(5.0f)
+	movementSpeed(5.0f),
+	worldSpeed(worldSpeed)
 {
 }
 
@@ -48,11 +49,12 @@ sf::Vector2f GlobalMovementComponent::Integrate(Input in, const float& dt)
 		velocity.y = 0;
 	}
 
+	sf::Vector2f worldVelocity(-worldSpeed, 0);
 	auto force = gravity + thrust;
 	auto acceleration = force / mass; // 2nd derivative
 	velocity += acceleration * dt; // 1st derivative
 	auto scaledMovement = in.movement * movementSpeed;
-	position = Bound(position + scaledMovement + velocity * dt);
+	position = Bound(position + scaledMovement + velocity + worldVelocity * dt);
 	return position;
 }
 
