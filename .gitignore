@@ -8,3 +8,5 @@
 /conanbuildinfo.txt
 /conanbuildinfo.cmake
 /conan.lock
+/src/out/build/x64-Debug
+/src/out/build/x64-Release
