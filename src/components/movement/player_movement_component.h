@@ -8,19 +8,22 @@
 
 struct Input;
 
-class GlobalMovementComponent: public IGlobalMovementComponent
+class PlayerMovementComponent: public IGlobalMovementComponent
 {
 public:
 
-	GlobalMovementComponent(sf::FloatRect bounds, float& worldSpeed);
-	virtual ~GlobalMovementComponent() = default;
+	PlayerMovementComponent(sf::FloatRect bounds, float& worldSpeed);
+	virtual ~PlayerMovementComponent() = default;
 
 	virtual void SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds) override;
 	virtual const sf::Vector2f GetPosition() const override;
 	virtual const sf::Vector2f GetCenter() const override;
 
-	virtual sf::Vector2f Integrate(Input in, const float& dt) override;
+	virtual sf::Vector2f Integrate(Input& in, const float& dt) override;
 	virtual sf::Vector2f Interpolate(const float& interp) override;
+
+protected:
+	virtual sf::Vector2f Integrate(const float& dt) override { return { 0,0 }; };
 
 private:
 	

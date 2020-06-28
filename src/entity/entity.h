@@ -29,7 +29,7 @@ public:
 	void RemoveObject(std::string name);
 	std::shared_ptr<EntityObject> GetObject(std::string name) const;
 
-	virtual void Update(Input in, float dt) const = 0;
+	virtual void Update(float dt) const = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 
 protected:

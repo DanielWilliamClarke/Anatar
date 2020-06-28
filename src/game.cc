@@ -9,10 +9,14 @@
 #include "player/player.h"
 #include "player/player_input.h"
 
+#include "enemy/enemy_builder.h"
+#include "enemy/enemy.h"
+
 #include "util/random_number_mersenne_source.cc"
 #include "level/space_level.h"
 
-#include "components/movement/global_movement_component.h"
+#include "components/movement/enemy_movement_component.h"
+#include "components/movement/player_movement_component.h"
 
 #include "components/animation/animation_component_factory.h"
 #include "components/animation/animation_component.h"
@@ -30,6 +34,7 @@ Game::Game()
     this->InitFps();
     this->InitLevel();
     this->InitPlayer();
+    this->InitEnemy();
 }
 
 void Game::InitWindow()
@@ -58,9 +63,25 @@ void Game::InitPlayer()
         viewSize.y);
 
     auto playerBuilder = std::make_shared<PlayerBuilder>();
-    auto movementComponent = std::make_shared<GlobalMovementComponent>(bounds, worldSpeed);
+    auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
+}
+
+void Game::InitEnemy()
+{
+    auto view = this->window->getView();
+    sf::Vector2f viewCenter(view.getCenter());
+    sf::Vector2f viewSize(view.getSize());
+    sf::FloatRect bounds(viewCenter.x - viewSize.x / 2, // left
+        viewCenter.y - viewSize.y / 2, // top
+        viewSize.x,
+        viewSize.y);
+
+    auto enemySpeed = 45.0f;
+    auto enemyBuilder = std::make_shared<EnemyBuilder>();
+    auto movementComponent = std::make_shared<EnemyMovementComponent>(bounds, enemySpeed, worldSpeed);
+    this->enemy = std::make_shared<Enemy>(enemyBuilder, movementComponent);
 }
 
 void Game::InitFps() 
@@ -89,6 +110,7 @@ void Game::Update()
     {
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
+        this->enemy->Update(dt);
         this->fps->Update();
         this->accumulator -= this->dt;
     }
@@ -100,6 +122,7 @@ void Game::Draw()
     this->window->clear(sf::Color::Black);
     this->level->Draw(*this->window);
     this->player->Draw(*this->window, interp);
+    this->enemy->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
     this->window->display();
 }

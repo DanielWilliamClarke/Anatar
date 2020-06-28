@@ -13,6 +13,7 @@ class Fps;
 class SpaceLevel;
 class Player;
 class PlayerInput;
+class Enemy;
 
 class Game 
 {
@@ -27,6 +28,7 @@ private:
 	void InitFps();
 	void InitLevel();
 	void InitPlayer();
+	void InitEnemy();
 
 	void WindowEvents();
 	void Update();
@@ -37,6 +39,7 @@ private:
 	std::shared_ptr<SpaceLevel> level;
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerInput> playerInput;
+	std::shared_ptr<Enemy> enemy;
 	std::shared_ptr<sf::Clock> clock;
 
 	float dt;

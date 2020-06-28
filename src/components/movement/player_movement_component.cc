@@ -1,9 +1,9 @@
 #include <math.h>
 #include <iostream>
-#include "global_movement_component.h"
+#include "player_movement_component.h"
 #include "../../player/player_input.h"
 
-GlobalMovementComponent::GlobalMovementComponent(sf::FloatRect bounds, float& worldSpeed)
+PlayerMovementComponent::PlayerMovementComponent(sf::FloatRect bounds, float& worldSpeed)
 	: bounds(bounds),
 	entityBounds(sf::FloatRect(0, 0, 0, 0)),
 	velocity(sf::Vector2f(.0f, .0f)),
@@ -17,25 +17,25 @@ GlobalMovementComponent::GlobalMovementComponent(sf::FloatRect bounds, float& wo
 {
 }
 
-const sf::Vector2f GlobalMovementComponent::GetPosition() const
+const sf::Vector2f PlayerMovementComponent::GetPosition() const
 {
 	return this->position;
 }
 
-const sf::Vector2f GlobalMovementComponent::GetCenter() const
+const sf::Vector2f PlayerMovementComponent::GetCenter() const
 {
 	return sf::Vector2f(
 		this->bounds.width / 2,
 		this->bounds.height / 2);
 }
 
-void GlobalMovementComponent::SetEntityAttributes(sf::Vector2f position, sf::FloatRect bounds)
+void PlayerMovementComponent::SetEntityAttributes(sf::Vector2f position, sf::FloatRect bounds)
 {
 	this->position = position;
 	this->entityBounds = bounds;
 }
 
-sf::Vector2f GlobalMovementComponent::Integrate(Input in, const float& dt)
+sf::Vector2f PlayerMovementComponent::Integrate(Input& in, const float& dt)
 {
 	lastPosition = position;
 
@@ -58,12 +58,12 @@ sf::Vector2f GlobalMovementComponent::Integrate(Input in, const float& dt)
 	return position;
 }
 
-sf::Vector2f GlobalMovementComponent::Interpolate(const float& interp)
+sf::Vector2f PlayerMovementComponent::Interpolate(const float& interp)
 {
 	return Bound(position * interp + lastPosition * (1.0f - interp));
 }
 
-sf::Vector2f GlobalMovementComponent::Bound(sf::Vector2f newPosition)
+sf::Vector2f PlayerMovementComponent::Bound(sf::Vector2f newPosition)
 {
 	if (newPosition.x <= bounds.left)
 	{

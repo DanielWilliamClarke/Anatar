@@ -16,7 +16,8 @@ public:
 	virtual const sf::Vector2f GetPosition() const = 0;
 	virtual const sf::Vector2f GetCenter() const = 0;
 	
-	virtual sf::Vector2f Integrate(Input in, const float& dt) = 0;
+	virtual sf::Vector2f Integrate(Input& in, const float& dt) = 0;
+	virtual sf::Vector2f Integrate(const float& dt) = 0;
 	virtual sf::Vector2f Interpolate(const float& interp) = 0;
 };
 

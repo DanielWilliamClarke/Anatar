@@ -5,11 +5,14 @@ Fps::Fps()
   font.loadFromFile("./assets/digital.ttf");
   fps.setFont(font);
   dps.setFont(font);
-  fps.setPosition(10.0f, 0.0f);
-  dps.setPosition(10.0f, 30.0f);
+  fps.setPosition(2.0f, 0.0f);
+  dps.setPosition(2.0f, 15.0f);
+  //Set size
+  fps.setScale(0.5, 0.5);
+  dps.setScale(0.5, 0.5);
   // set the color
-  fps.setFillColor(sf::Color::Red);
-  dps.setFillColor(sf::Color::Red);
+  fps.setFillColor(sf::Color::Cyan);
+  dps.setFillColor(sf::Color::Cyan);
   frames = draws = -1;
 }
 

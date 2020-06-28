@@ -10,9 +10,7 @@
 #include "../entity/entity_update.h"
 
 #include "player_input.h"
-#include "../components/animation/animation_component.h"
-#include "../components/hitbox/hitbox_component.h"
-#include "../components/movement/global_movement_component.h"
+#include "../components/movement/i_global_movement_component.h"
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
