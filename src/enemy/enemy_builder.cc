@@ -28,7 +28,7 @@ void EnemyBuilder::BuildEnemy()
 		spriteFrameSize.y / 2);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>();
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(spriteOrigin, 100.0f, 100.0f);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent);
 
@@ -50,6 +50,8 @@ void EnemyBuilder::BuildEnemy()
 		(int)spriteFrameSize.y);
 
 	ship->AddAnimation(this->IDLE, 0.2f, 0, 0, 0, 0, frameSize.x, frameSize.y);
+	ship->AddAnimation(this->MOVING_UP, 0.2f, 0, 1, 2, 1, frameSize.x, frameSize.y);
+	ship->AddAnimation(this->MOVING_DOWN, 0.2f, 0, 0, 2, 0, frameSize.x, frameSize.y);
 
 	manifest["enemy"] = ship;
 }

@@ -9,7 +9,7 @@
 class HitboxComponent: public IHitboxComponent
 {
 public: 
-	HitboxComponent();
+	HitboxComponent(sf::Color colour);
 	virtual ~HitboxComponent() = default;
 
 	virtual void SetSprite(std::shared_ptr<sf::Sprite> sprite, float offsetX, float offsetY, float width, float height) override;

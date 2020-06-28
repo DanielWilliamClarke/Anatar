@@ -14,14 +14,33 @@
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent)
-	: Entity{ entityBuilder, globalMovementComponent }
+	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent)
+	: Entity{ entityBuilder, globalMovementComponent }, movementComponent(globalMovementComponent)
 {
 	this->objects = this->entityBuilder->Build();
 
 	auto shipSprite = this->GetObject("ship")->GetSprite();
-	shipSprite->setPosition(this->globalMovementComponent->GetCenter());
-	this->globalMovementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
+	shipSprite->setPosition(this->movementComponent->GetCenter());
+	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
+}
+
+void Player::Update(Input in, float dt) const
+{
+	const auto lastPosition = this->movementComponent->GetPosition();
+	const auto position = this->movementComponent->Integrate(in, dt);
+	const auto direction = this->CalculateDirection(position, lastPosition);
+
+	this->UpdateObjects({
+		{ "ship", EntityUpdate(position, direction, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE) },
+		{ "turret",  EntityUpdate(position, IDLE) }
+	}, dt);
+}
+
+void Player::Draw(sf::RenderTarget& target, float interp) const
+{
+	const auto interpPosition = this->movementComponent->Interpolate(interp);
+	this->DrawObjects(target, interpPosition);
 }
 
 const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const
@@ -33,7 +52,7 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 		const auto angle = std::floor(std::atan2(y, x) * (180.0 / M_PI));
 
 
-		if (angle == 0 || angle == 180) 
+		if (angle == 0 || angle == 180)
 		{
 			return IDLE;
 		}
@@ -48,23 +67,4 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 	}
 
 	return IDLE;
-}
-
-void Player::Update(Input in, float dt) const
-{
-	const auto lastPosition = this->globalMovementComponent->GetPosition();
-	const auto position = this->globalMovementComponent->Integrate(in, dt);
-	const auto direction = this->CalculateDirection(position, lastPosition);
-
-	this->UpdateObjects({
-		{ "ship", EntityUpdate(position, direction, false) },
-		{ "exhaust",  EntityUpdate(position, IDLE) },
-		{ "turret",  EntityUpdate(position, IDLE) }
-	}, dt);
-}
-
-void Player::Draw(sf::RenderTarget& target, float interp) const
-{
-	const auto interpPosition = this->globalMovementComponent->Interpolate(interp);
-	this->DrawObjects(target, interpPosition);
 }

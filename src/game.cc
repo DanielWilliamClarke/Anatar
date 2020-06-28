@@ -18,10 +18,7 @@
 #include "components/movement/enemy_movement_component.h"
 #include "components/movement/player_movement_component.h"
 
-#include "components/animation/animation_component_factory.h"
 #include "components/animation/animation_component.h"
-
-#include "components/hitbox/hitbox_component_factory.h"
 #include "components/hitbox/hitbox_component.h"
 
 Game::Game()

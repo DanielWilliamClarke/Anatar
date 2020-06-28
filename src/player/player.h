@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "../entity/entity.h"
+#include "components/movement/i_player_movement_component.h"
 
 class Player : public Entity
 {
@@ -14,7 +15,7 @@ public:
 	Player() = default;
 	Player(
 		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
-		std::shared_ptr<IGlobalMovementComponent> movementComponent);
+		std::shared_ptr<IPlayerMovementComponent> movementComponent);
 	virtual ~Player() = default;
 	virtual void Update(Input in, float dt) const;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
@@ -22,6 +23,8 @@ public:
 protected:
 	virtual void Update(float dt) const override {};
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
+
+	std::shared_ptr<IPlayerMovementComponent> movementComponent;
 };
 
 #endif //PLAYER_H

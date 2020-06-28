@@ -1,14 +1,14 @@
-#ifndef GLOBAL_MOVEMENT_COMPONENT_H
-#define GLOBAL_MOVEMENT_COMPONENT_H
-
+#ifndef PLAYER_MOVEMENT_COMPONENT_H
+#define PLAYER_MOVEMENT_COMPONENT_H
 #pragma once
+
 #include <SFML/Graphics.hpp>
 
-#include "i_global_movement_component.h"
+#include "i_player_movement_component.h"
 
 struct Input;
 
-class PlayerMovementComponent: public IGlobalMovementComponent
+class PlayerMovementComponent: public IPlayerMovementComponent
 {
 public:
 
@@ -19,7 +19,7 @@ public:
 	virtual const sf::Vector2f GetPosition() const override;
 	virtual const sf::Vector2f GetCenter() const override;
 
-	virtual sf::Vector2f Integrate(Input& in, const float& dt) override;
+	virtual sf::Vector2f Integrate(Input& in, const float& dt);
 	virtual sf::Vector2f Interpolate(const float& interp) override;
 
 protected:
@@ -49,4 +49,4 @@ private:
 	sf::FloatRect entityBounds;
 };
 
-#endif //GLOBAL_MOVEMENT_COMPONENT_H
+#endif //PLAYER_MOVEMENT_COMPONENT_H

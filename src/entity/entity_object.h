@@ -26,6 +26,7 @@ public:
 	void InitHitboxComponent(float offsetX, float offsetY, float width, float height);
 
 	void AddAnimation(const int key, float frameDuration, int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
+	void PlayAnimation(const int direction, const bool loop) const;
 	std::shared_ptr<sf::Sprite> GetSprite() const;
 
 	void Update(EntityUpdate position, float dt) const;

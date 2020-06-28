@@ -10,7 +10,7 @@
 class Enemy : public Entity
 {
 public:
-	enum movementStates { IDLE = 0 };
+	enum movementStates { IDLE = 0, MOVING_UP, MOVING_DOWN };
 	Enemy() = default;
 	Enemy(
 		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
@@ -21,8 +21,8 @@ public:
 	virtual void Update(float dt) const override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 
-private: 
-
+protected: 
+	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
 };
 
 

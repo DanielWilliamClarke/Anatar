@@ -6,8 +6,6 @@
 
 #include "i_global_movement_component.h"
 
-struct Input;
-
 class EnemyMovementComponent : public IGlobalMovementComponent
 {
 public:
@@ -21,9 +19,6 @@ public:
 
 	virtual sf::Vector2f Integrate(const float& dt) override;
 	virtual sf::Vector2f Interpolate(const float& interp) override;
-
-protected:
-	virtual sf::Vector2f Integrate(Input& in, const float& dt) override { return { 0,0 }; };
 
 private:
 

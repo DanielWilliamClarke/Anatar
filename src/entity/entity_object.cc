@@ -36,6 +36,11 @@ void EntityObject::AddAnimation(const int key, float frameDuration,
 	this->animationComponent->AddAnimation(key, frameDuration, startFrameX, startFrameY, framesX, framesY, width, height);
 }
 
+void EntityObject::PlayAnimation(const int direction, const bool loop) const
+{
+	this->animationComponent->Play(direction, loop);
+}
+
 std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const 
 {
 	return this->sprite;

@@ -48,13 +48,13 @@ sf::Vector2f PlayerMovementComponent::Integrate(Input& in, const float& dt)
 		thrust = maxThrust;
 		velocity.y = 0;
 	}
+	auto scaledMovement = in.movement * movementSpeed;
 
-	sf::Vector2f worldVelocity(-worldSpeed, 0);
+	sf::Vector2f worldVelocity = sf::Vector2f(-worldSpeed, 0);
 	auto force = gravity + thrust;
 	auto acceleration = force / mass; // 2nd derivative
 	velocity += acceleration * dt; // 1st derivative
-	auto scaledMovement = in.movement * movementSpeed;
-	position = Bound(position + scaledMovement + velocity + worldVelocity * dt);
+	position = Bound(position + velocity + scaledMovement + worldVelocity * dt);
 	return position;
 }
 

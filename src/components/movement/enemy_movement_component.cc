@@ -1,5 +1,3 @@
-#include <math.h>
-#include <iostream>
 #include "enemy_movement_component.h"
 
 EnemyMovementComponent::EnemyMovementComponent(sf::FloatRect bounds, float& speed, float& worldSpeed)
