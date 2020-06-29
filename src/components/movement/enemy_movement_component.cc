@@ -25,6 +25,11 @@ const sf::Vector2f EnemyMovementComponent::GetCenter() const
 		this->bounds.height / 2);
 }
 
+const sf::FloatRect EnemyMovementComponent::GetBounds() const
+{
+	return this->bounds;
+}
+
 void EnemyMovementComponent::SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds)
 {
 	this->position = position;

@@ -18,6 +18,7 @@ public:
 	virtual void SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds) override;
 	virtual const sf::Vector2f GetPosition() const override;
 	virtual const sf::Vector2f GetCenter() const override;
+	virtual const sf::FloatRect GetBounds() const override;
 
 	virtual sf::Vector2f Integrate(Input& in, const float& dt);
 	virtual sf::Vector2f Interpolate(const float& interp) override;

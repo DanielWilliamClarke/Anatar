@@ -15,9 +15,10 @@ Enemy::Enemy(
 {
 	this->objects = this->entityBuilder->Build();
 
-	auto shipSprite = this->GetObject("enemy")->GetSprite();
-	shipSprite->setPosition(this->globalMovementComponent->GetCenter());
-	this->globalMovementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
+	auto enemy = this->GetObject("enemy")->GetSprite();
+	auto bounds = this->globalMovementComponent->GetBounds();
+	enemy->setPosition({ bounds.width, bounds.height / 2 });
+	this->globalMovementComponent->SetEntityAttributes(enemy->getPosition(), enemy->getGlobalBounds());
 }
 
 void Enemy::Update(float dt) const
@@ -25,13 +26,8 @@ void Enemy::Update(float dt) const
 	const auto position = this->globalMovementComponent->Integrate(dt);
 
 	this->UpdateObjects({
-		{ "enemy", EntityUpdate(position, IDLE, false) },
+		{ "enemy", EntityUpdate(position, IDLE) },
 	}, dt);
-
-	auto enemy = this->GetObject("enemy");
-	const auto newPosition = enemy->GetSprite()->getPosition();
-	const auto direction = this->CalculateDirection(position, newPosition);
-	enemy->PlayAnimation(direction, false);
 }
 
 void Enemy::Draw(sf::RenderTarget& target, float interp) const

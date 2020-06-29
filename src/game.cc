@@ -75,7 +75,7 @@ void Game::InitEnemy()
         viewSize.x,
         viewSize.y);
 
-    auto enemySpeed = 45.0f;
+    auto enemySpeed = 100.0f;
     auto enemyBuilder = std::make_shared<EnemyBuilder>();
     auto movementComponent = std::make_shared<EnemyMovementComponent>(bounds, enemySpeed, worldSpeed);
     this->enemy = std::make_shared<Enemy>(enemyBuilder, movementComponent);

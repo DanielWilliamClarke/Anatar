@@ -31,6 +31,11 @@ const sf::Vector2f PlayerMovementComponent::GetCenter() const
 		this->bounds.height / 2);
 }
 
+const sf::FloatRect PlayerMovementComponent::GetBounds() const
+{
+	return this->bounds;
+}
+
 void PlayerMovementComponent::SetEntityAttributes(sf::Vector2f position, sf::FloatRect bounds)
 {
 	this->position = position;
