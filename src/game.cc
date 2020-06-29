@@ -71,14 +71,18 @@ void Game::InitEnemySystem()
     this->enemySystem = std::make_shared<EnemySystem>();
 
     this->enemySystem
-        ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
+        ->AddFactory(5.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 100.0f),
                 EnemyAnimationConfig("assets/enemy_3.png", 9, 0.2f, 1.0f))))
-        ->AddFactory(5.0f, std::make_shared<EnemyTypeFactory>(
+        ->AddFactory(2.5f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 100.0f),
-                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.2f, 1.0f))));
+                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.2f, 1.0f))))
+        ->AddFactory(20.0f, std::make_shared<EnemyTypeFactory>(
+            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+                EnemyMotionConfig(bounds, worldSpeed, 50.0f),
+                EnemyAnimationConfig("assets/boss_1.png", 12, 0.2f, 1.0f))));
 }
 
 void Game::InitFps() 

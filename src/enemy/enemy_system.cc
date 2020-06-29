@@ -17,8 +17,7 @@ void EnemySystem::Update(float dt)
 
 	for (auto& f : factories)
 	{
-		auto diff = std::abs(f.first - this->accumulator);
-		if (diff <= 0.001)
+		if (std::fmod(this->accumulator, f.first) < dt)
 		{
 			enemies.push_back(f.second->Create());	
 		}
