@@ -10,7 +10,7 @@ class EnemyMovementComponent : public IGlobalMovementComponent
 {
 public:
 
-	EnemyMovementComponent(sf::FloatRect bounds, float& speed, float& worldSpeed);
+	EnemyMovementComponent(sf::FloatRect bounds, float speed, float worldSpeed);
 	virtual ~EnemyMovementComponent() = default;
 
 	virtual void SetEntityAttributes(sf::Vector2f position, sf::FloatRect entityBounds) override;
@@ -36,7 +36,7 @@ private:
 	float mass;
 
 	float movementSpeed;
-	float& worldSpeed;
+	float worldSpeed;
 	sf::FloatRect bounds;
 };
 

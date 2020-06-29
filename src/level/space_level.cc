@@ -2,8 +2,6 @@
 
 #include <stdlib.h>
 
-#include "../util/i_random_number_source.h"
-
 SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
 	: randSource(randSource), viewSize(viewSize)
 {

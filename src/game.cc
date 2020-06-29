@@ -9,14 +9,15 @@
 #include "player/player.h"
 #include "player/player_input.h"
 
-#include "enemy/enemy_builder.h"
-#include "enemy/enemy.h"
+#include "enemy/enemy_system.h"
+#include "enemy/enemy_type_factory.h"
 
 #include "util/random_number_mersenne_source.cc"
 #include "level/space_level.h"
 
 #include "components/movement/enemy_movement_component.h"
 #include "components/movement/player_movement_component.h"
+#include "components/movement/offset_movement_component.h"
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
@@ -31,7 +32,7 @@ Game::Game()
     this->InitFps();
     this->InitLevel();
     this->InitPlayer();
-    this->InitEnemy();
+    this->InitEnemySystem();
 }
 
 void Game::InitWindow()
@@ -40,6 +41,14 @@ void Game::InitWindow()
 		sf::VideoMode(1280, 720),
 		"Space Shooter",
 		sf::Style::Titlebar | sf::Style::Close);
+
+    auto view = this->window->getView();
+    sf::Vector2f viewCenter(view.getCenter());
+    sf::Vector2f viewSize(view.getSize());
+    bounds = sf::FloatRect(viewCenter.x - viewSize.x / 2, // left
+        viewCenter.y - viewSize.y / 2, // top
+        viewSize.x,
+        viewSize.y);
 }
 
 void Game::InitLevel()
@@ -51,34 +60,25 @@ void Game::InitLevel()
 
 void Game::InitPlayer() 
 {
-    auto view = this->window->getView();
-    sf::Vector2f viewCenter(view.getCenter());
-    sf::Vector2f viewSize(view.getSize());
-    sf::FloatRect bounds(viewCenter.x - viewSize.x / 2, // left
-        viewCenter.y - viewSize.y / 2, // top
-        viewSize.x,
-        viewSize.y);
-
     auto playerBuilder = std::make_shared<PlayerBuilder>();
     auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
 }
 
-void Game::InitEnemy()
+void Game::InitEnemySystem()
 {
-    auto view = this->window->getView();
-    sf::Vector2f viewCenter(view.getCenter());
-    sf::Vector2f viewSize(view.getSize());
-    sf::FloatRect bounds(viewCenter.x - viewSize.x / 2, // left
-        viewCenter.y - viewSize.y / 2, // top
-        viewSize.x,
-        viewSize.y);
+    this->enemySystem = std::make_shared<EnemySystem>();
 
-    auto enemySpeed = 100.0f;
-    auto enemyBuilder = std::make_shared<EnemyBuilder>();
-    auto movementComponent = std::make_shared<EnemyMovementComponent>(bounds, enemySpeed, worldSpeed);
-    this->enemy = std::make_shared<Enemy>(enemyBuilder, movementComponent);
+    this->enemySystem
+        ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
+            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+                EnemyMotionConfig(bounds, worldSpeed, 100.0f),
+                EnemyAnimationConfig("assets/enemy_3.png", 9, 0.2f, 1.0f))))
+        ->AddFactory(5.0f, std::make_shared<EnemyTypeFactory>(
+            EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
+                EnemyMotionConfig(bounds, worldSpeed, 100.0f),
+                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.2f, 1.0f))));
 }
 
 void Game::InitFps() 
@@ -107,7 +107,7 @@ void Game::Update()
     {
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
-        this->enemy->Update(dt);
+        this->enemySystem->Update(dt);
         this->fps->Update();
         this->accumulator -= this->dt;
     }
@@ -119,7 +119,7 @@ void Game::Draw()
     this->window->clear(sf::Color::Black);
     this->level->Draw(*this->window);
     this->player->Draw(*this->window, interp);
-    this->enemy->Draw(*this->window, interp);
+    this->enemySystem->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
     this->window->display();
 }

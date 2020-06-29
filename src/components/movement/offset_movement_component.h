@@ -14,7 +14,6 @@ public:
 
 	virtual sf::Vector2f Integrate(sf::Vector2f origin, const float& dt) override;
 	virtual sf::Vector2f Interpolate(sf::Vector2f interpPosition) const override;
-
 protected:
 	sf::Vector2f offset;
 };

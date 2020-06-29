@@ -4,16 +4,13 @@
 
 #include <memory>
 
-namespace sf {
-	class RenderWindow;
-	class Clock;
-}
+#include <SFML/Graphics.hpp>
 
 class Fps;
 class SpaceLevel;
 class Player;
 class PlayerInput;
-class Enemy;
+class EnemySystem;
 
 class Game 
 {
@@ -28,7 +25,7 @@ private:
 	void InitFps();
 	void InitLevel();
 	void InitPlayer();
-	void InitEnemy();
+	void InitEnemySystem();
 
 	void WindowEvents();
 	void Update();
@@ -39,8 +36,10 @@ private:
 	std::shared_ptr<SpaceLevel> level;
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerInput> playerInput;
-	std::shared_ptr<Enemy> enemy;
+	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<sf::Clock> clock;
+
+	sf::FloatRect bounds;
 
 	float dt;
 	float accumulator;

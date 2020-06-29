@@ -4,9 +4,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "i_local_movement_component.h"
+#include "offset_movement_component.h"
 
-class OrbitalMovementComponent : public ILocalMovementComponent
+class OrbitalMovementComponent : public OffSetMovementComponent
 {
 public:
 	OrbitalMovementComponent(sf::Vector2f offset, float radius, float speed);
@@ -17,7 +17,6 @@ public:
 
 private:
 	sf::Vector2f polarCoordinate;
-	sf::Vector2f offset;
 	float radius;
 	float angle;
 	float speed;

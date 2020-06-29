@@ -7,23 +7,25 @@
 
 #include "../entity/entity.h"
 
+#include "../util/i_random_number_source.h"
+
+
 class Enemy : public Entity
 {
 public:
-	enum movementStates { IDLE = 0, MOVING_UP, MOVING_DOWN };
+	enum movementStates { IDLE = 0 };
 	Enemy() = default;
 	Enemy(
-		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
-		std::shared_ptr<IGlobalMovementComponent> movementComponent);
-
+		EntityManifest manifest,
+		std::shared_ptr<IGlobalMovementComponent> movementComponent,
+		std::shared_ptr<IRandomNumberSource<int>> randSource);
 	virtual ~Enemy() = default;
-
 	virtual void Update(float dt) const override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 
-protected: 
-	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
-};
+protected:
 
+	std::shared_ptr<IRandomNumberSource<int>> randSource;
+};
 
 #endif //ENEMY_H

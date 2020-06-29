@@ -5,7 +5,7 @@
 #include <math.h>
 
 OrbitalMovementComponent::OrbitalMovementComponent(sf::Vector2f offset, float radius, float speed)
-	: offset(offset), radius(radius), speed(speed), angle(0.0f)
+	: OffSetMovementComponent{ offset }, radius(radius), speed(speed), angle(0.0f)
 {}
 
 sf::Vector2f OrbitalMovementComponent::Integrate(sf::Vector2f origin, const float& dt)

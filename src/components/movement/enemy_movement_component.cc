@@ -1,6 +1,6 @@
 #include "enemy_movement_component.h"
 
-EnemyMovementComponent::EnemyMovementComponent(sf::FloatRect bounds, float& speed, float& worldSpeed)
+EnemyMovementComponent::EnemyMovementComponent(sf::FloatRect bounds, float speed, float worldSpeed)
 	: bounds(bounds),
 	velocity(sf::Vector2f(.0f, .0f)),
 	gravity(sf::Vector2f(.0f, 9.81f)),
