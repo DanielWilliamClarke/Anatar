@@ -6,14 +6,16 @@
 PlayerMovementComponent::PlayerMovementComponent(sf::FloatRect bounds, float& worldSpeed)
 	: bounds(bounds),
 	entityBounds(sf::FloatRect(0, 0, 0, 0)),
+	movementSpeed(worldSpeed / 4),
+	worldSpeed(worldSpeed),
+	worldVelocity(sf::Vector2f(-worldSpeed, 0)),
 	velocity(sf::Vector2f(.0f, .0f)),
 	gravity(sf::Vector2f(.0f, 9.81f)),
 	thrust(sf::Vector2f(.0f, -9.81f)),
 	maxThrust(sf::Vector2f(.0f, -9.81f)),
 	mass(1.0f),
-	force(.0f),
-	movementSpeed(5.0f),
-	worldSpeed(worldSpeed)
+	force(.0f)
+
 {
 }
 
@@ -38,7 +40,6 @@ void PlayerMovementComponent::SetEntityAttributes(sf::Vector2f position, sf::Flo
 sf::Vector2f PlayerMovementComponent::Integrate(Input& in, const float& dt)
 {
 	lastPosition = position;
-
 	if (in.falling)
 	{
 		thrust = sf::Vector2f(0.0f, 0.0f);
@@ -46,21 +47,20 @@ sf::Vector2f PlayerMovementComponent::Integrate(Input& in, const float& dt)
 	else
 	{
 		thrust = maxThrust;
-		velocity.y = 0;
 	}
-	auto scaledMovement = in.movement * movementSpeed;
 
-	sf::Vector2f worldVelocity = sf::Vector2f(-worldSpeed, 0);
-	auto force = gravity + thrust;
+	auto inputForce = in.movement * movementSpeed;
+	auto force = gravity + thrust + inputForce;
 	auto acceleration = force / mass; // 2nd derivative
 	velocity += acceleration * dt; // 1st derivative
-	position = Bound(position + velocity + scaledMovement + worldVelocity * dt);
+	position = Bound(position + velocity + worldVelocity * dt);
+
 	return position;
 }
 
 sf::Vector2f PlayerMovementComponent::Interpolate(const float& interp)
 {
-	return Bound(position * interp + lastPosition * (1.0f - interp));
+	return position * interp + lastPosition * (1.0f - interp);
 }
 
 sf::Vector2f PlayerMovementComponent::Bound(sf::Vector2f newPosition)

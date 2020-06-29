@@ -36,17 +36,19 @@ private:
 	// Physics
 	sf::Vector2f gravity;
 	sf::Vector2f maxThrust;
-	sf::Vector2f thrust;
+	sf::Vector2f thrust;	
 	sf::Vector2f velocity;
+	sf::Vector2f worldVelocity;
+
 	float force;
 	float mass;
 	float movementSpeed;
-
 	float& worldSpeed;
 
 	// Bounds checking
 	sf::FloatRect bounds;
 	sf::FloatRect entityBounds;
+
 };
 
 #endif //PLAYER_MOVEMENT_COMPONENT_H
