@@ -71,18 +71,22 @@ void Game::InitEnemySystem()
     this->enemySystem = std::make_shared<EnemySystem>();
 
     this->enemySystem
-        ->AddFactory(5.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 100.0f),
-                EnemyAnimationConfig("assets/enemy_3.png", 9, 0.2f, 1.0f))))
-        ->AddFactory(2.5f, std::make_shared<EnemyTypeFactory>(
+        ->AddFactory(0.5f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 100.0f),
-                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.2f, 1.0f))))
-        ->AddFactory(20.0f, std::make_shared<EnemyTypeFactory>(
+                EnemyMotionConfig(bounds, worldSpeed, 200.0f),
+                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.1f, 0.5f))))
+        ->AddFactory(4.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 50.0f),
-                EnemyAnimationConfig("assets/boss_1.png", 12, 0.2f, 1.0f))));
+                EnemyMotionConfig(bounds, worldSpeed, 300.0f),
+                EnemyAnimationConfig("assets/enemy_2.png", 14, 0.1f, 1.0f))))
+        ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
+            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+                EnemyMotionConfig(bounds, worldSpeed, 75.0f),
+                EnemyAnimationConfig("assets/enemy_3.png", 9, 0.1f, 1.0f))))
+        ->AddFactory(100.0f, std::make_shared<EnemyTypeFactory>(
+            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+                EnemyMotionConfig(bounds, worldSpeed, 75.0f),
+                EnemyAnimationConfig("assets/boss_1.png", 12, 0.5f, 2.0f))));
 }
 
 void Game::InitFps() 

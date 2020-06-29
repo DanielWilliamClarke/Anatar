@@ -7,7 +7,7 @@
 #include "../entity/entity_object.h"
 
 EnemySystem::EnemySystem() 
-	: accumulator(0) 
+	: accumulator(0), maxInterval(0)
 {}
 
 void EnemySystem::Update(float dt) 
@@ -30,7 +30,10 @@ void EnemySystem::Update(float dt)
 	// Remove enemies
 	enemies.erase(
 		std::remove_if(enemies.begin(), enemies.end(), [=](std::shared_ptr<Enemy> e) -> bool {
-			return e->GetObject("enemy")->GetSprite()->getPosition().x <= 0;
+			auto enemySprite = e->GetObject("enemy")->GetSprite();
+			auto enemyBounds = enemySprite->getGlobalBounds();
+			auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
+			return enemyX <= 0;
 			}),
 		enemies.end());
 
