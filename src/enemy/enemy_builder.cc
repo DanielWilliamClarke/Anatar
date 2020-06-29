@@ -16,12 +16,13 @@ EntityManifest EnemyBuilder::Build()
 void EnemyBuilder::BuildEnemy()
 {
 	auto texture = std::make_shared<sf::Texture>();
-	texture->loadFromFile("assets/enemy_1.png");
+	texture->loadFromFile("assets/enemy_3.png");
 
+	auto totalFramesX = 9;
 	auto spriteScale = 2.0f;
 	auto textureSize = texture->getSize();
 	auto spriteFrameSize = sf::Vector2f(
-		(float)textureSize.x / 6,
+		(float)textureSize.x / totalFramesX,
 		(float)textureSize.y);
 	auto spriteOrigin = sf::Vector2f(
 		spriteFrameSize.x / 2,
@@ -49,7 +50,7 @@ void EnemyBuilder::BuildEnemy()
 		(int)spriteFrameSize.x,
 		(int)spriteFrameSize.y);
 
-	ship->AddAnimation(this->IDLE, 0.2f, 0, 0, 5, 0, frameSize.x, frameSize.y);
+	ship->AddAnimation(this->IDLE, 0.2f, 0, 0, totalFramesX - 1, 0, frameSize.x, frameSize.y);
 
 	manifest["enemy"] = ship;
 }
