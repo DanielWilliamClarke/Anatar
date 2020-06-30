@@ -2,11 +2,16 @@
 
 #include "player_builder.h"
 
+#include "../util/i_texture_atlas.h"
 #include "../components/animation/animation_component.h"
 #include "../components/hitbox/hitbox_component.h"
 #include "../components/movement/offset_movement_component.h"
 #include "../components/movement/orbital_movement_component.h"
 #include "../entity/entity_object.h"
+
+PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas)
+	: textureAtlas(textureAtlas)
+{}
 
 EntityManifest PlayerBuilder::Build()
 {
@@ -18,8 +23,7 @@ EntityManifest PlayerBuilder::Build()
 
 void PlayerBuilder::BuildShip()
 {
-	auto texture = std::make_shared<sf::Texture>();
-	texture->loadFromFile("assets/viperFrames.png");
+	auto texture = textureAtlas->GetTexture("playerShip");
 
 	auto spriteScale = 2.0f;
 	auto textureSize = texture->getSize();
@@ -61,8 +65,7 @@ void PlayerBuilder::BuildShip()
 
 void PlayerBuilder::BuildExhaust()
 {
-	auto texture = std::make_shared<sf::Texture>();
-	texture->loadFromFile("assets/viperExhaust.png");
+	auto texture = textureAtlas->GetTexture("playerExhaust");
 
 	auto spriteScale = 2.0f;
 	auto textureSize = texture->getSize();
@@ -98,8 +101,7 @@ void PlayerBuilder::BuildExhaust()
 
 void PlayerBuilder::BuildTurret()
 {
-	auto texture = std::make_shared<sf::Texture>();
-	texture->loadFromFile("assets/viperTurret.png");
+	auto texture = textureAtlas->GetTexture("playerTurret");
 
 	auto spriteScale = 1.0f;
 	auto textureSize = texture->getSize();

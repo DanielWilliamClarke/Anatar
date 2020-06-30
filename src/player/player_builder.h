@@ -8,11 +8,12 @@
 #include "player.h"
 
 class EntityObject;
+class ITextureAtlas;
 
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {
 public:
-	PlayerBuilder() = default;
+	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas);
 	virtual ~PlayerBuilder() = default;
 	virtual EntityManifest Build() override;
 private:
@@ -21,6 +22,7 @@ private:
 	void BuildTurret();
 
 	EntityManifest manifest;
+	std::shared_ptr<ITextureAtlas> textureAtlas;
 };
 
 #endif //PLAYER_BUILDER_H

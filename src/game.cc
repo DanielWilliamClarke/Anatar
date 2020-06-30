@@ -3,7 +3,8 @@
 #include <chrono>
 
 #include "game.h"
-#include "fps.h"
+#include "util/fps.h"
+#include "util/texture_atlas.h"
 
 #include "player/player_builder.h"
 #include "player/player.h"
@@ -30,6 +31,7 @@ Game::Game()
 {
     this->InitWindow();
     this->InitFps();
+    this->InitTextureAtlas();
     this->InitLevel();
     this->InitPlayer();
     this->InitEnemySystem();
@@ -51,6 +53,25 @@ void Game::InitWindow()
         viewSize.y);
 }
 
+void Game::InitFps()
+{
+    this->fps = std::make_shared<Fps>();
+}
+
+void Game::InitTextureAtlas()
+{
+    this->textureAtlas = std::make_shared<TextureAtlas>();
+
+    this->textureAtlas
+        ->AddTexture("playerShip", "assets/viperFrames.png")
+        ->AddTexture("playerExhaust", "assets/viperExhaust.png")
+        ->AddTexture("playerTurret", "assets/viperTurret.png")
+        ->AddTexture("enemy1", "assets/enemy_1.png")
+        ->AddTexture("enemy2", "assets/enemy_2.png")
+        ->AddTexture("enemy3", "assets/enemy_3.png")
+        ->AddTexture("boss1", "assets/boss_1.png");
+}
+
 void Game::InitLevel()
 {
     auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
@@ -60,7 +81,7 @@ void Game::InitLevel()
 
 void Game::InitPlayer() 
 {
-    auto playerBuilder = std::make_shared<PlayerBuilder>();
+    auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas);
     auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
@@ -74,25 +95,22 @@ void Game::InitEnemySystem()
         ->AddFactory(0.5f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 200.0f),
-                EnemyAnimationConfig("assets/enemy_1.png", 6, 0.1f, 0.5f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 0.5f))))
         ->AddFactory(4.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 300.0f),
-                EnemyAnimationConfig("assets/enemy_2.png", 14, 0.1f, 1.0f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f))))
         ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
-                EnemyAnimationConfig("assets/enemy_3.png", 9, 0.1f, 1.0f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f))))
         ->AddFactory(100.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
-                EnemyAnimationConfig("assets/boss_1.png", 12, 0.5f, 2.0f))));
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f))));
 }
 
-void Game::InitFps() 
-{
-    this->fps = std::make_shared<Fps>();
-}
+
 
 void Game::WindowEvents()
 {

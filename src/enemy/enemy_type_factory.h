@@ -9,6 +9,8 @@
 #include "i_enemy_type_factory.h"
 #include "enemy.h"
 
+class ILocalMovementComponent;
+
 struct EnemyMotionConfig
 {
 	sf::FloatRect bounds;
@@ -22,13 +24,13 @@ struct EnemyMotionConfig
 
 struct EnemyAnimationConfig
 {
-	std::string textureFile;
+	std::shared_ptr<sf::Texture> texture;
 	int frames;
 	float frameDuration;
 	float scale;
 
-	EnemyAnimationConfig(std::string textureFile, int frames, float frameDuration, float scale)
-		: textureFile(textureFile), frames(frames), frameDuration(frameDuration), scale(scale)
+	EnemyAnimationConfig(std::shared_ptr<sf::Texture> texture, int frames, float frameDuration, float scale)
+		: texture(texture), frames(frames), frameDuration(frameDuration), scale(scale)
 	{}
 };
 
@@ -53,7 +55,10 @@ public:
 	// Builder methods
 	static EntityManifest BuildLinearEnemy(EnemyConfig config);
 	static EntityManifest BuildOribitalEnemy(EnemyConfig config);
+
 private:
+
+	static EntityManifest BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent);
 	EnemyConfig config;
 };
 

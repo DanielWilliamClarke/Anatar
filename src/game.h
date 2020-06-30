@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 class Fps;
+class TextureAtlas;
 class SpaceLevel;
 class Player;
 class PlayerInput;
@@ -23,6 +24,7 @@ private:
 
 	void InitWindow();
 	void InitFps();
+	void InitTextureAtlas();
 	void InitLevel();
 	void InitPlayer();
 	void InitEnemySystem();
@@ -33,6 +35,7 @@ private:
 
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<Fps> fps;
+	std::shared_ptr<TextureAtlas> textureAtlas;
 	std::shared_ptr<SpaceLevel> level;
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerInput> playerInput;

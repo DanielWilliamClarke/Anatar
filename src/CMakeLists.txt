@@ -16,7 +16,7 @@ set(EXECUTABLE_NAME ${BINARY})
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 target_link_libraries(${BINARY} PUBLIC 
     ${CONAN_LIBS}
-)
+) 
 
 # Create lib for testing purposes
 add_library(${BINARY_LIB} STATIC ${SOURCES})
