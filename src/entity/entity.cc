@@ -45,3 +45,16 @@ void Entity::DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) c
 		obj.second->Draw(target, interPosition);
 	}
 }
+
+bool Entity::DetectCollision(sf::FloatRect hitbox) const
+{
+	for (auto& o : objects)
+	{
+		if (o.second->DetectCollision(hitbox))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

@@ -32,6 +32,8 @@ public:
 	void Update(EntityUpdate position, float dt) const;
 	void Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const;
 
+	bool DetectCollision(sf::FloatRect hitbox) const;
+
 private:
 	std::shared_ptr<IAnimationComponent> animationComponent;
 	std::shared_ptr<IHitboxComponent> hitboxComponent;

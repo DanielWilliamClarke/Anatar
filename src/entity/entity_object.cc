@@ -64,3 +64,8 @@ void EntityObject::Draw(sf::RenderTarget& target, sf::Vector2f interPosition) co
 		this->hitboxComponent->Draw(target);
 	}
 }
+
+bool EntityObject::DetectCollision(sf::FloatRect hitbox) const
+{
+	return this->hitboxComponent->Intersects(hitbox);
+}

@@ -32,6 +32,8 @@ public:
 	virtual void Update(float dt) const = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 
+	bool DetectCollision(sf::FloatRect hitbox) const;
+
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
 	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;
