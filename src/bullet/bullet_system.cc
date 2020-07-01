@@ -14,11 +14,15 @@ void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::
 
 void BulletSystem::Update(float dt, float worldSpeed)
 {
-	// Perform collision detection
+	// Update and perform collision detection
 	for (auto& b : this->bullets)
 	{
+		b.Update(dt, worldSpeed);
+
 		for (auto& c : collisionTargets)
 		{
+			
+
 			if (c->DetectCollision(b.GetRound().getGlobalBounds()))
 			{
 				// update entity
@@ -38,12 +42,6 @@ void BulletSystem::Update(float dt, float worldSpeed)
 				b.isSpent();
 			}),
 		this->bullets.end());
-
-	// Update bullets
-	for (auto& b : this->bullets)
-	{
-		b.Update(dt, worldSpeed);
-	}
 }
 
 void BulletSystem::Draw(sf::RenderTarget& target, float interp)
