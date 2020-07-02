@@ -6,6 +6,7 @@
 #include "util/fps.h"
 #include "util/texture_atlas.h"
 
+#include "entity/Entity.h"
 #include "player/player_builder.h"
 #include "player/player.h"
 #include "player/player_input.h"
@@ -19,6 +20,7 @@
 #include "components/movement/enemy_movement_component.h"
 #include "components/movement/player_movement_component.h"
 #include "components/movement/offset_movement_component.h"
+#include "bullet/bullet_system.h"
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
@@ -34,6 +36,7 @@ Game::Game()
     this->InitTextureAtlas();
     this->InitLevel();
     this->InitPlayer();
+    this->InitBulletSystem();
     this->InitEnemySystem();
 }
 
@@ -87,6 +90,12 @@ void Game::InitPlayer()
     this->playerInput = std::make_shared<PlayerInput>();
 }
 
+void Game::InitBulletSystem()
+{
+    auto targets = std::list<std::shared_ptr<Entity>>{ this->player };
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, targets);
+}
+
 void Game::InitEnemySystem()
 {
     this->enemySystem = std::make_shared<EnemySystem>();
@@ -95,19 +104,23 @@ void Game::InitEnemySystem()
         ->AddFactory(0.5f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 200.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 0.5f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 0.5f),
+                this->enemyBulletSystem)))
         ->AddFactory(4.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 300.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
+                this->enemyBulletSystem)))
         ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f))))
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
+                this->enemyBulletSystem)))
         ->AddFactory(100.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f))));
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
+                this->enemyBulletSystem)));
 }
 
 
@@ -134,6 +147,7 @@ void Game::Update()
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
         this->enemySystem->Update(dt);
+        this->enemyBulletSystem->Update(dt, worldSpeed);
         this->fps->Update();
         this->accumulator -= this->dt;
     }
@@ -146,6 +160,7 @@ void Game::Draw()
     this->level->Draw(*this->window);
     this->player->Draw(*this->window, interp);
     this->enemySystem->Draw(*this->window, interp);
+    this->enemyBulletSystem->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
     this->window->display();
 }

@@ -12,6 +12,7 @@ class SpaceLevel;
 class Player;
 class PlayerInput;
 class EnemySystem;
+class BulletSystem;
 
 class Game 
 {
@@ -27,7 +28,9 @@ private:
 	void InitTextureAtlas();
 	void InitLevel();
 	void InitPlayer();
+	void InitBulletSystem();
 	void InitEnemySystem();
+
 
 	void WindowEvents();
 	void Update();
@@ -40,6 +43,7 @@ private:
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<EnemySystem> enemySystem;
+	std::shared_ptr<BulletSystem> enemyBulletSystem;
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;

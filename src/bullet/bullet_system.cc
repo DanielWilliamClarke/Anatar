@@ -3,7 +3,7 @@
 
 #include "../entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, std::vector<std::shared_ptr<Entity>> collisionTargets)
+BulletSystem::BulletSystem(sf::FloatRect bounds, std::list<std::shared_ptr<Entity>> collisionTargets)
 	: bounds(bounds), collisionTargets(collisionTargets)
 {}
 
@@ -34,14 +34,12 @@ void BulletSystem::Update(float dt, float worldSpeed)
 	}
 
 	// Remove bullets 
-	this->bullets.erase(
-		std::remove_if(this->bullets.begin(), this->bullets.end(), [=](Bullet b) -> bool {
-			auto position = b.GetRound().getPosition();
-			return position.x <= bounds.left ||	position.x >= bounds.width ||
-				position.y <= bounds.top ||	position.y >= bounds.height ||
-				b.isSpent();
-			}),
-		this->bullets.end());
+	this->bullets.remove_if([=](Bullet b) -> bool {
+		auto position = b.GetRound().getPosition();
+		return position.x <= bounds.left ||	position.x >= bounds.width ||
+			position.y <= bounds.top ||	position.y >= bounds.height ||
+			b.isSpent();
+	});
 }
 
 void BulletSystem::Draw(sf::RenderTarget& target, float interp)

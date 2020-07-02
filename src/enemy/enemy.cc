@@ -18,7 +18,7 @@ Enemy::Enemy(
 
 	auto enemy = this->GetObject("enemy")->GetSprite();
 	auto bounds = this->globalMovementComponent->GetBounds();
-	enemy->setPosition({ bounds.width, (float)randSource->Generate(bounds.top, bounds.height)});
+	enemy->setPosition({ bounds.width, (float)randSource->Generate((int)bounds.top, (int)bounds.height)});
 	this->globalMovementComponent->SetEntityAttributes(enemy->getPosition(), enemy->getGlobalBounds());
 }
 

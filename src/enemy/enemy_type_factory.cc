@@ -11,6 +11,7 @@
 #include "../components/movement/orbital_movement_component.h"
 #include "../entity/entity_object.h"
 #include "../components/movement/enemy_movement_component.h"
+#include "../components/weapon/burst_shot_weapon_component.h"
 #include "util/random_number_mersenne_source.cc"
 
 EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
@@ -61,7 +62,8 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
-	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent);
+	auto weaponComponent = std::make_shared<BusrtShotWeaponComponent>(config.bulletSystem, 30.0f, 3.0f);
+	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 
 	ship->SetTexture(config.animationConfig.texture);
 	ship->InitAnimationComponent(config.animationConfig.texture);

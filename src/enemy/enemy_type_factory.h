@@ -9,6 +9,8 @@
 #include "i_enemy_type_factory.h"
 #include "enemy.h"
 
+#include "../bullet/i_bullet_system.h"
+
 class ILocalMovementComponent;
 
 struct EnemyMotionConfig
@@ -39,9 +41,10 @@ struct EnemyConfig
 	std::function<EntityManifest(EnemyConfig)> builder;
 	EnemyMotionConfig motionConfig;
 	EnemyAnimationConfig animationConfig;
+	std::shared_ptr<IBulletSystem> bulletSystem;
 
-	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig)
-		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig)
+	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, std::shared_ptr<IBulletSystem> bulletSystem)
+		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), bulletSystem(bulletSystem)
 	{}
 };
 

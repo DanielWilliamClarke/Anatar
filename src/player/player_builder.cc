@@ -7,6 +7,7 @@
 #include "../components/hitbox/hitbox_component.h"
 #include "../components/movement/offset_movement_component.h"
 #include "../components/movement/orbital_movement_component.h"
+#include "../components/weapon/inert_weapon_component.h"
 #include "../entity/entity_object.h"
 
 PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas)
@@ -37,7 +38,8 @@ void PlayerBuilder::BuildShip()
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
-	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent);
+	auto weaponComponent = std::make_shared<InertWeaponComponent>();
+	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 
 	auto sprite = ship->GetSprite();
 	ship->SetTexture(texture);
@@ -81,8 +83,8 @@ void PlayerBuilder::BuildExhaust()
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(sf::Vector2f(-10.0, shipSpriteOrigin.y + 2));
-
-	auto exhaust = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent);
+	auto weaponComponent = std::make_shared<InertWeaponComponent>();
+	auto exhaust = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 	auto sprite = exhaust->GetSprite();
 
 	exhaust->SetTexture(texture);
@@ -117,8 +119,8 @@ void PlayerBuilder::BuildTurret()
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Blue);
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 50.0f, 100.0f);
-
-	auto turret = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent);
+	auto weaponComponent = std::make_shared<InertWeaponComponent>();
+	auto turret = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 	auto sprite = turret->GetSprite();
 	turret->SetTexture(texture);
 	turret->InitAnimationComponent(texture);

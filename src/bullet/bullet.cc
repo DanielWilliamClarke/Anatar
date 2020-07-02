@@ -1,7 +1,7 @@
 #include "bullet.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius)
-	: position(position), lastPosition(position), velocity(position), round(sf::CircleShape(radius)), spent(false)
+	: position(position), lastPosition(position), velocity(velocity), round(sf::CircleShape(radius)), spent(false)
 {
 	this->round.setFillColor(colour);
 }
@@ -9,7 +9,8 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, f
 void Bullet::Update(float dt, float worldSpeed)
 {
 	this->lastPosition = this->position;
-	this->position += (this->velocity + sf::Vector2f(0.0f, worldSpeed)) * dt;
+	this->position += (this->velocity + sf::Vector2f(-worldSpeed, 0.0f)) * dt;
+	this->round.setPosition(this->position);
 }
 
 void Bullet::Draw(sf::RenderTarget& target, float interp) 

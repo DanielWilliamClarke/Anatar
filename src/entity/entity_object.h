@@ -9,6 +9,7 @@
 class IAnimationComponent;
 class IHitboxComponent;
 class ILocalMovementComponent;
+class IWeaponComponent;
 
 class EntityObject
 {
@@ -17,7 +18,8 @@ public:
 	EntityObject(
 		std::shared_ptr<IAnimationComponent> animationComponent,
 		std::shared_ptr<IHitboxComponent> hitboxComponent,
-		std::shared_ptr<ILocalMovementComponent> movementComponent);
+		std::shared_ptr<ILocalMovementComponent> movementComponent,
+		std::shared_ptr<IWeaponComponent> weaponComponent);
 
 	virtual ~EntityObject() = default;
 	
@@ -38,6 +40,7 @@ private:
 	std::shared_ptr<IAnimationComponent> animationComponent;
 	std::shared_ptr<IHitboxComponent> hitboxComponent;
 	std::shared_ptr<ILocalMovementComponent> movementComponent;
+	std::shared_ptr<IWeaponComponent> weaponComponent;
 
 	std::shared_ptr<sf::Sprite> sprite;
 	std::shared_ptr<sf::Texture> texture;

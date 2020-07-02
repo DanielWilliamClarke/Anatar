@@ -23,19 +23,17 @@ void EnemySystem::Update(float dt)
 		}
 	}
 
-	if (this->accumulator > this->maxInterval) {
-		this->accumulator = 0;
+	if (this->accumulator >= this->maxInterval) {
+		this->accumulator -= this->maxInterval;
 	}
 
 	// Remove enemies
-	enemies.erase(
-		std::remove_if(enemies.begin(), enemies.end(), [=](std::shared_ptr<Enemy> e) -> bool {
-			auto enemySprite = e->GetObject("enemy")->GetSprite();
-			auto enemyBounds = enemySprite->getGlobalBounds();
-			auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
-			return enemyX <= 0;
-			}),
-		enemies.end());
+	enemies.remove_if([=](std::shared_ptr<Enemy> e) -> bool {
+		auto enemySprite = e->GetObject("enemy")->GetSprite();
+		auto enemyBounds = enemySprite->getGlobalBounds();
+		auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
+		return enemyX <= 0;
+	});
 
 	// Update all remaining enemies
 	for (auto& e : enemies)

@@ -3,7 +3,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <list>
 #include <map>
 
 class Enemy;
@@ -21,7 +21,7 @@ public:
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
 
 private:
-	std::vector<std::shared_ptr<Enemy>> enemies;
+	std::list<std::shared_ptr<Enemy>> enemies;
 	std::map<float, std::shared_ptr<IEnemyTypeFactory>> factories;
 
 	sf::Clock spawnClock;

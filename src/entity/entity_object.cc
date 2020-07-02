@@ -3,14 +3,17 @@
 #include "../components/animation/i_animation_component.h"
 #include "../components/hitbox/i_hitbox_component.h"
 #include "../components/movement/i_local_movement_component.h"
+#include "../components/weapon/i_weapon_component.h"
 
 EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,
 	std::shared_ptr<IHitboxComponent> hitboxComponent,
-	std::shared_ptr<ILocalMovementComponent> movementComponent)
+	std::shared_ptr<ILocalMovementComponent> movementComponent,
+	std::shared_ptr<IWeaponComponent> weaponComponent)
 	: animationComponent(animationComponent),
 	hitboxComponent(hitboxComponent),
 	movementComponent(movementComponent),
+	weaponComponent(weaponComponent),
 	sprite(std::make_shared<sf::Sprite>())
 {
 }
@@ -49,6 +52,7 @@ std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const
 void EntityObject::Update(EntityUpdate update, float dt) const
 {
 	this->sprite->setPosition(this->movementComponent->Integrate(update.position, dt));
+	this->weaponComponent->Fire(this->sprite->getPosition());
 	this->animationComponent->Play(update.direction, update.loop);
 	if (this->hitboxComponent->IsRequired()) {
 		this->hitboxComponent->Update();
