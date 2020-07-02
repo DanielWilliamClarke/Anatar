@@ -24,16 +24,16 @@ Player::Player(
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
 
-void Player::Update(Input in, float dt) const
+void Player::Update(Input& in, float dt) const
 {
 	const auto lastPosition = this->movementComponent->GetPosition();
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
 	this->UpdateObjects({
-		{ "ship", EntityUpdate(position, direction, false) },
-		{ "exhaust",  EntityUpdate(position, IDLE) },
-		{ "turret",  EntityUpdate(position, IDLE) }
+		{ "ship", EntityUpdate(position, direction, in.fire, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE, in.fire) },
+		{ "turret",  EntityUpdate(position, IDLE, in.fire) }
 	}, dt);
 }
 

@@ -5,6 +5,7 @@
 #include "enemy.h"
 #include "i_enemy_type_factory.h"
 #include "../entity/entity_object.h"
+#include "../entity/entity.h"
 
 EnemySystem::EnemySystem() 
 	: accumulator(0), maxInterval(0)
@@ -28,7 +29,7 @@ void EnemySystem::Update(float dt)
 	}
 
 	// Remove enemies
-	enemies.remove_if([=](std::shared_ptr<Enemy> e) -> bool {
+	enemies.remove_if([=](std::shared_ptr<Entity> e) -> bool {
 		auto enemySprite = e->GetObject("enemy")->GetSprite();
 		auto enemyBounds = enemySprite->getGlobalBounds();
 		auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
@@ -57,4 +58,9 @@ std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::s
 		this->maxInterval = spawnInterval;
 	}
 	return shared_from_this();
+}
+
+std::list<std::shared_ptr<Entity>> EnemySystem::GetEnemies() const
+{
+	return enemies;
 }

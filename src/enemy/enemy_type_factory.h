@@ -53,7 +53,7 @@ class EnemyTypeFactory : public IEnemyTypeFactory, public Enemy
 public:
 	EnemyTypeFactory(EnemyConfig config);
 	virtual ~EnemyTypeFactory() = default;
-	virtual std::shared_ptr<Enemy> Create() override;
+	virtual std::shared_ptr<Entity> Create() override;
 
 	// Builder methods
 	static EntityManifest BuildLinearEnemy(EnemyConfig config);

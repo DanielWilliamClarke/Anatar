@@ -8,6 +8,7 @@ struct Input
 {
 	sf::Vector2f movement;
 	bool falling;
+	bool fire;
 };
 
 class PlayerInput

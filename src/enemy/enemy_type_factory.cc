@@ -18,13 +18,16 @@ EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 	: config(config)
 {}
 
-std::shared_ptr<Enemy> EnemyTypeFactory::Create()
+std::shared_ptr<Entity> EnemyTypeFactory::Create()
 {
-    auto enemySpeed = 1000.0f;
+    auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
+	auto textureSize = config.animationConfig.texture->getSize();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-    auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
-    return std::make_shared<Enemy>(config.builder(config), movementComponent, randGenerator);
+	auto position = sf::Vector2f(
+		config.motionConfig.bounds.width,
+		(float)randGenerator->Generate((int)config.motionConfig.bounds.top, (int)config.motionConfig.bounds.height - textureSize.y));
+    return std::make_shared<Enemy>(config.builder(config), movementComponent, position);
 }
 
 EntityManifest EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)
@@ -62,7 +65,7 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
-	auto weaponComponent = std::make_shared<BusrtShotWeaponComponent>(config.bulletSystem, 30.0f, 3.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(config.bulletSystem, 3.0f, 30.0f, 3.0f);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 
 	ship->SetTexture(config.animationConfig.texture);

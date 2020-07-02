@@ -11,15 +11,12 @@
 Enemy::Enemy(
 	EntityManifest manifest,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
-	std::shared_ptr<IRandomNumberSource<int>> randSource)
-	: Entity{ nullptr, globalMovementComponent }, randSource(randSource)
+	sf::Vector2f initialPosition)
+	: Entity{ nullptr, globalMovementComponent }
 {
 	this->objects = manifest;
-
-	auto enemy = this->GetObject("enemy")->GetSprite();
-	auto bounds = this->globalMovementComponent->GetBounds();
-	enemy->setPosition({ bounds.width, (float)randSource->Generate((int)bounds.top, (int)bounds.height)});
-	this->globalMovementComponent->SetEntityAttributes(enemy->getPosition(), enemy->getGlobalBounds());
+	this->GetObject("enemy")->GetSprite()->setPosition(initialPosition);
+	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject("enemy")->GetSprite()->getGlobalBounds());
 }
 
 void Enemy::Update(float dt) const

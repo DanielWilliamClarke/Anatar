@@ -2,6 +2,8 @@
 #define I_WEAPON_COMPONENT_H
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 class IWeaponComponent
 {
 public:

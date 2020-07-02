@@ -3,8 +3,8 @@
 
 #include "../entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, std::list<std::shared_ptr<Entity>> collisionTargets)
-	: bounds(bounds), collisionTargets(collisionTargets)
+BulletSystem::BulletSystem(sf::FloatRect bounds)
+	: bounds(bounds)
 {}
 
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius)
@@ -12,7 +12,7 @@ void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::
 	this->bullets.push_back(Bullet(position, velocity, colour, radius));
 }
 
-void BulletSystem::Update(float dt, float worldSpeed)
+void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>> collisionTargets)
 {
 	// Update and perform collision detection
 	for (auto& b : this->bullets)

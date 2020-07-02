@@ -9,10 +9,11 @@ struct EntityUpdate
 	sf::Vector2f position;
 	int direction;
 	bool loop;
+	bool fire;
 
 	EntityUpdate() = default;
-	EntityUpdate(sf::Vector2f position, int direction, bool loop = true)
-		: position(position), direction(direction), loop(loop)
+	EntityUpdate(sf::Vector2f position, int direction, bool fire = true, bool loop = true)
+		: position(position), direction(direction), fire(fire), loop(loop)
 	{}
 };
 

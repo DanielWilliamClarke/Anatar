@@ -52,7 +52,12 @@ std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const
 void EntityObject::Update(EntityUpdate update, float dt) const
 {
 	this->sprite->setPosition(this->movementComponent->Integrate(update.position, dt));
-	this->weaponComponent->Fire(this->sprite->getPosition());
+
+	if (update.fire) 
+	{
+		this->weaponComponent->Fire(this->sprite->getPosition());
+	}
+
 	this->animationComponent->Play(update.direction, update.loop);
 	if (this->hitboxComponent->IsRequired()) {
 		this->hitboxComponent->Update();

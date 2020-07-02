@@ -9,11 +9,12 @@
 
 class EntityObject;
 class ITextureAtlas;
+class IBulletSystem;
 
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {
 public:
-	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas);
+	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem);
 	virtual ~PlayerBuilder() = default;
 	virtual EntityManifest Build() override;
 private:
@@ -22,7 +23,9 @@ private:
 	void BuildTurret();
 
 	EntityManifest manifest;
+
 	std::shared_ptr<ITextureAtlas> textureAtlas;
+	std::shared_ptr<IBulletSystem> bulletSystem;
 };
 
 #endif //PLAYER_BUILDER_H

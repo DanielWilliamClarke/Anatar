@@ -1,8 +1,8 @@
 #include "single_shot_weapon_component.h"
 #include "../../bullet/i_bullet_system.h"
 
-SingleShotWeaponComponent::SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem)
-	: bulletSystem(bulletSystem), delay(1.0f), accumulator(0.0f)
+SingleShotWeaponComponent::SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay)
+	: bulletSystem(bulletSystem), delay(delay), accumulator(0.0f)
 {
 }
 

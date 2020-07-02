@@ -35,8 +35,8 @@ Game::Game()
     this->InitFps();
     this->InitTextureAtlas();
     this->InitLevel();
-    this->InitPlayer();
     this->InitBulletSystem();
+    this->InitPlayer();
     this->InitEnemySystem();
 }
 
@@ -82,18 +82,19 @@ void Game::InitLevel()
     this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
 }
 
+void Game::InitBulletSystem()
+{
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds);
+    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds);
+}
+
+
 void Game::InitPlayer() 
 {
-    auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas);
+    auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas,  this->playerBulletSystem);
     auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
     this->player = std::make_shared<Player>(playerBuilder, movementComponent);
     this->playerInput = std::make_shared<PlayerInput>();
-}
-
-void Game::InitBulletSystem()
-{
-    auto targets = std::list<std::shared_ptr<Entity>>{ this->player };
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, targets);
 }
 
 void Game::InitEnemySystem()
@@ -147,7 +148,8 @@ void Game::Update()
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
         this->enemySystem->Update(dt);
-        this->enemyBulletSystem->Update(dt, worldSpeed);
+        this->enemyBulletSystem->Update(dt, worldSpeed, { this->player });
+        this->playerBulletSystem->Update(dt, worldSpeed, this->enemySystem->GetEnemies());
         this->fps->Update();
         this->accumulator -= this->dt;
     }
@@ -161,6 +163,7 @@ void Game::Draw()
     this->player->Draw(*this->window, interp);
     this->enemySystem->Draw(*this->window, interp);
     this->enemyBulletSystem->Draw(*this->window, interp);
+    this->playerBulletSystem->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
     this->window->display();
 }

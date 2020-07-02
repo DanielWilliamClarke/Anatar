@@ -17,7 +17,7 @@ public:
 		std::shared_ptr<IEntityObjectBuilder> playerBuilder,
 		std::shared_ptr<IPlayerMovementComponent> movementComponent);
 	virtual ~Player() = default;
-	virtual void Update(Input in, float dt) const;
+	virtual void Update(Input& in, float dt) const;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 
 protected:

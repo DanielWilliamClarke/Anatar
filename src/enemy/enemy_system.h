@@ -6,7 +6,7 @@
 #include <list>
 #include <map>
 
-class Enemy;
+class Entity;
 class IEnemyTypeFactory;
 
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
@@ -20,8 +20,10 @@ public:
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
 
+	std::list<std::shared_ptr<Entity>> GetEnemies() const;
+
 private:
-	std::list<std::shared_ptr<Enemy>> enemies;
+	std::list<std::shared_ptr<Entity>> enemies;
 	std::map<float, std::shared_ptr<IEnemyTypeFactory>> factories;
 
 	sf::Clock spawnClock;

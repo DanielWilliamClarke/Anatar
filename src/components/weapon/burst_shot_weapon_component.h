@@ -8,11 +8,11 @@
 
 class IBulletSystem;
 
-class BusrtShotWeaponComponent : public IWeaponComponent
+class BurstShotWeaponComponent : public IWeaponComponent
 {
 public:
-	BusrtShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float arcAngle, float numBullets);
-	virtual ~BusrtShotWeaponComponent() = default;
+	BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay, float arcAngle, float numBullets);
+	virtual ~BurstShotWeaponComponent() = default;
 
 	virtual void Fire(sf::Vector2f position) override;
 

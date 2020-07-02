@@ -18,14 +18,10 @@ public:
 	Enemy(
 		EntityManifest manifest,
 		std::shared_ptr<IGlobalMovementComponent> movementComponent,
-		std::shared_ptr<IRandomNumberSource<int>> randSource);
+		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
 	virtual void Update(float dt) const override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
-
-protected:
-
-	std::shared_ptr<IRandomNumberSource<int>> randSource;
 };
 
 #endif //ENEMY_H
