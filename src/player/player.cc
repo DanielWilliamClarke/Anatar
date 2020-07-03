@@ -32,8 +32,8 @@ void Player::Update(Input& in, float dt) const
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	BulletConfig shipBulletConfig(sf::Color::Cyan, 3.0f, false, 10.0f);
-	BulletConfig turretBulletConfig(sf::Color::Yellow, 2.0f, false, 10.0f);
+	BulletConfig shipBulletConfig(sf::Color::Cyan, 4.0f, 300.0f, false, 10.0f);
+	BulletConfig turretBulletConfig(sf::Color::Yellow, 2.0f, 400.0f, false, 10.0f);
 
 	this->UpdateObjects({
 		{ "ship", EntityUpdate(position, direction, shipBulletConfig, in.fire, false) },

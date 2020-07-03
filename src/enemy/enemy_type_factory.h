@@ -11,7 +11,19 @@
 
 #include "../bullet/i_bullet_system.h"
 
+class IWeaponComponentFactory;
 class ILocalMovementComponent;
+
+struct EnemyWeaponConfig
+{
+	std::shared_ptr<IWeaponComponentFactory> weaponComponentFactory;
+	std::shared_ptr<IBulletSystem> bulletSystem;
+	float delay;
+
+	EnemyWeaponConfig(std::shared_ptr<IWeaponComponentFactory> weaponComponentFactory, std::shared_ptr<IBulletSystem> bulletSystem, float delay)
+		: weaponComponentFactory(weaponComponentFactory), bulletSystem(bulletSystem), delay(delay)
+	{}
+};
 
 struct EnemyMotionConfig
 {
@@ -41,10 +53,10 @@ struct EnemyConfig
 	std::function<EntityManifest(EnemyConfig)> builder;
 	EnemyMotionConfig motionConfig;
 	EnemyAnimationConfig animationConfig;
-	std::shared_ptr<IBulletSystem> bulletSystem;
+	EnemyWeaponConfig weaponConfig;
 
-	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, std::shared_ptr<IBulletSystem> bulletSystem)
-		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), bulletSystem(bulletSystem)
+	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, EnemyWeaponConfig weaponConfig)
+		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), weaponConfig(weaponConfig)
 	{}
 };
 

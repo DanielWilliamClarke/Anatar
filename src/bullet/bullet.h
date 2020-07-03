@@ -9,11 +9,12 @@ struct BulletConfig
 	sf::Color color;
 	float radius;
 
+	float speed;
 	bool penetrating;
 	float damage;
 
-	BulletConfig(sf::Color color, float radius, bool penetrating, float damage) 
-		: color(color), radius(radius), penetrating(penetrating), damage(damage)
+	BulletConfig(sf::Color color, float radius, float speed, bool penetrating, float damage) 
+		: color(color), radius(radius), speed(speed), penetrating(penetrating), damage(damage)
 	{}
 };
 

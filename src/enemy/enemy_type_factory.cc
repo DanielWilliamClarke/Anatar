@@ -11,7 +11,7 @@
 #include "../components/movement/orbital_movement_component.h"
 #include "../entity/entity_object.h"
 #include "../components/movement/enemy_movement_component.h"
-#include "../components/weapon/burst_shot_weapon_component.h"
+#include "../components/weapon/i_weapon_component_factory.h"
 #include "util/random_number_mersenne_source.cc"
 
 EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
@@ -53,7 +53,7 @@ EntityManifest EnemyTypeFactory::BuildOribitalEnemy(EnemyConfig config)
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OrbitalMovementComponent>(spriteOrigin, 50.0f, 100.f));
+	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OrbitalMovementComponent>(spriteOrigin, 25.0f, 200.f));
 }
 
 EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent)
@@ -65,7 +65,7 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(config.bulletSystem, 3.0f, 30.0f, 3.0f);
+	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 
 	ship->SetTexture(config.animationConfig.texture);

@@ -20,7 +20,10 @@
 #include "components/movement/enemy_movement_component.h"
 #include "components/movement/player_movement_component.h"
 #include "components/movement/offset_movement_component.h"
+
 #include "bullet/bullet_system.h"
+#include "components/weapon/burst/burst_shot_weapon_component_factory.h"
+#include "components/weapon/single/single_shot_weapon_component_factory.h"
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
@@ -102,26 +105,30 @@ void Game::InitEnemySystem()
     this->enemySystem = std::make_shared<EnemySystem>();
 
     this->enemySystem
-        ->AddFactory(0.5f, std::make_shared<EnemyTypeFactory>(
+
+        ->AddFactory(1.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 200.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 0.5f),
-                this->enemyBulletSystem)))
-        ->AddFactory(4.0f, std::make_shared<EnemyTypeFactory>(
+                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
+                EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(), this->enemyBulletSystem, 1.0f))))
+
+        ->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 300.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
-                this->enemyBulletSystem)))
-        ->AddFactory(10.0f, std::make_shared<EnemyTypeFactory>(
+                EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(), this->enemyBulletSystem, 2.0f))))
+
+        ->AddFactory(6.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
-                this->enemyBulletSystem)))
-        ->AddFactory(100.0f, std::make_shared<EnemyTypeFactory>(
+                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(90.0f, 10.0f), this->enemyBulletSystem, 3.0f))))
+
+        ->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
-                this->enemyBulletSystem)));
+                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(180.0f, 100.0f), this->enemyBulletSystem, 10.0f))));
 }
 
 

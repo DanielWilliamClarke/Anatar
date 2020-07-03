@@ -24,7 +24,7 @@ void Enemy::Update(float dt) const
 {
 	const auto position = this->globalMovementComponent->Integrate(dt);
 
-	BulletConfig bulletConfig(sf::Color::Red, 3.0f, false, 10.0f);
+	BulletConfig bulletConfig(sf::Color::Red, 3.0f, 180.0f, false, 10.0f);
 
 	this->UpdateObjects({
 		{ "enemy", EntityUpdate(position, IDLE, bulletConfig) },
