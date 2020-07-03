@@ -4,16 +4,23 @@
 
 #include <SFML/Graphics.hpp>
 
+struct BulletConfig;
+
 struct EntityUpdate 
 {
 	sf::Vector2f position;
 	int direction;
 	bool loop;
 	bool fire;
+	BulletConfig& bulletConfig;
 
 	EntityUpdate() = default;
-	EntityUpdate(sf::Vector2f position, int direction, bool fire = true, bool loop = true)
-		: position(position), direction(direction), fire(fire), loop(loop)
+	EntityUpdate(sf::Vector2f position,
+		int direction,
+		BulletConfig& bulletConfig,
+		bool fire = true,
+		bool loop = true)
+		: position(position), direction(direction), bulletConfig(bulletConfig), fire(fire), loop(loop)
 	{}
 };
 

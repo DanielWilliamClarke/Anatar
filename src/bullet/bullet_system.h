@@ -17,7 +17,7 @@ public:
 	BulletSystem(sf::FloatRect bounds, int affinity);
 	virtual ~BulletSystem() = default;
 
-	virtual void FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius) override;
+	virtual void FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
 
 	void Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>> collisionTargets);
 	void Draw(sf::RenderTarget& target, float interp);

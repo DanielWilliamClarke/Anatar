@@ -4,7 +4,7 @@ PlayerWeaponComponent::PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> w
 	: weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
 {}
 
-void PlayerWeaponComponent::Fire(sf::Vector2f position)
+void PlayerWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {
 	auto elapsedTime = this->clockFire.restart().asSeconds();
 
@@ -30,6 +30,6 @@ void PlayerWeaponComponent::Fire(sf::Vector2f position)
 			gunTemp = 100.0f;
 		}
 
-		weaponComponent->Fire(position);
+		weaponComponent->Fire(position, config);
 	}
 }

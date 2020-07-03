@@ -12,6 +12,8 @@
 #include "player_input.h"
 #include "../components/movement/i_global_movement_component.h"
 
+#include "../bullet/bullet.h"
+
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent)
@@ -30,10 +32,13 @@ void Player::Update(Input& in, float dt) const
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
+	BulletConfig shipBulletConfig(sf::Color::Cyan, 3.0f, false, 10.0f);
+	BulletConfig turretBulletConfig(sf::Color::Yellow, 2.0f, false, 10.0f);
+
 	this->UpdateObjects({
-		{ "ship", EntityUpdate(position, direction, in.fire, false) },
-		{ "exhaust",  EntityUpdate(position, IDLE, in.fire) },
-		{ "turret",  EntityUpdate(position, IDLE, in.fire) }
+		{ "ship", EntityUpdate(position, direction, shipBulletConfig, in.fire, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE, shipBulletConfig, in.fire) },
+		{ "turret",  EntityUpdate(position, IDLE, turretBulletConfig, in.fire) }
 	}, dt);
 }
 

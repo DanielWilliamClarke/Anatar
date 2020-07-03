@@ -1,9 +1,9 @@
 #include "bullet.h"
 
-Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius)
-	: position(position), lastPosition(position), velocity(velocity), round(sf::CircleShape(radius)), spent(false)
+Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
+	: position(position), lastPosition(position), velocity(velocity), round(sf::CircleShape(config.radius)), config(config), spent(false)
 {
-	this->round.setFillColor(colour);
+	this->round.setFillColor(config.color);
 }
 
 void Bullet::Update(float dt, float worldSpeed)
@@ -32,4 +32,9 @@ bool Bullet::isSpent() const
 sf::CircleShape Bullet::GetRound() const
 {
 	return round;
+}
+
+BulletConfig Bullet::GetConfig() const
+{
+	return config;
 }

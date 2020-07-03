@@ -55,7 +55,7 @@ void EntityObject::Update(EntityUpdate update, float dt) const
 
 	if (update.fire) 
 	{
-		this->weaponComponent->Fire(this->sprite->getPosition());
+		this->weaponComponent->Fire(this->sprite->getPosition(), update.bulletConfig);
 	}
 
 	this->animationComponent->Play(update.direction, update.loop);

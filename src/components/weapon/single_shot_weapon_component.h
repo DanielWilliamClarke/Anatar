@@ -14,7 +14,7 @@ public:
 	SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay);
 	virtual ~SingleShotWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position) override;
+	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

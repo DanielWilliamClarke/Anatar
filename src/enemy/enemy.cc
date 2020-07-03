@@ -7,6 +7,7 @@
 #include "../entity/entity_object.h"
 
 #include "../components/movement/i_global_movement_component.h"
+#include "../bullet/bullet.h"
 
 Enemy::Enemy(
 	EntityManifest manifest,
@@ -23,8 +24,10 @@ void Enemy::Update(float dt) const
 {
 	const auto position = this->globalMovementComponent->Integrate(dt);
 
+	BulletConfig bulletConfig(sf::Color::Red, 3.0f, false, 10.0f);
+
 	this->UpdateObjects({
-		{ "enemy", EntityUpdate(position, IDLE) },
+		{ "enemy", EntityUpdate(position, IDLE, bulletConfig) },
 	}, dt);
 }
 

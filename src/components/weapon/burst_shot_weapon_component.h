@@ -14,7 +14,7 @@ public:
 	BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay, float arcAngle, float numBullets);
 	virtual ~BurstShotWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position) override;
+	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

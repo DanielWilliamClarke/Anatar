@@ -10,7 +10,7 @@ public:
 	InertWeaponComponent() = default;
 	virtual ~InertWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position) override {};
+	virtual void Fire(sf::Vector2f position, BulletConfig& config) override {};
 
 private:
 };
