@@ -9,10 +9,12 @@
 class Bullet;
 class Entity;
 
-class BulletSystem: public IBulletSystem
+class BulletSystem : public IBulletSystem
 {
 public:
-	BulletSystem(sf::FloatRect bounds);
+	enum affinities { LEFT = -1, RIGHT = 1 };
+
+	BulletSystem(sf::FloatRect bounds, int affinity);
 	virtual ~BulletSystem() = default;
 
 	virtual void FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius) override;
@@ -23,6 +25,7 @@ public:
 private:
 	std::list <Bullet> bullets;
 	sf::FloatRect bounds;
+	int affinity;
 };
 
 #endif // BULLET_SYSTEM_H

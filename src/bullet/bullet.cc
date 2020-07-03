@@ -9,7 +9,7 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, f
 void Bullet::Update(float dt, float worldSpeed)
 {
 	this->lastPosition = this->position;
-	this->position += (this->velocity + sf::Vector2f(-worldSpeed, 0.0f)) * dt;
+	this->position += (this->velocity + sf::Vector2f(worldSpeed, 0.0f)) * dt;
 	this->round.setPosition(this->position);
 }
 

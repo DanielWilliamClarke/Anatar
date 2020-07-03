@@ -84,8 +84,8 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds);
-    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds);
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
 }
 
 

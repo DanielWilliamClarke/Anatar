@@ -3,13 +3,14 @@
 
 #include "../entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds)
-	: bounds(bounds)
+BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
+	: bounds(bounds), affinity(affinity)
 {}
 
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, sf::Color colour, float radius)
 {
-	this->bullets.push_back(Bullet(position, velocity, colour, radius));
+	auto alignedVelocity = sf::Vector2f(velocity.x * (float)affinity, velocity.y);
+	this->bullets.push_back(Bullet(position, alignedVelocity, colour, radius));
 }
 
 void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>> collisionTargets)

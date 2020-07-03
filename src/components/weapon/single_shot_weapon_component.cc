@@ -12,6 +12,6 @@ void SingleShotWeaponComponent::Fire(sf::Vector2f position)
 	if (this->accumulator >= this->delay)
 	{
 		this->accumulator -= this->delay;
-		this->bulletSystem->FireBullet(position, { -180.0f, 0 }, sf::Color::Red, 3.0f);
+		this->bulletSystem->FireBullet(position, { 180.0f, 0 }, sf::Color::Red, 3.0f);
 	}
 }

@@ -8,6 +8,7 @@
 #include "../components/movement/offset_movement_component.h"
 #include "../components/movement/orbital_movement_component.h"
 #include "../components/weapon/single_shot_weapon_component.h"
+#include "../components/weapon/burst_shot_weapon_component.h"
 #include "../components/weapon/player_weapon_component.h"
 #include "../components/weapon/inert_weapon_component.h"
 #include "../entity/entity_object.h"
@@ -40,7 +41,9 @@ void PlayerBuilder::BuildShip()
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
-	auto weaponComponent = std::make_shared<SingleShotWeaponComponent>(bulletSystem, 0.0f);
+
+	//auto weaponComponent = std::make_shared<SingleShotWeaponComponent>(bulletSystem, 0.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, 0.0f, 30.0f, 3.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 
