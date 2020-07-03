@@ -6,22 +6,23 @@
 
 struct BulletConfig
 {
+	std::shared_ptr<sf::Shape> shape;
 	sf::Color color;
-	float radius;
+	float rotation;
 
 	float speed;
 	bool penetrating;
 	float damage;
 
-	BulletConfig(sf::Color color, float radius, float speed, bool penetrating, float damage) 
-		: color(color), radius(radius), speed(speed), penetrating(penetrating), damage(damage)
+	BulletConfig(std::shared_ptr<sf::Shape> shape, sf::Color color, float rotation, float speed, bool penetrating, float damage)
+		: shape(shape), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
 	{}
 };
 
 class Bullet
 {
 public:
-	Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config);
+	Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config);
 	virtual ~Bullet() = default;
 
 	void Update(float dt, float worldSpeed);
@@ -30,17 +31,17 @@ public:
 	void CollisionDetected();
 	bool isSpent() const;
 
-	sf::CircleShape GetRound() const;
+	std::shared_ptr<sf::Shape> GetRound() const;
 	BulletConfig GetConfig() const;
 
 private:
-	sf::CircleShape round; // Holds the bullet shape / position etc
+	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;
 	bool spent; // used in hit detection
 
-	BulletConfig& config;
+	BulletConfig config;
 };
 
 #endif // BULLET_H
