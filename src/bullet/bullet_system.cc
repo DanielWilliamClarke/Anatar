@@ -22,8 +22,6 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 
 		for (auto& c : collisionTargets)
 		{
-			
-
 			if (c->DetectCollision(b.GetRound()->getGlobalBounds()))
 			{
 				// update entity
@@ -36,9 +34,9 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 
 	// Remove bullets 
 	this->bullets.remove_if([=](Bullet b) -> bool {
-		auto position = b.GetRound()->getPosition();
-		return position.x <= bounds.left ||	position.x >= bounds.width ||
-			position.y <= bounds.top ||	position.y >= bounds.height ||
+		auto position = b.GetPosition();
+		return position.x <= bounds.left || position.x >= bounds.width ||
+			position.y <= bounds.top || position.y >= bounds.height ||
 			b.isSpent();
 	});
 }

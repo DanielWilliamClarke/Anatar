@@ -3,10 +3,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 struct BulletConfig
 {
-	std::shared_ptr<sf::Shape> shape;
+	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
 	sf::Color color;
 	float rotation;
 
@@ -14,8 +15,8 @@ struct BulletConfig
 	bool penetrating;
 	float damage;
 
-	BulletConfig(std::shared_ptr<sf::Shape> shape, sf::Color color, float rotation, float speed, bool penetrating, float damage)
-		: shape(shape), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
+	BulletConfig(std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
+		: shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
 	{}
 };
 
@@ -33,6 +34,7 @@ public:
 
 	std::shared_ptr<sf::Shape> GetRound() const;
 	BulletConfig GetConfig() const;
+	sf::Vector2f GetPosition() const;
 
 private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc

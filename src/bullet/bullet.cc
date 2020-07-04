@@ -5,7 +5,7 @@
 #include <math.h>
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
-	: position(position), lastPosition(position), velocity(velocity), round(config.shape), config(config), spent(false)
+	: position(position), lastPosition(position), velocity(velocity), round(config.shapeBuilder()), config(config), spent(false)
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();
@@ -48,4 +48,9 @@ std::shared_ptr<sf::Shape> Bullet::GetRound() const
 BulletConfig Bullet::GetConfig() const
 {
 	return config;
+}
+
+sf::Vector2f Bullet::GetPosition() const
+{
+	return position;
 }
