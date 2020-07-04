@@ -27,7 +27,7 @@ void Fps::Update()
   frames++;
 }
 
-void Fps::Draw(sf::RenderWindow &window)
+void Fps::Draw(sf::RenderTarget &window)
 {
   if (clockDraw.getElapsedTime().asSeconds() >= 1.0f)
   {

@@ -14,7 +14,7 @@ public:
 	virtual ~SpaceLevel() = default;
 
 	void Update(float worldSpeed, float dt);
-	void Draw(sf::RenderTarget& target) const;
+	void Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader) const;
 
 private:
 	std::shared_ptr<IRandomNumberSource<int>> randSource;

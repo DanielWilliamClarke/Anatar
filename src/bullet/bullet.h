@@ -27,7 +27,7 @@ public:
 	virtual ~Bullet() = default;
 
 	void Update(float dt, float worldSpeed);
-	void Draw(sf::RenderTarget& target, float interp);
+	void Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader, float interp);
 
 	void CollisionDetected();
 	bool isSpent() const;

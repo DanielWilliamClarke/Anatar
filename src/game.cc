@@ -28,6 +28,20 @@
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
 
+static const std::string shaderCode = \
+"uniform vec2 frag_LightOrigin;"\
+"uniform vec3 frag_LightColor;"\
+"uniform float frag_LightAttenuation;"\
+"uniform vec2 frag_ScreenResolution;"\
+"void main(){"\
+" vec2 baseDistance =  gl_FragCoord.xy;"\
+" baseDistance.y = frag_ScreenResolution.y-baseDistance.y;"\
+" vec2 distance=frag_LightOrigin - baseDistance;"\
+" float linear_distance = length(distance);"\
+" float attenuation=1.0/( frag_LightAttenuation*linear_distance + frag_LightAttenuation*linear_distance);"\
+" vec4 lightColor = vec4(frag_LightColor,  clamp(frag_LightAttenuation, 0.0 ,frag_LightAttenuation));"\
+" vec4 color = vec4(attenuation, attenuation, attenuation, 1.0) * lightColor; gl_FragColor=color;}";
+
 Game::Game()
     : clock(std::make_shared<sf::Clock>()),
     dt(1.0f / 60.0f),
@@ -45,10 +59,13 @@ Game::Game()
 
 void Game::InitWindow()
 {
-	this->window = std::make_shared<sf::RenderWindow>(
-		sf::VideoMode(1280, 720),
-		"Space Shooter",
-		sf::Style::Titlebar | sf::Style::Close);
+    this->window = std::make_shared<sf::RenderWindow>(
+        sf::VideoMode(1280, 720),
+        "Space Shooter",
+        sf::Style::Titlebar | sf::Style::Close);
+
+    this->windowTexture = std::make_shared<sf::RenderTexture>();
+    this->windowTexture->create(1280, 720);
 
     auto view = this->window->getView();
     sf::Vector2f viewCenter(view.getCenter());
@@ -57,6 +74,14 @@ void Game::InitWindow()
         viewCenter.y - viewSize.y / 2, // top
         viewSize.x,
         viewSize.y);
+
+    this->glowSprite = std::make_shared<sf::Sprite>();
+    this->glowSprite->setTexture(this->windowTexture->getTexture());
+    this->glowSprite->setOrigin(this->glowSprite->getTextureRect().width / 2, this->glowSprite->getTextureRect().height / 2);
+    this->glowSprite->setPosition(viewSize.x / 2.f, viewSize.y / 2.f);
+
+    this->shader.loadFromMemory(shaderCode, sf::Shader::Fragment);
+    this->shader.setUniform("frag_ScreenResolution", sf::Vector2f(viewSize.x, viewSize.y));
 }
 
 void Game::InitFps()
@@ -87,8 +112,8 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
-    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(shader, bounds, BulletSystem::LEFT);
+    this->playerBulletSystem = std::make_shared<BulletSystem>(shader, bounds, BulletSystem::RIGHT);
 }
 
 
@@ -166,12 +191,20 @@ void Game::Draw()
 {
     auto interp = this->accumulator / this->dt;
     this->window->clear(sf::Color::Black);
-    this->level->Draw(*this->window);
+    this->windowTexture->clear(sf::Color::Transparent);
+
+    //Draw stuff that glows
+    this->level->Draw(*this->windowTexture, *this->glowSprite, this->shader);
+    this->enemyBulletSystem->Draw(*this->windowTexture, *this->glowSprite, interp);
+    this->playerBulletSystem->Draw(*this->windowTexture, *this->glowSprite, interp);
+    this->windowTexture->display();
+    this->window->draw(*this->glowSprite);
+
+    // Draw everything else
     this->player->Draw(*this->window, interp);
     this->enemySystem->Draw(*this->window, interp);
-    this->enemyBulletSystem->Draw(*this->window, interp);
-    this->playerBulletSystem->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
+
     this->window->display();
 }
 

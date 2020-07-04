@@ -10,7 +10,7 @@ public:
   Fps();
   virtual ~Fps() = default;
   void Update();
-  void Draw(sf::RenderWindow &window);
+  void Draw(sf::RenderTarget &window);
 
 private:
   // Clocks

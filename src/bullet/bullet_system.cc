@@ -3,8 +3,8 @@
 
 #include "../entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
-	: bounds(bounds), affinity(affinity)
+BulletSystem::BulletSystem(sf::Shader& shader, sf::FloatRect bounds, int affinity)
+	: shader(shader), bounds(bounds), affinity(affinity)
 {}
 
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
@@ -41,10 +41,10 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 	});
 }
 
-void BulletSystem::Draw(sf::RenderTarget& target, float interp)
+void BulletSystem::Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, float interp)
 {
 	for (auto& b : this->bullets)
 	{
-		b.Draw(target, interp);
+		b.Draw(target, glowSprite, shader, interp);
 	}
 }

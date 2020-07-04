@@ -10,7 +10,7 @@ SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf:
 
 	for (auto i = 0; i < stars.size(); i++) {
 		auto& s = stars[i];
-		s = sf::CircleShape(0.75);
+		s = sf::CircleShape(0.75f);
 		s.setFillColor(sf::Color::White);
 		s.setPosition((float)starChartX[i], (float)starChartY[i]);
 	}
@@ -34,13 +34,13 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 		{
 			paralaxFactor = 0.7f;
 			s.setFillColor(sf::Color(255, 215, 0));
-			s.setRadius(1);
+			s.setRadius(1.0f);
 		}
 		else if (i < 375)
 		{
 			paralaxFactor = 1.1f;
 			s.setFillColor(sf::Color(0, 255, 255));
-			s.setRadius(1.5);
+			s.setRadius(1.5f);
 		}
 
 		starPosition.x -= worldSpeed * dt * paralaxFactor;
@@ -55,9 +55,24 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 	}
 }
 
-void SpaceLevel::Draw(sf::RenderTarget& target) const
+void SpaceLevel::Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader) const
 {
 	for (auto &s : stars) {
+
 		target.draw(s);
+
+		if (s.getRadius() >= 1.5f)
+		{
+			auto color = s.getFillColor();
+			shader.setUniform("frag_LightOrigin", s.getPosition());
+			shader.setUniform("frag_LightColor", sf::Vector3f(color.r, color.g, color.b));
+			shader.setUniform("frag_LightAttenuation", 500.0f);
+
+			sf::RenderStates states;
+			states.shader = &shader;
+			states.blendMode = sf::BlendAdd;
+
+			target.draw(glowSprite, states);
+		}
 	}
 }

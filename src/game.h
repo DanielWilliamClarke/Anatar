@@ -37,6 +37,9 @@ private:
 	void Draw();
 
 	std::shared_ptr<sf::RenderWindow> window;
+	std::shared_ptr<sf::RenderTexture> windowTexture;
+	std::shared_ptr<sf::Sprite> glowSprite;
+
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;
 	std::shared_ptr<SpaceLevel> level;
@@ -48,6 +51,7 @@ private:
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;
+	sf::Shader shader;
 
 	float dt;
 	float accumulator;
