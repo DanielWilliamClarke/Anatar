@@ -2,11 +2,5 @@
 sfml/2.5.1@bincrafters/stable
 gtest/1.8.1@bincrafters/stable
 
-[options]
-sfml:graphics=True
-sfml:window=True
-sfml:audio=False
-sfml:network=False
-
 [generators]
 cmake

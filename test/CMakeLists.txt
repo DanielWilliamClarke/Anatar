@@ -5,6 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 enable_testing()
 
+
 set(BINARY ${CMAKE_PROJECT_NAME}_test)
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES true
@@ -18,7 +19,8 @@ add_executable(${BINARY} ${SOURCES})
 
 # The idea is that gtest runs my library testing the code
 target_link_libraries(${BINARY} PUBLIC
-	${CONAN_LIBS} 
+	CONAN_PKG::sfml
+	CONAN_PKG::gtest
 	${CMAKE_PROJECT_NAME}_lib
 )
 

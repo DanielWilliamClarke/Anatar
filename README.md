@@ -30,6 +30,8 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 
 ## Install Conan packages
 
+For now update profile.txt to contain the Build Config mode [`Debug` or `Release]
+
 ```Powershell
 # Install Deps
 cd build
@@ -38,3 +40,5 @@ conan install --build=missing --profile ../profile.txt ..
 # then run cmake
 cmake ..
 ```
+
+then build
