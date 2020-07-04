@@ -4,6 +4,7 @@
 #include <cmath>
 #include <math.h>
 
+#include "../util/i_glow_shader_renderer.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: position(position), lastPosition(position), velocity(velocity), round(config.shapeBuilder()), config(config), spent(false)
@@ -25,22 +26,11 @@ void Bullet::Update(float dt, float worldSpeed)
 	}
 }
 
-void Bullet::Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader, float interp)
+void Bullet::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 {
-	auto color = this->round->getFillColor();
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
-
-	target.draw(*round);
-
-	shader.setUniform("frag_LightOrigin", this->round->getPosition());
-	shader.setUniform("frag_LightColor", sf::Vector3f(color.r, color.g, color.b));
-	shader.setUniform("frag_LightAttenuation", 200.0f);
-
-	sf::RenderStates states;
-	states.shader = &shader;
-	states.blendMode = sf::BlendAdd;
-
-	target.draw(glowSprite, states);
+	renderer->ExposeTarget().draw(*round);
+	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), 200.0f);
 }
 
 void Bullet::CollisionDetected()

@@ -8,6 +8,8 @@
 
 class Fps;
 class TextureAtlas;
+class GlowShaderRenderer;
+
 class SpaceLevel;
 class Player;
 class PlayerInput;
@@ -30,15 +32,12 @@ private:
 	void InitPlayer();
 	void InitBulletSystem();
 	void InitEnemySystem();
-
-
 	void WindowEvents();
 	void Update();
 	void Draw();
 
 	std::shared_ptr<sf::RenderWindow> window;
-	std::shared_ptr<sf::RenderTexture> windowTexture;
-	std::shared_ptr<sf::Sprite> glowSprite;
+	std::shared_ptr<GlowShaderRenderer> glowRenderer;
 
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;
@@ -51,7 +50,6 @@ private:
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;
-	sf::Shader shader;
 
 	float dt;
 	float accumulator;

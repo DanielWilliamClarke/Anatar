@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#include "../util/i_glow_shader_renderer.h"
+
 SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
 	: randSource(randSource), viewSize(viewSize)
 {
@@ -55,24 +57,14 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 	}
 }
 
-void SpaceLevel::Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader) const
+void SpaceLevel::Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const
 {
-	for (auto &s : stars) {
-
-		target.draw(s);
-
+	for (auto &s : stars)
+	{
+		renderer->ExposeTarget().draw(s);
 		if (s.getRadius() >= 1.5f)
 		{
-			auto color = s.getFillColor();
-			shader.setUniform("frag_LightOrigin", s.getPosition());
-			shader.setUniform("frag_LightColor", sf::Vector3f(color.r, color.g, color.b));
-			shader.setUniform("frag_LightAttenuation", 500.0f);
-
-			sf::RenderStates states;
-			states.shader = &shader;
-			states.blendMode = sf::BlendAdd;
-
-			target.draw(glowSprite, states);
+			renderer->AddGlowAtPosition(s.getPosition(), s.getFillColor(), 500.0f);
 		}
 	}
 }

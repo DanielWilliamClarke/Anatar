@@ -20,6 +20,8 @@ struct BulletConfig
 	{}
 };
 
+class IGlowShaderRenderer;
+
 class Bullet
 {
 public:
@@ -27,7 +29,7 @@ public:
 	virtual ~Bullet() = default;
 
 	void Update(float dt, float worldSpeed);
-	void Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader, float interp);
+	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 	void CollisionDetected();
 	bool isSpent() const;

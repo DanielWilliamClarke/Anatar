@@ -7,6 +7,8 @@
 
 #include "../util/i_random_number_source.h"
 
+class IGlowShaderRenderer;
+
 class SpaceLevel
 {
 public:
@@ -14,11 +16,11 @@ public:
 	virtual ~SpaceLevel() = default;
 
 	void Update(float worldSpeed, float dt);
-	void Draw(sf::RenderTarget& target, sf::Sprite& glowSprite, sf::Shader& shader) const;
+	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const;
 
 private:
 	std::shared_ptr<IRandomNumberSource<int>> randSource;
-	std::array<sf::CircleShape, 750> stars;
+	std::array<sf::CircleShape, 500> stars;
 	sf::Vector2f viewSize;
 };
 

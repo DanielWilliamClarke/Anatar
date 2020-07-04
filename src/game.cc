@@ -5,6 +5,7 @@
 #include "game.h"
 #include "util/fps.h"
 #include "util/texture_atlas.h"
+#include "util/glow_shader_renderer.h"
 
 #include "entity/Entity.h"
 #include "player/player_builder.h"
@@ -28,19 +29,7 @@
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
 
-static const std::string shaderCode = \
-"uniform vec2 frag_LightOrigin;"\
-"uniform vec3 frag_LightColor;"\
-"uniform float frag_LightAttenuation;"\
-"uniform vec2 frag_ScreenResolution;"\
-"void main(){"\
-" vec2 baseDistance =  gl_FragCoord.xy;"\
-" baseDistance.y = frag_ScreenResolution.y-baseDistance.y;"\
-" vec2 distance=frag_LightOrigin - baseDistance;"\
-" float linear_distance = length(distance);"\
-" float attenuation=1.0/( frag_LightAttenuation*linear_distance + frag_LightAttenuation*linear_distance);"\
-" vec4 lightColor = vec4(frag_LightColor,  clamp(frag_LightAttenuation, 0.0 ,frag_LightAttenuation));"\
-" vec4 color = vec4(attenuation, attenuation, attenuation, 1.0) * lightColor; gl_FragColor=color;}";
+
 
 Game::Game()
     : clock(std::make_shared<sf::Clock>()),
@@ -64,9 +53,6 @@ void Game::InitWindow()
         "Space Shooter",
         sf::Style::Titlebar | sf::Style::Close);
 
-    this->windowTexture = std::make_shared<sf::RenderTexture>();
-    this->windowTexture->create(1280, 720);
-
     auto view = this->window->getView();
     sf::Vector2f viewCenter(view.getCenter());
     sf::Vector2f viewSize(view.getSize());
@@ -75,13 +61,7 @@ void Game::InitWindow()
         viewSize.x,
         viewSize.y);
 
-    this->glowSprite = std::make_shared<sf::Sprite>();
-    this->glowSprite->setTexture(this->windowTexture->getTexture());
-    this->glowSprite->setOrigin(this->glowSprite->getTextureRect().width / 2, this->glowSprite->getTextureRect().height / 2);
-    this->glowSprite->setPosition(viewSize.x / 2.f, viewSize.y / 2.f);
-
-    this->shader.loadFromMemory(shaderCode, sf::Shader::Fragment);
-    this->shader.setUniform("frag_ScreenResolution", sf::Vector2f(viewSize.x, viewSize.y));
+    this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
 }
 
 void Game::InitFps()
@@ -112,8 +92,8 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(shader, bounds, BulletSystem::LEFT);
-    this->playerBulletSystem = std::make_shared<BulletSystem>(shader, bounds, BulletSystem::RIGHT);
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
 }
 
 
@@ -147,13 +127,13 @@ void Game::InitEnemySystem()
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(90.0f, 10.0f), this->enemyBulletSystem, 3.0f))))
+                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(45.0f, 7.0f), this->enemyBulletSystem, 3.0f))))
 
         ->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 75.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(180.0f, 100.0f), this->enemyBulletSystem, 10.0f))));
+                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(110.0f, 50.0f), this->enemyBulletSystem, 10.0f))));
 }
 
 
@@ -191,14 +171,13 @@ void Game::Draw()
 {
     auto interp = this->accumulator / this->dt;
     this->window->clear(sf::Color::Black);
-    this->windowTexture->clear(sf::Color::Transparent);
 
     //Draw stuff that glows
-    this->level->Draw(*this->windowTexture, *this->glowSprite, this->shader);
-    this->enemyBulletSystem->Draw(*this->windowTexture, *this->glowSprite, interp);
-    this->playerBulletSystem->Draw(*this->windowTexture, *this->glowSprite, interp);
-    this->windowTexture->display();
-    this->window->draw(*this->glowSprite);
+    this->glowRenderer->Clear();
+    this->level->Draw(this->glowRenderer);
+    this->enemyBulletSystem->Draw(this->glowRenderer, interp);
+    this->playerBulletSystem->Draw(this->glowRenderer, interp);
+    this->glowRenderer->Draw(*this->window);
 
     // Draw everything else
     this->player->Draw(*this->window, interp);
