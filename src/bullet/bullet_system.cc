@@ -10,38 +10,38 @@ BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
 {
 	auto alignedVelocity = sf::Vector2f(velocity.x * (float)affinity, velocity.y);
-	this->bullets.push_back(Bullet(position, alignedVelocity, config));
+	this->bullets.push_back(std::make_unique<Bullet>(position, alignedVelocity, config));
 }
 
-void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>> collisionTargets)
+void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>>& collisionTargets)
 {
 	// Update and perform collision detection
-	for (auto& b : this->bullets)
+	for (auto&& b : this->bullets)
 	{
-		b.Update(dt, worldSpeed);
+		b->Update(dt, worldSpeed);
 
 		for (auto& c : collisionTargets)
 		{
-			if (c->DetectCollision(b.GetRound()->getGlobalBounds()))
+			if (c->DetectCollision(b->GetRound()->getGlobalBounds()))
 			{
 				// update entity
-				auto damage = b.GetDamage();
+				auto damage = b->GetDamage();
 				c->TakeDamage(damage.first);
 				// spend round 
 				if (!damage.second)
 				{
-					b.CollisionDetected();
+					b->CollisionDetected();
 				}
 			}
 		}
 	}
 
 	// Remove bullets 
-	this->bullets.remove_if([=](Bullet b) -> bool {
-		auto position = b.GetPosition();
+	this->bullets.remove_if([=](std::unique_ptr<Bullet>& b) -> bool {
+		auto position = b->GetPosition();
 		return position.x <= bounds.left || position.x >= bounds.width ||
 			position.y <= bounds.top || position.y >= bounds.height ||
-			b.isSpent();
+			b->isSpent();
 	});
 }
 
@@ -49,6 +49,6 @@ void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float int
 {
 	for (auto& b : this->bullets)
 	{
-		b.Draw(renderer, interp);
+		b->Draw(renderer, interp);
 	}
 }

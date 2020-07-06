@@ -60,7 +60,7 @@ std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::s
 	return shared_from_this();
 }
 
-std::list<std::shared_ptr<Entity>> EnemySystem::GetEnemies() const
+std::list<std::shared_ptr<Entity>>& EnemySystem::GetEnemies()
 {
 	return enemies;
 }

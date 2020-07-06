@@ -105,6 +105,7 @@ void Game::InitPlayer()
     auto attributeComponent = std::make_shared<HealthAttributeComponent>(100.0f, 50.0f);
 
     this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
+    this->playerTargets.push_back(this->player);
     this->playerInput = std::make_shared<PlayerInput>();
 }
 
@@ -163,7 +164,7 @@ void Game::Update()
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
         this->enemySystem->Update(dt);
-        this->enemyBulletSystem->Update(dt, worldSpeed, { this->player });
+        this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
         this->playerBulletSystem->Update(dt, worldSpeed, this->enemySystem->GetEnemies());
         this->fps->Update();
         this->accumulator -= this->dt;

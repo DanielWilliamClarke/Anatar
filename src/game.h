@@ -3,6 +3,7 @@
 #pragma once
 
 #include <memory>
+#include <list>
 
 #include <SFML/Graphics.hpp>
 
@@ -11,6 +12,7 @@ class TextureAtlas;
 class GlowShaderRenderer;
 
 class SpaceLevel;
+class Entity;
 class Player;
 class PlayerInput;
 class EnemySystem;
@@ -42,7 +44,10 @@ private:
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;
 	std::shared_ptr<SpaceLevel> level;
+
 	std::shared_ptr<Player> player;
+	std::list<std::shared_ptr<Entity>> playerTargets;
+
 	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<BulletSystem> enemyBulletSystem;

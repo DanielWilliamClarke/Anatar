@@ -3,6 +3,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include <list>
 #include "i_bullet_system.h"
 
@@ -20,11 +21,11 @@ public:
 
 	virtual void FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
 
-	void Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>> collisionTargets);
+	void Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>>& collisionTargets);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
-	std::list <Bullet> bullets;
+	std::list<std::unique_ptr<Bullet>> bullets;
 	sf::FloatRect bounds;
 	int affinity;
 };
