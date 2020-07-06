@@ -12,8 +12,9 @@
 Enemy::Enemy(
 	EntityManifest manifest,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
+	std::shared_ptr<IAttributeComponent> attributeComponent,
 	sf::Vector2f initialPosition)
-	: Entity{ nullptr, globalMovementComponent }
+	: Entity{ nullptr, globalMovementComponent, attributeComponent }
 {
 	this->objects = manifest;
 	this->GetObject("enemy")->GetSprite()->setPosition(initialPosition);

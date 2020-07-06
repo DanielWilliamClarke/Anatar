@@ -8,8 +8,9 @@
 
 Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent)
-	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent)
+	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
+	std::shared_ptr<IAttributeComponent> attributeComponent)
+	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent)
 {}
 
 void Entity::AddObject(std::string name, std::shared_ptr<EntityObject> object)

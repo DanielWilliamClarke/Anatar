@@ -9,9 +9,9 @@
 
 class IEntityObjectBuilder;
 class IGlobalMovementComponent;
-class EntityObject;
+class IAttributeComponent;
 
-struct Input;
+class EntityObject;
 struct EntityUpdate;
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
@@ -22,7 +22,8 @@ public:
 	Entity() = default;
 	Entity(
 		std::shared_ptr<IEntityObjectBuilder> entityBuilder,
-		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent);
+		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
+		std::shared_ptr<IAttributeComponent> attributeComponent);
 	virtual ~Entity() = default;
 
 	void AddObject(std::string name, std::shared_ptr<EntityObject> object);
@@ -41,6 +42,7 @@ protected:
 	EntityManifest objects;
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder;
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
+	std::shared_ptr<IAttributeComponent> attributeComponent;
 
 private:
 

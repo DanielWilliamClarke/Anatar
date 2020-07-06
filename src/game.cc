@@ -22,13 +22,14 @@
 #include "components/movement/player_movement_component.h"
 #include "components/movement/offset_movement_component.h"
 
+#include "components/attributes/i_attribute_component.h"
+
 #include "bullet/bullet_system.h"
 #include "components/weapon/burst/burst_shot_weapon_component_factory.h"
 #include "components/weapon/single/single_shot_weapon_component_factory.h"
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
-
 
 
 Game::Game()
@@ -101,7 +102,9 @@ void Game::InitPlayer()
 {
     auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas,  this->playerBulletSystem);
     auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
-    this->player = std::make_shared<Player>(playerBuilder, movementComponent);
+    auto attributeComponent = std::make_shared<IAttributeComponent>();
+
+    this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
     this->playerInput = std::make_shared<PlayerInput>();
 }
 

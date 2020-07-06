@@ -4,15 +4,17 @@
 
 #include "enemy.h"
 
+#include "util/random_number_mersenne_source.cc"
+
 #include "../components/animation/animation_component.h"
 #include "../components/hitbox/hitbox_component.h"
-#include "../components/movement/i_local_movement_component.h"
 #include "../components/movement/offset_movement_component.h"
 #include "../components/movement/orbital_movement_component.h"
-#include "../entity/entity_object.h"
 #include "../components/movement/enemy_movement_component.h"
+#include "../components/attributes/i_attribute_component.h"
 #include "../components/weapon/i_weapon_component_factory.h"
-#include "util/random_number_mersenne_source.cc"
+
+#include "../entity/entity_object.h"
 
 EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 	: config(config)
@@ -21,13 +23,15 @@ EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 std::shared_ptr<Entity> EnemyTypeFactory::Create()
 {
     auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
+	auto attributeComponent = std::make_shared<IAttributeComponent>();
+
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
 	auto position = sf::Vector2f(
 		config.motionConfig.bounds.width,
 		(float)randGenerator->Generate((int)config.motionConfig.bounds.top, (int)config.motionConfig.bounds.height - textureSize.y));
-    return std::make_shared<Enemy>(config.builder(config), movementComponent, position);
+    return std::make_shared<Enemy>(config.builder(config), movementComponent, attributeComponent, position);
 }
 
 EntityManifest EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)

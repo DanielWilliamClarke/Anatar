@@ -9,7 +9,6 @@
 
 #include "../util/i_random_number_source.h"
 
-
 class Enemy : public Entity
 {
 public:
@@ -18,6 +17,7 @@ public:
 	Enemy(
 		EntityManifest manifest,
 		std::shared_ptr<IGlobalMovementComponent> movementComponent,
+		std::shared_ptr<IAttributeComponent> attributeComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
 	virtual void Update(float dt) const override;
