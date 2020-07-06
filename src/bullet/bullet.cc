@@ -30,7 +30,7 @@ void Bullet::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 {
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->ExposeTarget().draw(*round);
-	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), 200.0f);
+	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), 100.0f);
 }
 
 void Bullet::CollisionDetected()

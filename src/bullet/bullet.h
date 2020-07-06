@@ -5,9 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 
+class IGlowShaderRenderer;
+class Entity;
+
 struct BulletConfig
 {
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
+	std::shared_ptr<const Entity> owner;
 	sf::Color color;
 	float rotation;
 
@@ -15,12 +19,10 @@ struct BulletConfig
 	bool penetrating;
 	float damage;
 
-	BulletConfig(std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
-		: shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
+	BulletConfig(std::shared_ptr<const Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
+		: owner(owner), shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
 	{}
 };
-
-class IGlowShaderRenderer;
 
 class Bullet
 {

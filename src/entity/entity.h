@@ -16,8 +16,8 @@ struct EntityUpdate;
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 
-class Entity {
-
+class Entity: public std::enable_shared_from_this<Entity>
+{
 public:
 	Entity() = default;
 	Entity(
