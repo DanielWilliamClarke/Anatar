@@ -25,9 +25,13 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 			if (c->DetectCollision(b.GetRound()->getGlobalBounds()))
 			{
 				// update entity
-
+				auto damage = b.GetDamage();
+				c->TakeDamage(damage.first);
 				// spend round 
-				b.CollisionDetected();
+				if (!damage.second)
+				{
+					b.CollisionDetected();
+				}
 			}
 		}
 	}

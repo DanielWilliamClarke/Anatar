@@ -39,6 +39,7 @@ public:
 	std::shared_ptr<sf::Shape> GetRound() const;
 	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
+	std::pair<float, bool> GetDamage() const;
 
 private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc

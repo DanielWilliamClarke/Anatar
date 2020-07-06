@@ -38,7 +38,7 @@ void Player::Update(Input& in, float dt) const
 	BulletConfig shipBulletConfig(shared_from_this(), shipBulletBuilder, sf::Color::Cyan, 0.0f, 300.0f, false, 10.0f);
 
 	auto turretBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); };
-	BulletConfig turretBulletConfig(shared_from_this(), turretBulletBuilder, sf::Color::Yellow, 1.0f, 400.0f, false, 12.0f);
+	BulletConfig turretBulletConfig(shared_from_this(), turretBulletBuilder, sf::Color::Yellow, 1.0f, 400.0f, true, 0.5f);
 
 	this->UpdateObjects({
 		{ "ship", EntityUpdate(position, direction, shipBulletConfig, in.fire, false) },

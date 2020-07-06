@@ -33,7 +33,7 @@ void EnemySystem::Update(float dt)
 		auto enemySprite = e->GetObject("enemy")->GetSprite();
 		auto enemyBounds = enemySprite->getGlobalBounds();
 		auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
-		return enemyX <= 0;
+		return enemyX <= 0 || e->HasDied();
 	});
 
 	// Update all remaining enemies

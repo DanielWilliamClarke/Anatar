@@ -57,3 +57,8 @@ sf::Vector2f Bullet::GetPosition() const
 {
 	return position;
 }
+
+std::pair<float, bool> Bullet::GetDamage() const
+{
+	return std::make_pair(config.damage, config.penetrating);
+}

@@ -7,7 +7,8 @@ class IAttributeComponent
 public:
 	IAttributeComponent() = default;
 	virtual ~IAttributeComponent() = default;
-private:
+	virtual void TakeDamage(float damage) = 0;
+	virtual bool IsDead() const = 0;
 };
 
 #endif // I_ATTRBUTE_COMPONENT_H
