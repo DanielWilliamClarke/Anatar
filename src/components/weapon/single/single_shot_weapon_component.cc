@@ -13,7 +13,7 @@ void SingleShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	this->accumulator += this->clockFire.restart().asSeconds();
 	if (this->accumulator >= this->delay)
 	{
-		this->accumulator -= this->delay;
+		this->accumulator = 0;
 		this->bulletSystem->FireBullet(position, { config.speed, 0 }, config);
 	}
 }

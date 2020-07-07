@@ -16,7 +16,7 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 	this->accumulator += this->clockFire.restart().asSeconds();
 	if (this->accumulator >= this->delay)
 	{
-		this->accumulator -= this->delay;
+		this->accumulator = 0;
 
 		// burst center point is (360 - theta) / 2
 		float thetaStart = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
