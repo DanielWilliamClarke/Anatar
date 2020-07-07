@@ -38,6 +38,7 @@ private:
 	sf::Vector2f gravity;
 	sf::Vector2f maxThrust;
 	sf::Vector2f thrust;	
+	sf::Vector2f acceleration;
 	sf::Vector2f velocity;
 	sf::Vector2f worldVelocity;
 

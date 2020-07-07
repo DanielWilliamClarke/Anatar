@@ -54,10 +54,13 @@ sf::Vector2f PlayerMovementComponent::Integrate(Input& in, const float& dt)
 		thrust = maxThrust;
 	}
 
+	auto friction = 0.5f;
+	auto damping = -velocity * friction;
 	auto inputForce = in.movement * movementSpeed;
-	auto force = gravity + thrust + inputForce;
-	auto acceleration = force / mass; // 2nd derivative
-	velocity += acceleration * dt; // 1st derivative
+	auto force = gravity + thrust + inputForce + damping;
+
+	acceleration = force / mass; // 2nd derivative;
+	velocity += acceleration * dt ; // 1st derivative
 	position = Bound(position + velocity + worldVelocity * dt);
 
 	return position;
