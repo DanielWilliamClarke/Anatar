@@ -24,7 +24,7 @@ void PlayerWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 	if (canFire && gunTemp < 80.0f)
 	{
 		gunReloadTime = gunReload;
-		gunTemp += 5.0f;
+		gunTemp += 4.0f;
 		if (gunTemp > 100.0f)
 		{
 			gunTemp = 100.0f;

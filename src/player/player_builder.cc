@@ -22,6 +22,7 @@ EntityManifest PlayerBuilder::Build()
 	this->BuildShip();
 	this->BuildExhaust();
 	this->BuildTurret();
+	this->BuildGlowie();
 	return manifest;
 }
 
@@ -148,4 +149,47 @@ void PlayerBuilder::BuildTurret()
 	turret->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
 
 	manifest["turret"] = turret;
+}
+
+void PlayerBuilder::BuildGlowie()
+{
+	auto texture = textureAtlas->GetTexture("playerGlowie");
+
+	auto spriteScale = 1.0f;
+	auto textureSize = texture->getSize();
+	auto spriteFrameSize = sf::Vector2f(
+		(float)textureSize.x / 7,
+		(float)textureSize.y);
+	auto spriteOrigin = sf::Vector2f(
+		spriteFrameSize.x / 2,
+		spriteFrameSize.y / 2);
+
+	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
+
+	auto animationComponent = std::make_shared<AnimationComponent>();
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Blue);
+	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 75.0f, -100.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, 10.0f, 360.0f, 50.0f);
+	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
+	auto glowie = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
+	auto sprite = glowie->GetSprite();
+	glowie->SetTexture(texture);
+	glowie->InitAnimationComponent(texture);
+	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
+	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
+
+	auto spriteBounds = sprite->getLocalBounds();
+	glowie->InitHitboxComponent(
+		spriteBounds.left - spriteFrameSize.x / 2,
+		spriteBounds.top - spriteFrameSize.y / 2,
+		spriteFrameSize.x,
+		spriteFrameSize.y);
+
+	auto frameSize = sf::Vector2i(
+		(int)spriteFrameSize.x,
+		(int)spriteFrameSize.y);
+
+	glowie->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
+
+	manifest["glowie"] = glowie;
 }

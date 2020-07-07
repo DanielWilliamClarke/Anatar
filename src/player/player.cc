@@ -33,17 +33,20 @@ void Player::Update(Input& in, float dt) const
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	//BulletConfig shipBulletConfig(std::make_shared<sf::CircleShape>(4.0f, 3), sf::Color::Cyan, 30.0f, 300.0f, false, 10.0f);
 	auto shipBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 2.0f)); };
 	BulletConfig shipBulletConfig(shared_from_this(), shipBulletBuilder, sf::Color::Cyan, 0.0f, 300.0f, false, 10.0f);
 
 	auto turretBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); };
 	BulletConfig turretBulletConfig(shared_from_this(), turretBulletBuilder, sf::Color::Yellow, 1.0f, 400.0f, false, 5.0f);
 
+	auto glowieBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); };
+	BulletConfig glowieBulletConfig(shared_from_this(), glowieBulletBuilder, sf::Color::Green, 5.0f, 400.0f, false , 25.0f);
+
 	this->UpdateObjects({
 		{ "ship", EntityUpdate(position, direction, shipBulletConfig, in.fire, false) },
 		{ "exhaust",  EntityUpdate(position, IDLE, shipBulletConfig, in.fire) },
-		{ "turret",  EntityUpdate(position, IDLE, turretBulletConfig, in.fire) }
+		{ "turret",  EntityUpdate(position, IDLE, turretBulletConfig, in.fire) },
+		{ "glowie",  EntityUpdate(position, IDLE, glowieBulletConfig, in.fire) }
 	}, dt);
 }
 

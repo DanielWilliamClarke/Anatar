@@ -57,7 +57,7 @@ EntityManifest EnemyTypeFactory::BuildOribitalEnemy(EnemyConfig config)
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OrbitalMovementComponent>(spriteOrigin, 25.0f, 200.f));
+	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OrbitalMovementComponent>(spriteOrigin, 250.0f, 50.0f));
 }
 
 EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent)

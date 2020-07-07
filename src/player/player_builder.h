@@ -21,6 +21,7 @@ private:
 	void BuildShip();
 	void BuildExhaust();
 	void BuildTurret();
+	void BuildGlowie();
 
 	EntityManifest manifest;
 
