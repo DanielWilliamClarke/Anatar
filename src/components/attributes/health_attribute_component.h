@@ -7,19 +7,15 @@
 class HealthAttributeComponent: public IAttributeComponent
 {
 public:
-	HealthAttributeComponent(float health, float shields);
+	HealthAttributeComponent(float health);
 	virtual ~HealthAttributeComponent() = default;
 
 	virtual void TakeDamage(float damage) override;
-
 	virtual bool IsDead() const override;
-
+	virtual void RegisterKill(float score) override {};
 private:
-
 	float maxHealth;
 	float health;
-	float maxShields;
-	float shields;
 };
 
 #endif //HEALTH_ATTRBUTE_COMPONENT_H

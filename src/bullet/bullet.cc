@@ -62,3 +62,8 @@ std::pair<float, bool> Bullet::GetDamage() const
 {
 	return std::make_pair(config.damage, config.penetrating);
 }
+
+std::shared_ptr<Entity> Bullet::GetOwner() const
+{
+	return config.owner;
+}

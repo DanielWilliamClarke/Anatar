@@ -20,8 +20,11 @@ public:
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
-	virtual void Update(float dt) const override;
+	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
+
+private:
+	void InitBullets();
 };
 
 #endif //ENEMY_H

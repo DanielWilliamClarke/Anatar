@@ -70,3 +70,8 @@ bool Entity::HasDied() const
 {
 	return this->attributeComponent->IsDead();
 }
+
+void Entity::RegisterKill(float score)
+{
+	this->attributeComponent->RegisterKill(score);
+}

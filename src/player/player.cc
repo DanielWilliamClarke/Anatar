@@ -10,15 +10,16 @@
 #include "../entity/entity_update.h"
 
 #include "player_input.h"
-#include "../components/movement/i_global_movement_component.h"
+#include "../components/movement/i_player_movement_component.h"
+#include "../components/attributes/i_player_attribute_component.h"
 
 #include "../bullet/bullet.h"
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
-	std::shared_ptr<IAttributeComponent> attributeComponent)
-	: Entity{ entityBuilder, globalMovementComponent, attributeComponent }, movementComponent(globalMovementComponent)
+	std::shared_ptr<IPlayerAttributeComponent> attributeComponent)
+	: Entity{ entityBuilder, globalMovementComponent, attributeComponent }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
 {
 	this->objects = this->entityBuilder->Build();
 
@@ -27,27 +28,29 @@ Player::Player(
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
 
-void Player::Update(Input& in, float dt) const
+void Player::Update(Input& in, float dt)
 {
+	if (this->bulletConfigs.empty())
+	{
+		this->InitBullets();
+	}
+
 	const auto lastPosition = this->movementComponent->GetPosition();
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	auto shipBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 2.0f)); };
-	BulletConfig shipBulletConfig(shared_from_this(), shipBulletBuilder, sf::Color::Cyan, 0.0f, 300.0f, false, 10.0f);
-
-	auto turretBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); };
-	BulletConfig turretBulletConfig(shared_from_this(), turretBulletBuilder, sf::Color::Yellow, 1.0f, 400.0f, false, 5.0f);
-
-	auto glowieBulletBuilder = [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); };
-	BulletConfig glowieBulletConfig(shared_from_this(), glowieBulletBuilder, sf::Color::Green, 5.0f, 400.0f, false , 25.0f);
+	auto shipConfig = this->bulletConfigs.at("ship");
+	auto turrentConfig = this->bulletConfigs.at("turret");
+	auto glowieConfig = this->bulletConfigs.at("glowie");
 
 	this->UpdateObjects({
-		{ "ship", EntityUpdate(position, direction, shipBulletConfig, in.fire, false) },
-		{ "exhaust",  EntityUpdate(position, IDLE, shipBulletConfig, in.fire) },
-		{ "turret",  EntityUpdate(position, IDLE, turretBulletConfig, in.fire) },
-		{ "glowie",  EntityUpdate(position, IDLE, glowieBulletConfig, in.fire) }
+		{ "ship", EntityUpdate(position, direction, *shipConfig, in.fire, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
+		{ "turret",  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
+		{ "glowie",  EntityUpdate(position, IDLE, *glowieConfig, in.fire) }
 	}, dt);
+
+	this->attributeComponent->Update(dt);
 }
 
 void Player::Draw(sf::RenderTarget& target, float interp) const
@@ -80,4 +83,21 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 	}
 
 	return IDLE;
+}
+
+void Player::InitBullets()
+{
+	auto self = shared_from_this();
+
+	this->bulletConfigs["ship"] = std::make_shared<BulletConfig>(self,
+		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 2.0f)); },
+		sf::Color::Cyan, 0.0f, 300.0f, false, 15.0f);
+
+	this->bulletConfigs["turret"] = std::make_shared<BulletConfig>(self,
+		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); },
+		sf::Color::Yellow, 1.0f, 400.0f, false, 5.0f);
+
+	this->bulletConfigs["glowie"] = std::make_shared<BulletConfig>(self,
+		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); },
+		sf::Color::Green, 5.0f, 400.0f, false, 25.0f);
 }

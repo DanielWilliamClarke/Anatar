@@ -21,8 +21,8 @@ EntityManifest PlayerBuilder::Build()
 {
 	this->BuildShip();
 	this->BuildExhaust();
-	this->BuildTurret();
-	this->BuildGlowie();
+	//this->BuildTurret();
+	//this->BuildGlowie();
 	return manifest;
 }
 

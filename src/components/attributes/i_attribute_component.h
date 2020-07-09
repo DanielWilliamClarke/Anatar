@@ -9,6 +9,7 @@ public:
 	virtual ~IAttributeComponent() = default;
 	virtual void TakeDamage(float damage) = 0;
 	virtual bool IsDead() const = 0;
+	virtual void RegisterKill(float score) = 0;
 };
 
 #endif // I_ATTRBUTE_COMPONENT_H

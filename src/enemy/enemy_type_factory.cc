@@ -23,7 +23,7 @@ EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 std::shared_ptr<Entity> EnemyTypeFactory::Create()
 {
     auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
-	auto attributeComponent = std::make_shared<HealthAttributeComponent>(30.0f, 0.0f);
+	auto attributeComponent = std::make_shared<HealthAttributeComponent>(30.0f);
 
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();

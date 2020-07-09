@@ -13,6 +13,7 @@ class IAttributeComponent;
 
 class EntityObject;
 struct EntityUpdate;
+struct BulletConfig;
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 
@@ -30,13 +31,15 @@ public:
 	void RemoveObject(std::string name);
 	std::shared_ptr<EntityObject> GetObject(std::string name) const;
 
-	virtual void Update(float dt) const = 0;
+	virtual void Update(float dt) = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
 
 	void TakeDamage(float damage);
+	void RegisterKill(float score);
 	bool HasDied() const;
+
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
 	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;
@@ -45,6 +48,8 @@ protected:
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder;
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
 	std::shared_ptr<IAttributeComponent> attributeComponent;
+
+	std::map<std::string, std::shared_ptr<BulletConfig>> bulletConfigs;
 
 private:
 

@@ -11,7 +11,7 @@ class Entity;
 struct BulletConfig
 {
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
-	std::shared_ptr<const Entity> owner;
+	std::shared_ptr<Entity> owner;
 	sf::Color color;
 	float rotation;
 
@@ -19,7 +19,7 @@ struct BulletConfig
 	bool penetrating;
 	float damage;
 
-	BulletConfig(std::shared_ptr<const Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
+	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
 		: owner(owner), shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
 	{}
 };
@@ -40,6 +40,7 @@ public:
 	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
 	std::pair<float, bool> GetDamage() const;
+	std::shared_ptr<Entity> GetOwner() const;
 
 private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
