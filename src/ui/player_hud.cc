@@ -40,11 +40,11 @@ void PlayerHud::Update(float health, float maxHealth, float shields, float maxSh
 	shieldBar.setSize(sf::Vector2f(barMaxWidth * shieldPercentage, 10.0f));
 	if (shieldPercentage > 0.5f)
 	{
-		shieldBar.setFillColor(BlendColor(sf::Color(8, 146, 208), sf::Color::Cyan, (shieldPercentage - 0.5f) / (1.0f - 0.5f)));
+		shieldBar.setFillColor(BlendColor(sf::Color::Cyan, sf::Color(8, 146, 208), (shieldPercentage - 0.5f) / (1.0f - 0.5f)));
 	}
 	else
 	{
-		shieldBar.setFillColor(BlendColor(sf::Color::Cyan, sf::Color::Red, (shieldPercentage - 0.0f) / (0.5f - 0.0f)));
+		shieldBar.setFillColor(BlendColor(sf::Color(8, 146, 208), sf::Color::Red, (shieldPercentage - 0.0f) / (0.5f - 0.0f)));
 	}
 
 	playerText.setString("Health: " + std::to_string((int)health) + " - Shields: " + std::to_string((int)shields));
