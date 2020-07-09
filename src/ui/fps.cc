@@ -2,7 +2,7 @@
 
 Fps::Fps()
 {
-  font.loadFromFile("./assets/digital.ttf");
+  font.loadFromFile("./assets/EightBitDragon-anqx.ttf");
   fps.setFont(font);
   dps.setFont(font);
   fps.setPosition(2.0f, 0.0f);

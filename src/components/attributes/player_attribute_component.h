@@ -4,20 +4,23 @@
 
 #include "i_player_attribute_component.h"
 
+class IPlayerHud;
+
 class PlayerAttributeComponent : public IPlayerAttributeComponent
 {
 public:
-	PlayerAttributeComponent(float health, float shields, float shieldRecharge, float shieldRechargeDelay);
+	PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, float health, float shields, float shieldRecharge, float shieldRechargeDelay);
 	virtual ~PlayerAttributeComponent() = default;
 
 	virtual void TakeDamage(float damage) override;
 	virtual bool IsDead() const override;
 
 	virtual void Update(float dt) override;
-	virtual void Draw(sf::RenderTarget& target) const override;
 	virtual void RegisterKill(float score) override;
 
 private:
+
+	std::shared_ptr<IPlayerHud> hud;
 
 	float maxHealth;
 	float health;

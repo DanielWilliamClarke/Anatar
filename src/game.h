@@ -14,6 +14,7 @@ class GlowShaderRenderer;
 class SpaceLevel;
 class Entity;
 class Player;
+class PlayerHud;
 class PlayerInput;
 class EnemySystem;
 class BulletSystem;
@@ -46,6 +47,7 @@ private:
 	std::shared_ptr<SpaceLevel> level;
 
 	std::shared_ptr<Player> player;
+	std::shared_ptr<PlayerHud> playerHud;
 	std::list<std::shared_ptr<Entity>> playerTargets;
 
 	std::shared_ptr<PlayerInput> playerInput;

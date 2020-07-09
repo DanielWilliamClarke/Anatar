@@ -1,9 +1,11 @@
 #include <SFML/Graphics.hpp>
-
 #include <chrono>
 
 #include "game.h"
-#include "util/fps.h"
+
+#include "ui/fps.h"
+#include "ui/player_hud.h"
+
 #include "util/texture_atlas.h"
 #include "util/glow_shader_renderer.h"
 
@@ -102,8 +104,10 @@ void Game::InitBulletSystem()
 void Game::InitPlayer() 
 {
     auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas,  this->playerBulletSystem);
-    auto movementComponent = std::make_shared<PlayerMovementComponent>(bounds, worldSpeed);
-    auto attributeComponent = std::make_shared<PlayerAttributeComponent>(100.0f, 50.0f, 5.0f, 3.0f);
+    auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
+
+    this->playerHud = std::make_shared<PlayerHud>(this->bounds);
+    auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 5.0f, 3.0f);
 
     this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
     this->playerTargets.push_back(this->player);
@@ -188,7 +192,8 @@ void Game::Draw()
     this->player->Draw(*this->window, interp);
     this->enemySystem->Draw(*this->window, interp);
     this->fps->Draw(*this->window);
-
+    this->playerHud->Draw(*this->window);
+        
     this->window->display();
 }
 

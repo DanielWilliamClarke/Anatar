@@ -3,8 +3,10 @@
 #include <math.h>
 #include <iostream>
 
-PlayerAttributeComponent::PlayerAttributeComponent(float health, float shields, float shieldRecharge, float shieldRechargeDelay)
-	: health(health), shields(shields), maxHealth(health), maxShields(shields), accumulator(0.0f), shieldRecharge(shieldRecharge), shieldRechargeDelay(shieldRechargeDelay), score(0.0f)
+#include "../../ui/i_player_hud.h"
+
+PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, float health, float shields, float shieldRecharge, float shieldRechargeDelay)
+	: hud(hud), health(health), shields(shields), maxHealth(health), maxShields(shields), accumulator(0.0f), shieldRecharge(shieldRecharge), shieldRechargeDelay(shieldRechargeDelay), score(0.0f)
 {}
 
 void PlayerAttributeComponent::Update(float dt)
@@ -24,13 +26,7 @@ void PlayerAttributeComponent::Update(float dt)
 		}
 	}
 
-	std::cout << "Sheilds " << std::to_string(this->shields) << std::endl;
-	std::cout << "Health " << std::to_string(this->health) << std::endl;
-	std::cout << "Score " << std::to_string(this->score) << std::endl;
-}
-
-void PlayerAttributeComponent::Draw(sf::RenderTarget& target) const
-{
+	this->hud->Update(this->health, this->maxHealth, this->shields, this->maxShields, this->score);
 }
 
 void PlayerAttributeComponent::RegisterKill(float score)
