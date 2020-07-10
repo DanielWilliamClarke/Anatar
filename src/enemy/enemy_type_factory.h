@@ -48,15 +48,26 @@ struct EnemyAnimationConfig
 	{}
 };
 
+struct EnemyAttributeConfig
+{
+	float health;
+	float shields;
+
+	EnemyAttributeConfig(float health, float shields)
+		: health(health), shields(shields)
+	{}
+};
+
 struct EnemyConfig
 {
 	std::function<EntityManifest(EnemyConfig)> builder;
 	EnemyMotionConfig motionConfig;
 	EnemyAnimationConfig animationConfig;
 	EnemyWeaponConfig weaponConfig;
+	EnemyAttributeConfig attributeConfig;
 
-	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, EnemyWeaponConfig weaponConfig)
-		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), weaponConfig(weaponConfig)
+	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, EnemyWeaponConfig weaponConfig, EnemyAttributeConfig attributeConfig)
+		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), weaponConfig(weaponConfig), attributeConfig(attributeConfig)
 	{}
 };
 

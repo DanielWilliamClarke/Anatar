@@ -24,7 +24,7 @@ public:
 
 private:
 	std::list<std::shared_ptr<Entity>> enemies;
-	std::map<float, std::shared_ptr<IEnemyTypeFactory>> factories;
+	std::map<float, std::list<std::shared_ptr<IEnemyTypeFactory>>> factories;
 
 	sf::Clock spawnClock;
 	float accumulator;

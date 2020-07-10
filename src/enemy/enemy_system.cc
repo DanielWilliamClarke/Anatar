@@ -20,7 +20,10 @@ void EnemySystem::Update(float dt)
 	{
 		if (std::fmod(this->accumulator, f.first) < dt)
 		{
-			enemies.push_back(f.second->Create());	
+			for (auto& fe : f.second)
+			{
+				enemies.push_back(fe->Create());
+			}
 		}
 	}
 
@@ -53,7 +56,7 @@ void EnemySystem::Draw(sf::RenderTarget& target, float interp) const
 
 std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory)
 {
-	this->factories[spawnInterval] = factory;
+	this->factories[spawnInterval].push_back(factory);
 	if (spawnInterval > this->maxInterval) {
 		this->maxInterval = spawnInterval;
 	}
