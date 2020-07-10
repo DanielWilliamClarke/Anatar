@@ -44,6 +44,12 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 			s.setFillColor(sf::Color(0, 255, 255));
 			s.setRadius(1.5f);
 		}
+		else if (i < 400)
+		{
+			paralaxFactor = 0.5f;
+			s.setFillColor(sf::Color(255, 0, 0));
+			s.setRadius(0.7f);
+		}
 
 		starPosition.x -= worldSpeed * dt * paralaxFactor;
 

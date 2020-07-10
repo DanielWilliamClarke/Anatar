@@ -25,9 +25,9 @@ GlowShaderRenderer::GlowShaderRenderer(sf::Vector2f bounds)
     this->shader.setUniform("frag_ScreenResolution", bounds);
 }
 
-void GlowShaderRenderer::Clear() const
+void GlowShaderRenderer::Clear(sf::Color color) const
 {
-    this->windowTexture.clear(sf::Color::Transparent);
+    this->windowTexture.clear(color);
 }
 
 void GlowShaderRenderer::Draw(sf::RenderTarget& window) const

@@ -27,8 +27,10 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 				// update entity
 				auto damage = b->GetDamage();
 				c->TakeDamage(damage.first);
-
-				b->GetOwner()->RegisterKill(damage.first);
+				if (c->HasDied())
+				{
+					b->GetOwner()->RegisterKill(damage.first);
+				}
 
 				// spend round 
 				if (!damage.second)

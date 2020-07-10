@@ -21,8 +21,8 @@ EntityManifest PlayerBuilder::Build()
 {
 	this->BuildShip();
 	this->BuildExhaust();
-	//this->BuildTurret();
-	//this->BuildGlowie();
+	this->BuildTurret();
+	this->BuildGlowie();
 	return manifest;
 }
 
@@ -136,11 +136,11 @@ void PlayerBuilder::BuildTurret()
 	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
 
 	auto spriteBounds = sprite->getLocalBounds();
-	turret->InitHitboxComponent(
-		spriteBounds.left - spriteFrameSize.x / 2,
-		spriteBounds.top - spriteFrameSize.y / 2,
-		spriteFrameSize.x,
-		spriteFrameSize.y);
+	//turret->InitHitboxComponent(
+	//	spriteBounds.left - spriteFrameSize.x / 2,
+	//	spriteBounds.top - spriteFrameSize.y / 2,
+	//	spriteFrameSize.x,
+	//	spriteFrameSize.y);
 
 	auto frameSize = sf::Vector2i(
 		(int)spriteFrameSize.x,
@@ -179,11 +179,11 @@ void PlayerBuilder::BuildGlowie()
 	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
 
 	auto spriteBounds = sprite->getLocalBounds();
-	glowie->InitHitboxComponent(
-		spriteBounds.left - spriteFrameSize.x / 2,
-		spriteBounds.top - spriteFrameSize.y / 2,
-		spriteFrameSize.x,
-		spriteFrameSize.y);
+	//glowie->InitHitboxComponent(
+	//	spriteBounds.left - spriteFrameSize.x / 2,
+	//	spriteBounds.top - spriteFrameSize.y / 2,
+	//	spriteFrameSize.x,
+	//	spriteFrameSize.y);
 
 	auto frameSize = sf::Vector2i(
 		(int)spriteFrameSize.x,

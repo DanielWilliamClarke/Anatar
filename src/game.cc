@@ -107,7 +107,7 @@ void Game::InitPlayer()
     auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
 
     this->playerHud = std::make_shared<PlayerHud>(this->bounds);
-    auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 5.0f, 3.0f);
+    auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 10.0f, 3.0f);
 
     this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
     this->playerTargets.push_back(this->player);
@@ -168,6 +168,11 @@ void Game::Update()
     {
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
+
+        if (this->player->HasDied()) {
+            exit(0);
+        }
+
         this->enemySystem->Update(dt);
         this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
         this->playerBulletSystem->Update(dt, worldSpeed, this->enemySystem->GetEnemies());
@@ -179,10 +184,12 @@ void Game::Update()
 void Game::Draw() 
 {
     auto interp = this->accumulator / this->dt;
-    this->window->clear(sf::Color::Black);
+
+    auto bgColor = sf::Color(10, 0, 10);
+    this->window->clear(bgColor);
 
     //Draw stuff that glows
-    this->glowRenderer->Clear();
+    this->glowRenderer->Clear(bgColor);
     this->level->Draw(this->glowRenderer);
     this->enemyBulletSystem->Draw(this->glowRenderer, interp);
     this->playerBulletSystem->Draw(this->glowRenderer, interp);

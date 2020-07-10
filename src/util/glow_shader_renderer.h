@@ -13,7 +13,7 @@ public:
 	virtual ~GlowShaderRenderer() = default;
 	virtual void Draw(sf::RenderTarget& window) const override;
 	virtual sf::RenderTexture& ExposeTarget() const override;
-	virtual void Clear() const override;
+	virtual void Clear(sf::Color color) const override;
 	virtual void AddGlowAtPosition(sf::Vector2f position, sf::Color color, float attenuation) override;
 
 private:
