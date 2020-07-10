@@ -3,8 +3,10 @@
 
 #include "../entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
-	: bounds(bounds), affinity(affinity)
+#include "../components/weapon/i_weapon_component.h"
+
+BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<IWeaponComponent> debrisGenerator, std::shared_ptr<BulletConfig> debrisConfig)
+	:  bounds(bounds), affinity(affinity), debrisGenerator(debrisGenerator), debrisConfig(debrisConfig)
 {}
 
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
@@ -29,7 +31,14 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 				c->TakeDamage(damage.first);
 				if (c->HasDied())
 				{
-					b->GetOwner()->RegisterKill(damage.first);
+					if (b->GetOwner())
+					{
+						b->GetOwner()->RegisterKill(damage.first);
+					}
+					if (debrisGenerator)
+					{
+						debrisGenerator->Fire(b->GetPosition(), *debrisConfig);
+					}
 				}
 
 				// spend round 

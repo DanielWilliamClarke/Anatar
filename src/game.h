@@ -18,6 +18,8 @@ class PlayerHud;
 class PlayerInput;
 class EnemySystem;
 class BulletSystem;
+struct BulletConfig;
+class RandomShotWeaponComponent;
 
 class Game 
 {
@@ -48,12 +50,17 @@ private:
 
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerHud> playerHud;
+	std::shared_ptr<PlayerInput> playerInput;
+	std::shared_ptr<BulletSystem> playerBulletSystem;
 	std::list<std::shared_ptr<Entity>> playerTargets;
 
-	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<BulletSystem> enemyBulletSystem;
-	std::shared_ptr<BulletSystem> playerBulletSystem;
+
+	std::shared_ptr<BulletSystem> debrisSystem;
+	std::shared_ptr<BulletConfig> debrisConfig;
+	std::shared_ptr<RandomShotWeaponComponent> debrisGenerator;
+
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;

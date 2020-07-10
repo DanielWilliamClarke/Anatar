@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
+#include <algorithm>
 
 #include "game.h"
 
@@ -27,6 +28,8 @@
 #include "components/attributes/player_attribute_component.h"
 
 #include "bullet/bullet_system.h"
+#include "bullet/bullet.h"
+#include "components/weapon/burst/random_shot_weapon_component.h"
 #include "components/weapon/burst/burst_shot_weapon_component_factory.h"
 #include "components/weapon/single/single_shot_weapon_component_factory.h"
 
@@ -97,10 +100,18 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
-    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
-}
+    this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+    this->debrisConfig = std::make_shared<BulletConfig>(nullptr,
+        [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
+        sf::Color(248, 99, 0, 255), 50.0f, 500.0f, false, 0.0f);
 
+    auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
+    this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, randGenerator, 200.0f);
+
+    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfig);
+}
 
 void Game::InitPlayer() 
 {
@@ -180,14 +191,18 @@ void Game::Update()
     {
         this->level->Update(worldSpeed, dt);
         this->player->Update(in, this->dt);
-
         if (this->player->HasDied()) {
             exit(0);
         }
 
         this->enemySystem->Update(dt);
+        auto enemyTargets = this->enemySystem->GetEnemies();
         this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
-        this->playerBulletSystem->Update(dt, worldSpeed, this->enemySystem->GetEnemies());
+        this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets);
+
+        std::list<std::shared_ptr<Entity>> debrisTargets;
+        this->debrisSystem->Update(dt, worldSpeed, debrisTargets);
+
         this->fps->Update();
         this->accumulator -= this->dt;
     }
@@ -205,6 +220,7 @@ void Game::Draw()
     this->level->Draw(this->glowRenderer);
     this->enemyBulletSystem->Draw(this->glowRenderer, interp);
     this->playerBulletSystem->Draw(this->glowRenderer, interp);
+    this->debrisSystem->Draw(this->glowRenderer, interp);
     this->glowRenderer->Draw(*this->window);
 
     // Draw everything else

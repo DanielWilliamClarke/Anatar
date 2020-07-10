@@ -8,15 +8,17 @@
 #include "i_bullet_system.h"
 
 class Bullet;
+struct BulletConfig;
 class Entity;
 class IGlowShaderRenderer;
+class IWeaponComponent;
 
 class BulletSystem : public IBulletSystem
 {
 public:
 	enum affinities { LEFT = -1, RIGHT = 1 };
 
-	BulletSystem(sf::FloatRect bounds, int affinity);
+	BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<IWeaponComponent> debrisGenerator = nullptr, std::shared_ptr<BulletConfig> debrisConfig = nullptr);
 	virtual ~BulletSystem() = default;
 
 	virtual void FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
@@ -26,6 +28,8 @@ public:
 
 private:
 	std::list<std::unique_ptr<Bullet>> bullets;
+	std::shared_ptr<IWeaponComponent> debrisGenerator;
+	std::shared_ptr<BulletConfig> debrisConfig;
 	sf::FloatRect bounds;
 	int affinity;
 };
