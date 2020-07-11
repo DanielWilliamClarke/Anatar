@@ -53,6 +53,8 @@ private:
 
 	sf::Clock clock;
 	float accumulator; 
+	float minFadeout;
+	float maxFadeout;
 
 	BulletConfig config;
 };

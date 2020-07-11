@@ -99,5 +99,5 @@ void Player::InitBullets()
 
 	this->bulletConfigs["glowie"] = std::make_shared<BulletConfig>(self,
 		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); },
-		sf::Color::Green, 5.0f, 400.0f, false, 25.0f);
+		sf::Color::Green, 5.0f, 400.0f, false, 25.0f, 3.0f);
 }

@@ -3,11 +3,20 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <math.h>
+#include <iostream>
 
 #include "../util/i_glow_shader_renderer.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
-	: position(position), lastPosition(position), velocity(velocity), round(config.shapeBuilder()), config(config), spent(false), accumulator(0.0f)
+	: position(position),
+	lastPosition(position),
+	velocity(velocity), 
+	round(config.shapeBuilder()), 
+	config(config),
+	spent(false),
+	accumulator(0.0f),
+	minFadeout(0.8f),
+	maxFadeout(1.0f)
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();
@@ -28,6 +37,17 @@ void Bullet::Update(float dt, float worldSpeed)
 	if (config.lifeTime > 0)
 	{
 		this->accumulator += this->clock.restart().asSeconds();
+
+		auto percentage = 1 - ((config.lifeTime - this->accumulator) / config.lifeTime);
+		if (percentage > minFadeout && percentage <= maxFadeout)
+		{
+			auto localPercentage = (percentage - minFadeout) / (maxFadeout - minFadeout);
+			this->round->setFillColor(sf::Color(
+				(sf::Color::Transparent.r - config.color.r) * localPercentage + config.color.r,
+				(sf::Color::Transparent.g - config.color.g) * localPercentage + config.color.g,
+				(sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b));
+		}
+
 		if (this->accumulator >= config.lifeTime)
 		{
 			spent = true;
