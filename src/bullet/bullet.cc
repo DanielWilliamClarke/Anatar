@@ -7,7 +7,7 @@
 #include "../util/i_glow_shader_renderer.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
-	: position(position), lastPosition(position), velocity(velocity), round(config.shapeBuilder()), config(config), spent(false)
+	: position(position), lastPosition(position), velocity(velocity), round(config.shapeBuilder()), config(config), spent(false), accumulator(0.0f)
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();
@@ -23,6 +23,15 @@ void Bullet::Update(float dt, float worldSpeed)
 	if (config.rotation)
 	{
 		this->round->rotate(config.rotation);
+	}
+
+	if (config.lifeTime > 0)
+	{
+		this->accumulator += this->clock.restart().asSeconds();
+		if (this->accumulator >= config.lifeTime)
+		{
+			spent = true;
+		}
 	}
 }
 

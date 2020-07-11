@@ -19,8 +19,10 @@ struct BulletConfig
 	bool penetrating;
 	float damage;
 
-	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage)
-		: owner(owner), shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage)
+	float lifeTime;
+
+	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float rotation, float speed, bool penetrating, float damage, float lifeTime = 0)
+		: owner(owner), shapeBuilder(shapeBuilder), color(color), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage), lifeTime(lifeTime)
 	{}
 };
 
@@ -48,6 +50,9 @@ private:
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;
 	bool spent; // used in hit detection
+
+	sf::Clock clock;
+	float accumulator; 
 
 	BulletConfig config;
 };
