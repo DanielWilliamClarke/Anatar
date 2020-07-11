@@ -33,7 +33,7 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 - enemy Waves?
 - mission select screen? 
 - Android app?
-- 
+- better weapons: beam weapons, seeker missiles, bombs
 
 ## Install Conan packages
 
