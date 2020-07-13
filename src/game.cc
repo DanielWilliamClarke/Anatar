@@ -55,7 +55,7 @@ Game::Game()
 void Game::InitWindow()
 {
     this->window = std::make_shared<sf::RenderWindow>(
-        sf::VideoMode(2500, 720),
+        sf::VideoMode(1500, 720),
         "Space Shooter",
         sf::Style::Titlebar | sf::Style::Close);
 

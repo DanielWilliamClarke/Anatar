@@ -27,7 +27,7 @@ public:
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
-	std::list<std::unique_ptr<Bullet>> bullets;
+	std::list<std::shared_ptr<Bullet>> bullets;
 	std::shared_ptr<IWeaponComponent> debrisGenerator;
 	std::shared_ptr<BulletConfig> debrisConfig;
 	sf::FloatRect bounds;
