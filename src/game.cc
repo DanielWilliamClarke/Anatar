@@ -55,7 +55,7 @@ Game::Game()
 void Game::InitWindow()
 {
     this->window = std::make_shared<sf::RenderWindow>(
-        sf::VideoMode(2500, 720),
+        sf::VideoMode(1280, 720),
         "Space Shooter",
         sf::Style::Titlebar | sf::Style::Close);
 
@@ -157,7 +157,7 @@ void Game::InitEnemySystem()
             EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
                 EnemyMotionConfig(bounds, worldSpeed, 100.0f),
                 EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(360.0f, 5.0f), this->enemyBulletSystem, 1.0f),
+                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(360.0f, 8.0f), this->enemyBulletSystem, 1.0f),
                 EnemyAttributeConfig(30.0f, 0.0f))))
 
         ->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
