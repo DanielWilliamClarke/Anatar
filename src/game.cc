@@ -103,11 +103,11 @@ void Game::InitBulletSystem()
     this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
     this->debrisConfig = std::make_shared<BulletConfig>(nullptr,
         [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
-        sf::Color(248, 99, 0, 255), 50.0f, 500.0f, false, 0.0f, 1.5f);
+        sf::Color(248, 99, 0, 255), 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f);
 
     auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
     auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-    this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, randGenerator, 200.0f);
+    this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, randGenerator, 30.0f);
 
     this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
     this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfig);

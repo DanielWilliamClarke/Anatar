@@ -43,9 +43,9 @@ void Bullet::Update(float dt, float worldSpeed)
 		{
 			auto localPercentage = (percentage - minFadeout) / (maxFadeout - minFadeout);
 			this->round->setFillColor(sf::Color(
-				(sf::Color::Transparent.r - config.color.r) * localPercentage + config.color.r,
-				(sf::Color::Transparent.g - config.color.g) * localPercentage + config.color.g,
-				(sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b));
+				(sf::Uint8)((sf::Color::Transparent.r - config.color.r) * localPercentage + config.color.r),
+				(sf::Uint8)((sf::Color::Transparent.g - config.color.g) * localPercentage + config.color.g),
+				(sf::Uint8)((sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b)));
 		}
 
 		if (this->accumulator >= config.lifeTime)
@@ -59,7 +59,7 @@ void Bullet::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 {
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->ExposeTarget().draw(*round);
-	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), 100.0f);
+	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
 void Bullet::CollisionDetected()

@@ -12,43 +12,46 @@ SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf:
 
 	for (auto i = 0; i < stars.size(); i++) {
 		auto& s = stars[i];
-		s = sf::CircleShape(0.75f);
-		s.setFillColor(sf::Color::White);
-		s.setPosition((float)starChartX[i], (float)starChartY[i]);
+		s = std::make_unique<sf::CircleShape>(0.75f, 3);
+		s->setFillColor(sf::Color::White);
+		s->setPosition((float)starChartX[i], (float)starChartY[i]);
 	}
 }
 
 void SpaceLevel::Update(float worldSpeed, float dt)
 {
+
+	auto totalStars = stars.size();
+
 	for (auto i = 0; i < stars.size(); i++) {
 
 		auto& s = stars[i];
 
-		auto starPosition = s.getPosition();
+		auto starPosition = s->getPosition();
 
 		auto paralaxFactor = 1.0f;
-		if (i < 300)
+		if (i < totalStars * 0.8)
 		{
 			paralaxFactor = 0.5f;
-			s.setFillColor(sf::Color(128, 128, 128));
+			s->setFillColor(sf::Color(128, 128, 128));
 		}
-		else if (i < 350)
+		else if (i < totalStars * 0.85)
 		{
 			paralaxFactor = 0.7f;
-			s.setFillColor(sf::Color(255, 215, 0));
-			s.setRadius(1.0f);
+			s->setFillColor(sf::Color(255, 215, 0));
+			s->setRadius(1.0f);
 		}
-		else if (i < 375)
+		else if (i < totalStars * 0.9)
 		{
 			paralaxFactor = 1.1f;
-			s.setFillColor(sf::Color(0, 255, 255));
-			s.setRadius(1.5f);
+			s->setFillColor(sf::Color(0, 255, 255));
+			s->setRadius(1.5f);
 		}
-		else if (i < 400)
+		else if (i < totalStars * 0.95)
 		{
 			paralaxFactor = 0.5f;
-			s.setFillColor(sf::Color(255, 0, 0));
-			s.setRadius(0.7f);
+			s->setFillColor(sf::Color(255, 0, 0));
+			s->setRadius(0.7f);
 		}
 
 		starPosition.x -= worldSpeed * dt * paralaxFactor;
@@ -59,7 +62,7 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 			starPosition.y = (float)randSource->Generate(0, (int)viewSize.y);
 		}
 
-		s.setPosition(starPosition);	
+		s->setPosition(starPosition);	
 	}
 }
 
@@ -67,10 +70,10 @@ void SpaceLevel::Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const
 {
 	for (auto &s : stars)
 	{
-		renderer->ExposeTarget().draw(s);
-		if (s.getRadius() >= 1.5f)
+		renderer->ExposeTarget().draw(*s);
+		if (s->getRadius() >= 1.5f)
 		{
-			renderer->AddGlowAtPosition(s.getPosition(), s.getFillColor(), 500.0f);
+			renderer->AddGlowAtPosition(s->getPosition(), s->getFillColor(), 500.0f);
 		}
 	}
 }

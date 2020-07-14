@@ -20,7 +20,7 @@ public:
 
 private:
 	std::shared_ptr<IRandomNumberSource<int>> randSource;
-	std::array<sf::CircleShape, 500> stars;
+	std::array<std::unique_ptr<sf::CircleShape>, 200> stars;
 	sf::Vector2f viewSize;
 };
 
