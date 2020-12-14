@@ -15,25 +15,35 @@
 
 https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 
-
-## Next Up
+## Done
 
 - Create base entity class so players and enemies may implement / derive - ✓
 - Create enemies and enemy movement ✓
 - Player weapons ✓
 - Flesh out player ✓
-- Skin player and enemies using previous assets before new ones are made ✓
 - Player enemy interactions ✓
 - Stage background for fun ✓ (base space stage in place)
+- Skin player and enemies using previous assets before new ones are made ✓
+
+## Next Up
+
 - Game states - main menu, gameplay, pause, settings, highscores etc
-- Level design: missions, bosses, enemy squadrons
-- Power ups
-- more intelligent enemies, track player, shoot at player
+- Level design: missions, bosses, enemy squadrons, mission select screen? 
+- Power ups 
+- Helpers: have own health, add buffs, ammo can fire autonmously or on player action (dies on timeout, ammo depletion and health loss)
+  - Can be encountered mid level, will attach themselves to the player
+- Limpets: like helpers but add debuffs or damage over time.
+  - Can be encountered mid level, will attach themselves to the player
+- Intelligent enemies: track and shoot towards player
 - Bosses, multiple firing patterns, interesting mechanics, weak points?
-- enemy Waves?
-- mission select screen? 
+- Enemy waves, Sqaudrons?
 - Android app?
-- better weapons: beam weapons, seeker missiles, bombs
+- Better weapons: beam weapons, seeker missiles, bombs.
+- Visualise weapon stats, as in weapon temp, weapon energy etc.
+  - Visualise kills
+- Highscore and points system?
+
+*- Could even have online coop?*
 
 ## Install Conan packages
 
