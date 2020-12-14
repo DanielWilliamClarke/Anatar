@@ -15,6 +15,24 @@
 
 https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 
+## Install Conan packages, generate CMake files and build
+
+For now update profile.txt to contain the Build Config mode [`Debug` or `Release]
+
+```Powershell
+# cd into build location
+cd build/<build-confiuration> -> so: cd build/x64-Debug
+
+# Install Deps
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+conan remote add skypjack https://api.bintray.com/conan/skypjack/conan
+conan install --build=missing --profile ../profile.txt ..     
+
+# then run cmake
+cmake ..
+```
+then build
+
 ## Done
 
 - Create base entity class so players and enemies may implement / derive - ✓
@@ -44,22 +62,3 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 - Highscore and points system?
 
 *- Could even have online coop?*
-
-## Install Conan packages
-
-For now update profile.txt to contain the Build Config mode [`Debug` or `Release]
-
-```Powershell
-# cd into build location
-cd build/<build-confiuration> -> so: cd build/x64-Debug
-
-# Install Deps
-conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-conan remote add skypjack https://api.bintray.com/conan/skypjack/conan
-conan install --build=missing --profile ../profile.txt ..     
-
-# then run cmake
-cmake ..
-```
-
-then build
