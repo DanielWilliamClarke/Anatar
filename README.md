@@ -40,8 +40,12 @@ https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
 For now update profile.txt to contain the Build Config mode [`Debug` or `Release]
 
 ```Powershell
+# cd into build location
+cd build/<build-confiuration> -> so: cd build/x64-Debug
+
 # Install Deps
-cd build
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+conan remote add skypjack https://api.bintray.com/conan/skypjack/conan
 conan install --build=missing --profile ../profile.txt ..     
 
 # then run cmake

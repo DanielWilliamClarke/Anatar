@@ -6,9 +6,9 @@ PlayerHud::PlayerHud(sf::FloatRect bounds)
 	font.loadFromFile("./assets/EightBitDragon-anqx.ttf");
 
 	playerText.setFont(font);
-	playerText.setCharacterSize(15.0f);
+	playerText.setCharacterSize(15);
 	scoreText.setFont(font);
-	scoreText.setCharacterSize(15.0f);
+	scoreText.setCharacterSize(15);
 
 	auto barMaxWidth = bounds.width - (margin * 2);
 
@@ -69,7 +69,7 @@ void PlayerHud::Draw(sf::RenderTarget& target) const
 sf::Color PlayerHud::BlendColor(sf::Color start, sf::Color end, float percentage) const
 {
 	return sf::Color(
-		(start.r - end.r) * percentage + end.r,
-		(start.g - end.g) * percentage + end.g,
-		(start.b - end.b) * percentage + end.b);
+		(sf::Uint8)((start.r - end.r) * percentage + end.r),
+		(sf::Uint8)((start.g - end.g) * percentage + end.g),
+		(sf::Uint8)((start.b - end.b) * percentage + end.b));
 }
