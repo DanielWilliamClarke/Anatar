@@ -1,5 +1,7 @@
 # Annatar
 
+![](./src/assets/p1.gif)
+
 - Fresh repo to build a working version of my old first year programming project
 - Using SFML 2.5 as a 2D renderer instead of Gwin
 
