@@ -28,7 +28,7 @@ cd build/<build-confiuration> -> so: cd build/x64-Debug
 # Install Deps
 conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 conan remote add skypjack https://api.bintray.com/conan/skypjack/conan
-conan install --build=missing --profile ../profile.txt ..     
+conan install --build=missing --profile ../../profile.txt ../..     
 
 # then run cmake
 cmake ..

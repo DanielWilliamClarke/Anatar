@@ -10,6 +10,7 @@
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: position(position),
 	lastPosition(position),
+	collisionPosition(sf::Vector2f()),
 	velocity(velocity), 
 	round(config.shapeBuilder()), 
 	config(config),
@@ -62,9 +63,10 @@ void Bullet::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-void Bullet::CollisionDetected()
+void Bullet::CollisionDetected(sf::Vector2f point)
 {
 	spent = true;
+	collisionPosition = point;
 }
 
 bool Bullet::isSpent() const

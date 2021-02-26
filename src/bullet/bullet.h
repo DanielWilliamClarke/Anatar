@@ -37,7 +37,7 @@ public:
 	void Update(float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
-	void CollisionDetected();
+	void CollisionDetected(sf::Vector2f point);
 	bool isSpent() const;
 
 	std::shared_ptr<sf::Shape> GetRound() const;
@@ -50,6 +50,7 @@ private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
+	sf::Vector2f collisionPosition;
 	sf::Vector2f velocity;
 	bool spent; // used in hit detection
 

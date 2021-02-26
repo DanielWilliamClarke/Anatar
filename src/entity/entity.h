@@ -40,6 +40,8 @@ public:
 	void RegisterKill(float score);
 	bool HasDied() const;
 
+	float DistanceTo(sf::Vector2f position) const;
+	sf::Vector2f GetPosition() const;
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
 	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;

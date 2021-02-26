@@ -18,7 +18,7 @@ class PlayerHud;
 class PlayerInput;
 class EnemySystem;
 class BulletSystem;
-struct BulletConfig;
+struct BulletSystemDebrisConfig;
 class RandomShotWeaponComponent;
 
 class Game 
@@ -58,7 +58,7 @@ private:
 	std::shared_ptr<BulletSystem> enemyBulletSystem;
 
 	std::shared_ptr<BulletSystem> debrisSystem;
-	std::shared_ptr<BulletConfig> debrisConfig;
+	std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs;
 	std::shared_ptr<RandomShotWeaponComponent> debrisGenerator;
 
 	std::shared_ptr<sf::Clock> clock;

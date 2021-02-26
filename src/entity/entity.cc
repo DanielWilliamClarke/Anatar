@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <math.h>
 
 #include "entity.h"
 
@@ -74,4 +75,17 @@ bool Entity::HasDied() const
 void Entity::RegisterKill(float score)
 {
 	this->attributeComponent->RegisterKill(score);
+}
+
+float Entity::DistanceTo(sf::Vector2f point) const
+{
+	auto position = this->globalMovementComponent->GetPosition();
+	auto dx = position.x - point.x;
+	auto dy = position.y - point.y;
+	return sqrtf(dx * dx + dy * dy);
+}
+
+sf::Vector2f Entity::GetPosition() const
+{
+	return this->globalMovementComponent->GetPosition();
 }
