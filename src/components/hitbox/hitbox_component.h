@@ -16,6 +16,7 @@ public:
 	virtual void Update() override;
 	virtual void Draw(sf::RenderTarget& target) override;
 	virtual bool Intersects(const sf::FloatRect& hitbox) override;
+	virtual bool IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const override;
 	virtual const bool IsRequired() const override;
 private:
 	std::shared_ptr<sf::Sprite> sprite;

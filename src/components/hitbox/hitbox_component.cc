@@ -35,7 +35,62 @@ bool HitboxComponent::Intersects(const sf::FloatRect& hitbox)
 	return this->hitbox.getGlobalBounds().intersects(hitbox);
 }
 
+bool HitboxComponent::IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
+{
+	auto bounds = this->hitbox.getGlobalBounds();
+
+	auto top = bounds.top;
+	auto bottom = bounds.top + bounds.height;
+	auto left = bounds.left;
+	auto right = bounds.left + bounds.width;
+
+	// Here I define each line of the hitbox
+	auto lines = std::vector< std::pair<sf::Vector2f, sf::Vector2f>>({
+		std::pair<sf::Vector2f, sf::Vector2f>( // left
+			sf::Vector2f(left, top),
+			sf::Vector2f(left, bottom)),
+		std::pair<sf::Vector2f, sf::Vector2f>( // bottom
+			sf::Vector2f(left, bottom),
+			sf::Vector2f(right, bottom)),
+		 std::pair<sf::Vector2f, sf::Vector2f>( // right
+			sf::Vector2f(right, bottom),
+			sf::Vector2f(right, top)),
+		std::pair<sf::Vector2f, sf::Vector2f>( // top
+			sf::Vector2f(right, top),
+			sf::Vector2f(left, top))
+		});
+
+	// Define ray
+	auto x3 = origin.x;
+	auto y3 = origin.y;
+	auto x4 = origin.x + direction.x;
+	auto y4 = origin.y + direction.y;
+
+	for (auto& line : lines) {
+
+		auto x1 = line.first.x;
+		auto y1 = line.first.y;
+		auto x2 = line.second.x;
+		auto y2 = line.second.y;
+
+
+		auto den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+		if (den == 0) {
+			continue;
+		}
+
+		auto t = ((x1 - x3) * (y3 - y4) - (y1 - y3)* (x3 - x4)) / den;
+		auto u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+		if (t > 0 && t < 1 && u > 0) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 const bool HitboxComponent::IsRequired() const
 {
 	return required;
 }
+

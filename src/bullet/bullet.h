@@ -43,6 +43,7 @@ public:
 	std::shared_ptr<sf::Shape> GetRound() const;
 	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
+	sf::Vector2f GetVelocity() const;
 	std::pair<float, bool> GetDamage() const;
 	std::shared_ptr<Entity> GetOwner() const;
 

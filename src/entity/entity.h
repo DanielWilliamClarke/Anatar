@@ -35,6 +35,7 @@ public:
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
+	bool DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
 
 	void TakeDamage(float damage);
 	void RegisterKill(float score);

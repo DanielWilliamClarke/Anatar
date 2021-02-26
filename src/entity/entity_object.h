@@ -35,6 +35,7 @@ public:
 	void Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
+	bool DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
 
 private:
 	std::shared_ptr<IAnimationComponent> animationComponent;

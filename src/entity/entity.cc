@@ -62,6 +62,20 @@ bool Entity::DetectCollision(sf::FloatRect hitbox) const
 	return false;
 }
 
+bool Entity::DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
+{
+	for (auto& o : objects)
+	{
+		if (o.second->DetectCollisionWithRay(origin, direction))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 void Entity::TakeDamage(float damage)
 {
 	this->attributeComponent->TakeDamage(damage);

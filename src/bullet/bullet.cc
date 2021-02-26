@@ -65,7 +65,7 @@ void Bullet::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 
 void Bullet::CollisionDetected(sf::Vector2f point)
 {
-	spent = true;
+	spent = config.penetrating ? false : true;
 	collisionPosition = point;
 }
 
@@ -87,6 +87,11 @@ BulletConfig Bullet::GetConfig() const
 sf::Vector2f Bullet::GetPosition() const
 {
 	return position;
+}
+
+sf::Vector2f Bullet::GetVelocity() const
+{
+	return velocity;
 }
 
 std::pair<float, bool> Bullet::GetDamage() const

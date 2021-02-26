@@ -15,6 +15,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw(sf::RenderTarget& target) = 0;
 	virtual bool Intersects(const sf::FloatRect& hitbox) = 0;
+	virtual bool IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const = 0;
 	virtual const bool IsRequired() const = 0;
 };
 
