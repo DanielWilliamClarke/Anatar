@@ -34,33 +34,24 @@ public:
 	Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config);
 	virtual ~Bullet() = default;
 
-	void Update(float dt, float worldSpeed);
-	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
+	virtual void Update(float dt, float worldSpeed) = 0;
+	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
+	virtual void CollisionDetected(sf::Vector2f point) = 0;
+	virtual std::shared_ptr<sf::Shape> GetRound() const = 0;
 
-	void CollisionDetected(sf::Vector2f point);
 	bool isSpent() const;
-
-	std::shared_ptr<sf::Shape> GetRound() const;
 	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
 	sf::Vector2f GetVelocity() const;
 	std::pair<float, bool> GetDamage() const;
 	std::shared_ptr<Entity> GetOwner() const;
 
-private:
-	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
+protected:
+	BulletConfig config;
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
-	sf::Vector2f collisionPosition;
 	sf::Vector2f velocity;
 	bool spent; // used in hit detection
-
-	sf::Clock clock;
-	float accumulator; 
-	float minFadeout;
-	float maxFadeout;
-
-	BulletConfig config;
 };
 
 #endif // BULLET_H

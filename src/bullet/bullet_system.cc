@@ -1,5 +1,5 @@
 #include "bullet_system.h"
-#include "bullet.h"
+#include "projectile.h"
 
 #include "../entity/entity.h"
 
@@ -12,7 +12,7 @@ BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<I
 void BulletSystem::FireBullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
 {
 	auto alignedVelocity = sf::Vector2f(velocity.x * (float)affinity, velocity.y);
-	this->bullets.push_back(std::make_unique<Bullet>(position, alignedVelocity, config));
+	this->bullets.push_back(std::make_unique<Projectile>(position, alignedVelocity, config));
 }
 
 void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>>& collisionTargets)
@@ -40,7 +40,6 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 			if (t->DetectCollision(b->GetRound()->getGlobalBounds()))
 			{
 				auto damage = b->GetDamage();
-				b->CollisionDetected(t->GetPosition());
 
 				// update target
 				t->TakeDamage(damage.first);
@@ -49,10 +48,6 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 					if (b->GetOwner())
 					{
 						b->GetOwner()->RegisterKill(damage.first);
-					}
-					if (debrisGenerator)
-					{
-						debrisGenerator->Fire(b->GetPosition(), *this->debrisConfigs->onDeath);
 					}
 				}
 
@@ -68,6 +63,7 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 				}
 
 				// spend round - we can just go to the next bullet if we dont need to penetrate the enemy
+				b->CollisionDetected(t->GetPosition());
 				if (!damage.second)
 				{
 					break;
