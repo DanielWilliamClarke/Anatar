@@ -4,10 +4,7 @@
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: Bullet(position, velocity, config),
-	round(config.shapeBuilder()),
-	accumulator(0.0f),
-	minFadeout(0.8f),
-	maxFadeout(1.0f)
+	round(config.shapeBuilder())
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();

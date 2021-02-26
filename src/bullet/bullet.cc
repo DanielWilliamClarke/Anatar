@@ -10,7 +10,10 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config
 	lastPosition(position),
 	velocity(velocity),
 	config(config),
-	spent(false)
+	spent(false),
+	accumulator(0.0f),
+	minFadeout(0.8f),
+	maxFadeout(1.0f)
 {
 }
 

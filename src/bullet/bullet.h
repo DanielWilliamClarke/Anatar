@@ -52,6 +52,11 @@ protected:
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;
 	bool spent; // used in hit detection
+
+	sf::Clock clock;
+	float accumulator;
+	float minFadeout;
+	float maxFadeout;
 };
 
 #endif // BULLET_H

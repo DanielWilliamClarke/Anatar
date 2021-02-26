@@ -19,11 +19,6 @@ public:
 
 private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
-
-	sf::Clock clock;
-	float accumulator;
-	float minFadeout;
-	float maxFadeout;
 };
 
 #endif // PROJECTILE_H

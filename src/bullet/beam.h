@@ -9,7 +9,7 @@
 class Beam : public Bullet
 {
 public:
-	Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config);
+	Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds);
 	virtual ~Beam() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;
@@ -20,6 +20,7 @@ public:
 protected:
 	std::shared_ptr<sf::RectangleShape> round;
 	sf::Vector2f collisionPosition;
+	sf::FloatRect bounds;
 };
 
 #endif // BEAM_H
