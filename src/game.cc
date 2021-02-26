@@ -29,6 +29,8 @@
 
 #include "bullet/bullet_system.h"
 #include "bullet/bullet.h"
+#include "bullet/projectile_factory.h"
+
 #include "components/weapon/burst/random_shot_weapon_component.h"
 #include "components/weapon/burst/burst_shot_weapon_component_factory.h"
 #include "components/weapon/single/single_shot_weapon_component_factory.h"
@@ -36,213 +38,215 @@
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
 
-
 Game::Game()
-    : clock(std::make_shared<sf::Clock>()),
-    dt(1.0f / 60.0f),
-    accumulator(0.0f),
-    worldSpeed(40.0f)
+	: clock(std::make_shared<sf::Clock>()),
+	dt(1.0f / 60.0f),
+	accumulator(0.0f),
+	worldSpeed(40.0f)
 {
-    this->InitWindow();
-    this->InitFps();
-    this->InitTextureAtlas();
-    this->InitLevel();
-    this->InitBulletSystem();
-    this->InitPlayer();
-    this->InitEnemySystem();
+	this->InitWindow();
+	this->InitFps();
+	this->InitTextureAtlas();
+	this->InitLevel();
+	this->InitBulletSystem();
+	this->InitPlayer();
+	this->InitEnemySystem();
 }
 
 void Game::InitWindow()
 {
-    this->window = std::make_shared<sf::RenderWindow>(
-        sf::VideoMode(1280, 720),
-        "Space Shooter",
-        sf::Style::Titlebar | sf::Style::Close);
+	this->window = std::make_shared<sf::RenderWindow>(
+		sf::VideoMode(1280, 720),
+		"Space Shooter",
+		sf::Style::Titlebar | sf::Style::Close);
 
-    auto view = this->window->getView();
-    sf::Vector2f viewCenter(view.getCenter());
-    sf::Vector2f viewSize(view.getSize());
-    bounds = sf::FloatRect(viewCenter.x - viewSize.x / 2, // left
-        viewCenter.y - viewSize.y / 2, // top
-        viewSize.x,
-        viewSize.y);
+	auto view = this->window->getView();
+	sf::Vector2f viewCenter(view.getCenter());
+	sf::Vector2f viewSize(view.getSize());
+	bounds = sf::FloatRect(viewCenter.x - viewSize.x / 2, // left
+		viewCenter.y - viewSize.y / 2, // top
+		viewSize.x,
+		viewSize.y);
 
-    this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
+	this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
 }
 
 void Game::InitFps()
 {
-    this->fps = std::make_shared<Fps>();
+	this->fps = std::make_shared<Fps>();
 }
 
 void Game::InitTextureAtlas()
 {
-    this->textureAtlas = std::make_shared<TextureAtlas>();
+	this->textureAtlas = std::make_shared<TextureAtlas>();
 
-    this->textureAtlas
-        ->AddTexture("playerShip", "assets/viperFrames.png")
-        ->AddTexture("playerExhaust", "assets/viperExhaust.png")
-        ->AddTexture("playerTurret", "assets/viperTurret.png")
-        ->AddTexture("playerGlowie", "assets/glowie.png")
-        ->AddTexture("enemy1", "assets/enemy_1.png")
-        ->AddTexture("enemy2", "assets/enemy_2.png")
-        ->AddTexture("enemy3", "assets/enemy_3.png")
-        ->AddTexture("enemy4", "assets/enemy_4.png")
-        ->AddTexture("boss1", "assets/boss_1.png");
+	this->textureAtlas
+		->AddTexture("playerShip", "assets/viperFrames.png")
+		->AddTexture("playerExhaust", "assets/viperExhaust.png")
+		->AddTexture("playerTurret", "assets/viperTurret.png")
+		->AddTexture("playerGlowie", "assets/glowie.png")
+		->AddTexture("enemy1", "assets/enemy_1.png")
+		->AddTexture("enemy2", "assets/enemy_2.png")
+		->AddTexture("enemy3", "assets/enemy_3.png")
+		->AddTexture("enemy4", "assets/enemy_4.png")
+		->AddTexture("boss1", "assets/boss_1.png");
 }
 
 void Game::InitLevel()
 {
-    auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-    this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
+	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
+	this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
 }
 
 void Game::InitBulletSystem()
 {
-    this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
 
-    this->debrisConfigs = std::make_shared<BulletSystemDebrisConfig>(
-        std::make_shared<BulletConfig>(nullptr,
-            [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
-            sf::Color(248, 99, 0, 255), 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f),
-        std::make_shared<BulletConfig>(nullptr,
-            [=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.05f, 3); },
-            sf::Color(248, 99, 0, 255), 200.0f, 0.0f, 100.0f, false, 0.0f, 0.3f));
+	this->debrisConfigs = std::make_shared<BulletSystemDebrisConfig>(
+		std::make_shared<BulletConfig>(nullptr,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
+			sf::Color(248, 99, 0, 255), 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f),
+		std::make_shared<BulletConfig>(nullptr,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.05f, 3); },
+			sf::Color(248, 99, 0, 255), 200.0f, 0.0f, 100.0f, false, 0.0f, 0.3f));
 
-    auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-    auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-    this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, randGenerator, 25.0f);
+	auto projectileFactory = std::make_shared<ProjectileFactory>();
+	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
 
-    this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
-    this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfigs);
+	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 25.0f);
+	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfigs);
 }
 
-void Game::InitPlayer() 
+void Game::InitPlayer()
 {
-    auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas,  this->playerBulletSystem);
-    auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
+	auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas, this->playerBulletSystem);
+	auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
 
-    this->playerHud = std::make_shared<PlayerHud>(this->bounds);
-    auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 10.0f, 3.0f);
+	this->playerHud = std::make_shared<PlayerHud>(this->bounds);
+	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 10.0f, 3.0f);
 
-    this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
-    this->playerTargets.push_back(this->player);
-    this->playerInput = std::make_shared<PlayerInput>();
+	this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
+	this->playerTargets.push_back(this->player);
+	this->playerInput = std::make_shared<PlayerInput>();
 }
 
 void Game::InitEnemySystem()
 {
-    this->enemySystem = std::make_shared<EnemySystem>();
+	this->enemySystem = std::make_shared<EnemySystem>();
 
-    this->enemySystem
+	auto projectileFactory = std::make_shared<ProjectileFactory>();
 
-        ->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 200.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(), this->enemyBulletSystem, 1.0f),
-                EnemyAttributeConfig(20.0f, 0.0f))))
+	this->enemySystem
 
-        ->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 300.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(), this->enemyBulletSystem, 2.0f),
-                EnemyAttributeConfig(40.0f, 0.0f))))
+		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
+			EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
+				EnemyMotionConfig(bounds, worldSpeed, 200.0f),
+				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
+				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 1.0f),
+				EnemyAttributeConfig(20.0f, 0.0f))))
 
-        ->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 75.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(45.0f, 7.0f), this->enemyBulletSystem, 3.0f),
-                EnemyAttributeConfig(60.0f, 0.0f))))     
+		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
+			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+				EnemyMotionConfig(bounds, worldSpeed, 300.0f),
+				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
+				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 2.0f),
+				EnemyAttributeConfig(40.0f, 0.0f))))
 
-        ->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 100.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(360.0f, 8.0f), this->enemyBulletSystem, 1.0f),
-                EnemyAttributeConfig(30.0f, 0.0f))))
+		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
+			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+				EnemyMotionConfig(bounds, worldSpeed, 75.0f),
+				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 45.0f, 7.0f), this->enemyBulletSystem, 3.0f),
+				EnemyAttributeConfig(60.0f, 0.0f))))
 
-        ->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
-            EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-                EnemyMotionConfig(bounds, worldSpeed, 50.0f),
-                EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
-                EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(110.0f, 50.0f), this->enemyBulletSystem, 10.0f),
-                EnemyAttributeConfig(150.0f, 0.0f))));
+		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
+			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+				EnemyMotionConfig(bounds, worldSpeed, 100.0f),
+				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 360.0f, 8.0f), this->enemyBulletSystem, 1.0f),
+				EnemyAttributeConfig(30.0f, 0.0f))))
+
+		->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
+			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
+				EnemyMotionConfig(bounds, worldSpeed, 50.0f),
+				EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 110.0f, 50.0f), this->enemyBulletSystem, 10.0f),
+				EnemyAttributeConfig(150.0f, 0.0f))));
 }
 
 
 
 void Game::WindowEvents()
 {
-    sf::Event event;
-    while (this->window->pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-        {
-            this->window->close();
-        }
-    }           
+	sf::Event event;
+	while (this->window->pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			this->window->close();
+		}
+	}
 }
 
-void Game::Update() 
+void Game::Update()
 {
-    auto in = this->playerInput->SampleInput();
+	auto in = this->playerInput->SampleInput();
 
-    this->accumulator += this->clock->restart().asSeconds();
-    while (this->accumulator >= this->dt)
-    {
-        this->level->Update(worldSpeed, dt);
-        this->player->Update(in, this->dt);
-        if (this->player->HasDied()) {
-            exit(0);
-        }
+	this->accumulator += this->clock->restart().asSeconds();
+	while (this->accumulator >= this->dt)
+	{
+		this->level->Update(worldSpeed, dt);
+		this->player->Update(in, this->dt);
+		if (this->player->HasDied()) {
+			exit(0);
+		}
 
-        this->enemySystem->Update(dt);
-        auto enemyTargets = this->enemySystem->GetEnemies();
-        this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
-        this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets);
+		this->enemySystem->Update(dt);
+		auto enemyTargets = this->enemySystem->GetEnemies();
+		this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
+		this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets);
 
-        std::list<std::shared_ptr<Entity>> debrisTargets;
-        this->debrisSystem->Update(dt, worldSpeed, debrisTargets);
+		std::list<std::shared_ptr<Entity>> debrisTargets;
+		this->debrisSystem->Update(dt, worldSpeed, debrisTargets);
 
-        this->fps->Update();
-        this->accumulator -= this->dt;
-    }
+		this->fps->Update();
+		this->accumulator -= this->dt;
+	}
 }
 
-void Game::Draw() 
+void Game::Draw()
 {
-    auto interp = this->accumulator / this->dt;
+	auto interp = this->accumulator / this->dt;
 
-    auto bgColor = sf::Color(10, 0, 10);
-    this->window->clear(bgColor);
+	auto bgColor = sf::Color(10, 0, 10);
+	this->window->clear(bgColor);
 
-    //Draw stuff that glows
-    this->glowRenderer->Clear(bgColor);
-    this->level->Draw(this->glowRenderer);
-    this->enemyBulletSystem->Draw(this->glowRenderer, interp);
-    this->playerBulletSystem->Draw(this->glowRenderer, interp);
-    this->debrisSystem->Draw(this->glowRenderer, interp);
-    this->glowRenderer->Draw(*this->window);
+	//Draw stuff that glows
+	this->glowRenderer->Clear(bgColor);
+	this->level->Draw(this->glowRenderer);
+	this->enemyBulletSystem->Draw(this->glowRenderer, interp);
+	this->playerBulletSystem->Draw(this->glowRenderer, interp);
+	this->debrisSystem->Draw(this->glowRenderer, interp);
+	this->glowRenderer->Draw(*this->window);
 
-    // Draw everything else
-    this->player->Draw(*this->window, interp);
-    this->enemySystem->Draw(*this->window, interp);
-    this->fps->Draw(*this->window);
-    this->playerHud->Draw(*this->window);
-        
-    this->window->display();
+	// Draw everything else
+	this->player->Draw(*this->window, interp);
+	this->enemySystem->Draw(*this->window, interp);
+	this->fps->Draw(*this->window);
+	this->playerHud->Draw(*this->window);
+
+	this->window->display();
 }
 
-void Game::Run() 
+void Game::Run()
 {
-    while (this->window->isOpen())
-    {
-        this->WindowEvents();
-        this->Update();
-        this->Draw();
-    }
+	while (this->window->isOpen())
+	{
+		this->WindowEvents();
+		this->Update();
+		this->Draw();
+	}
 }

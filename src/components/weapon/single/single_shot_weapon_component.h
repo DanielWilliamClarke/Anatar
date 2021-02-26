@@ -7,17 +7,19 @@
 #include "../i_weapon_component.h"
 
 class IBulletSystem;
+class IBulletFactory;
 
 class SingleShotWeaponComponent: public IWeaponComponent
 {
 public:
-	SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay);
+	SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay);
 	virtual ~SingleShotWeaponComponent() = default;
 
 	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;
+	std::shared_ptr<IBulletFactory> factory;
 	sf::Clock clockFire;
 	float accumulator;
 	float delay;

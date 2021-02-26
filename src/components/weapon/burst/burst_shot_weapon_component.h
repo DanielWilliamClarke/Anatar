@@ -7,17 +7,20 @@
 #include "../i_weapon_component.h"
 
 class IBulletSystem;
+class IBulletFactory;
 
 class BurstShotWeaponComponent : public IWeaponComponent
 {
 public:
-	BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, float delay, float arcAngle, float numBullets);
+	BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay, float arcAngle, float numBullets);
 	virtual ~BurstShotWeaponComponent() = default;
 
 	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;
+	std::shared_ptr<IBulletFactory> factory;
+
 	float arcAngle;
 	float numBullets;
 
