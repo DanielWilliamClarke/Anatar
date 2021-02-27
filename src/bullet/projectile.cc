@@ -50,9 +50,9 @@ void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float inter
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-void Projectile::CollisionDetected(sf::Vector2f point)
+void Projectile::CollisionDetected(sf::Vector2f* point)
 {
-	spent = config.penetrating ? false : true;
+	spent = point && !config.penetrating ? true : false;
 }
 
 std::shared_ptr<sf::Shape> Projectile::GetRound() const

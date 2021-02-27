@@ -24,6 +24,7 @@ public:
 	virtual ~Player() = default;
 	virtual void Update(Input& in, float dt);
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
+	virtual sf::Vector2f GetPosition() const override;
 
 protected:
 	virtual void Update(float dt) override {};
@@ -32,7 +33,6 @@ protected:
 
 	std::shared_ptr<IPlayerMovementComponent> movementComponent;
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent;
-
 };
 
 #endif //PLAYER_H

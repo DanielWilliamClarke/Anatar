@@ -14,7 +14,7 @@ class IBulletSystem;
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {
 public:
-	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem);
+	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds);
 	virtual ~PlayerBuilder() = default;
 	virtual EntityManifest Build() override;
 private:
@@ -27,6 +27,8 @@ private:
 
 	std::shared_ptr<ITextureAtlas> textureAtlas;
 	std::shared_ptr<IBulletSystem> bulletSystem;
+
+	sf::FloatRect bounds;
 };
 
 #endif //PLAYER_BUILDER_H

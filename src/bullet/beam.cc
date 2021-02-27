@@ -3,11 +3,14 @@
 #include "../entity/entity.h"
 #include "../util/i_glow_shader_renderer.h"
 
-Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds)
+Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),
-	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 2.0f))),
-	collisionPosition(sf::Vector2f(bounds.width, position.y)),
-	bounds(bounds)
+	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 3.0f))),
+	collisionPosition(&sf::Vector2f(bounds.width, position.y)),
+	bounds(bounds),
+	damageRateAccumulator(0.0f),
+	damageRate(damageRate),
+	damageCache(config.damage)
 {
 	this->round->setFillColor(config.color);
 }
@@ -18,10 +21,19 @@ void Beam::Update(float dt, float worldSpeed)
 	this->position = this->config.owner->GetPosition();
 	this->round->setPosition(this->position);
 
+	auto beamEnd = sf::Vector2f(collisionPosition ? collisionPosition->x : this->bounds.width, this->position.y);
 	this->round->setSize(
 		sf::Vector2f(
-			this->config.owner->DistanceTo(this->collisionPosition),
-			2.0f));
+			this->config.owner->DistanceTo(beamEnd),
+			this->round->getSize().y));
+
+	config.damage = 0;
+	this->damageRateAccumulator += this->damageClock .restart().asSeconds();
+	if (this->damageRateAccumulator >= this->damageRate)
+	{   
+		config.damage = damageCache;             
+		this->damageRateAccumulator = 0;
+	}
 
 	if (config.lifeTime > 0)
 	{
@@ -42,7 +54,6 @@ void Beam::Update(float dt, float worldSpeed)
 			spent = true;
 		}
 	}
-
 }
 
 void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
@@ -53,7 +64,7 @@ void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 }
 
 
-void Beam::CollisionDetected(sf::Vector2f point)
+void Beam::CollisionDetected(sf::Vector2f* point)
 {
 	collisionPosition = point;
 }
@@ -62,3 +73,9 @@ std::shared_ptr<sf::Shape> Beam::GetRound() const
 {
 	return round;
 }
+
+void Beam::Reignite()
+{
+	this->accumulator = 0;
+}
+

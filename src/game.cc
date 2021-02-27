@@ -60,7 +60,7 @@ void Game::InitWindow()
 		"Space Shooter",
 		sf::Style::Titlebar | sf::Style::Close);
 
-	auto view = this->window->getView();
+	auto& view = this->window->getView();
 	sf::Vector2f viewCenter(view.getCenter());
 	sf::Vector2f viewSize(view.getSize());
 	bounds = sf::FloatRect(viewCenter.x - viewSize.x / 2, // left
@@ -116,13 +116,13 @@ void Game::InitBulletSystem()
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
 
 	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 25.0f);
-	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT, this->debrisGenerator, this->debrisConfigs);
 	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfigs);
 }
 
 void Game::InitPlayer()
 {
-	auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas, this->playerBulletSystem);
+	auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas, this->playerBulletSystem, this->bounds);
 	auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
 
 	this->playerHud = std::make_shared<PlayerHud>(this->bounds);

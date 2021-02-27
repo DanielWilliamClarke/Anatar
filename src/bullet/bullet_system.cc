@@ -22,6 +22,8 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 	// Update and perform collision detection
 	for (auto&& b : this->bullets)
 	{
+		b->CollisionDetected(nullptr);
+
 		// Cull targets if they are not pointed at by bullet
 		std::list<std::shared_ptr<Entity>> targets;
 		std::copy_if(collisionTargets.begin(), collisionTargets.end(), std::back_inserter(targets),
@@ -44,28 +46,28 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 				auto damage = b->GetDamage();
 
 				// update target
-				t->TakeDamage(damage.first);
-				if (t->HasDied())
+				if (damage.first > 0.0f)
 				{
-					if (b->GetOwner())
+					t->TakeDamage(damage.first);
+					if (t->HasDied() && b->GetOwner())
 					{
 						b->GetOwner()->RegisterKill(damage.first);
 					}
-				}
 
-				// Effects
-				if (debrisGenerator)
-				{
-					auto config = *this->debrisConfigs->onCollision;
-					if (t->HasDied())
+					// Effects
+					if (debrisGenerator)
 					{
-						config = *this->debrisConfigs->onDeath;
+						auto config = *this->debrisConfigs->onCollision;
+						if (t->HasDied())
+						{
+							config = *this->debrisConfigs->onDeath;
+						}
+						debrisGenerator->Fire(t->GetPosition(), config);
 					}
-					debrisGenerator->Fire(b->GetPosition(), config);
 				}
 
 				// spend round - we can just go to the next bullet if we dont need to penetrate the enemy
-				b->CollisionDetected(t->GetPosition());
+				b->CollisionDetected(&t->GetPosition());
 				if (!damage.second)
 				{
 					break;

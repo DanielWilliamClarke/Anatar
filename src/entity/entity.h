@@ -33,6 +33,7 @@ public:
 
 	virtual void Update(float dt) = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
+	virtual sf::Vector2f GetPosition() const;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
 	bool DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
@@ -42,7 +43,7 @@ public:
 	bool HasDied() const;
 
 	float DistanceTo(sf::Vector2f position) const;
-	sf::Vector2f GetPosition() const;
+
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
 	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;

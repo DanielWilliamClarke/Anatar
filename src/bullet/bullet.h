@@ -23,7 +23,7 @@ struct BulletConfig
 
 	float lifeTime;
 
-	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float glowAttenuation, float rotation, float speed, bool penetrating, float damage, float lifeTime = 0)
+	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float glowAttenuation, float rotation, float speed, bool penetrating, float damage, float lifeTime = 0.0f)
 		: owner(owner), shapeBuilder(shapeBuilder), color(color), glowAttenuation(glowAttenuation), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage), lifeTime(lifeTime)
 	{}
 };
@@ -36,7 +36,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
-	virtual void CollisionDetected(sf::Vector2f point) = 0;
+	virtual void CollisionDetected(sf::Vector2f* point) = 0;
 	virtual std::shared_ptr<sf::Shape> GetRound() const = 0;
 
 	bool isSpent() const;

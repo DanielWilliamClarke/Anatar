@@ -11,11 +11,14 @@
 #include "../components/weapon/burst/burst_shot_weapon_component.h"
 #include "../components/weapon/player/player_weapon_component.h"
 #include "../components/weapon/inert_weapon_component.h"
+#include "../components/weapon/beam/single_beam_weapon_component.h"
 #include "../entity/entity_object.h"
-#include "../bullet/projectile_factory.h"
 
-PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem)
-	: textureAtlas(textureAtlas), bulletSystem(bulletSystem)
+#include "../bullet/projectile_factory.h"
+#include "../bullet/beam_factory.h"
+
+PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds)
+	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds)
 {}
 
 EntityManifest PlayerBuilder::Build()
@@ -44,8 +47,8 @@ void PlayerBuilder::BuildShip()
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
 
-	auto projectileFactory = std::make_shared<ProjectileFactory>();
-	auto weaponComponent = std::make_shared<SingleShotWeaponComponent>(bulletSystem, projectileFactory, 0.0f);
+	auto beamFactory = std::make_shared<BeamFactory>(this->bounds, 0.5f);
+	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 5.0f, 1.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 

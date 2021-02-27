@@ -14,7 +14,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
-	virtual void CollisionDetected(sf::Vector2f point) override;
+	virtual void CollisionDetected(sf::Vector2f* point) override;
 	virtual std::shared_ptr<sf::Shape> GetRound() const override; 
 
 private:
