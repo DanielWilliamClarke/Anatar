@@ -5,7 +5,7 @@
 
 Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),
-	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 3.0f))),
+	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 5.0f))),
 	collisionPosition(&sf::Vector2f(bounds.width, position.y)),
 	bounds(bounds),
 	damageRateAccumulator(0.0f),
@@ -13,6 +13,8 @@ Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf
 	damageCache(config.damage)
 {
 	this->round->setFillColor(config.color);
+	auto roundBounds = this->round->getLocalBounds();
+	this->round->setOrigin(0, roundBounds.height / 2.0f);
 }
 
 void Beam::Update(float dt, float worldSpeed)
