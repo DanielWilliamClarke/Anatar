@@ -4,6 +4,7 @@
 #include "i_bullet_factory.h"
 #include "../entity/entity.h"
 #include "../components/weapon/i_weapon_component.h"
+#include "../components/hitbox/i_hitbox_component.h"
 
 BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<IWeaponComponent> debrisGenerator, std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs)
 	: bounds(bounds), affinity(affinity), debrisGenerator(debrisGenerator), debrisConfigs(debrisConfigs)
@@ -24,32 +25,42 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 	{
 		b->CollisionDetected(nullptr);
 
-		// Cull targets if they are not pointed at by bullet
-		std::list<std::shared_ptr<Entity>> targets;
-		std::copy_if(collisionTargets.begin(), collisionTargets.end(), std::back_inserter(targets),
-			[&collisionTargets, &b](std::shared_ptr<Entity> entity) -> bool {
-				return entity->DetectCollisionWithRay(b->GetPosition(), b->GetVelocity());
+		// Intersect targets with bullet
+		std::list<IntersectedTarget> targets;
+		std::transform(collisionTargets.begin(), collisionTargets.end(), std::back_inserter(targets),
+			[&b](std::shared_ptr<Entity> entity) -> IntersectedTarget {
+				return std::make_pair(
+					entity,
+					entity->DetectCollisionWithRay(b->GetPosition(), b->GetVelocity())
+				);
+			});
+
+		// Cull targets that do not have intersection
+		std::list<IntersectedTarget> culledTargets;
+		std::copy_if(targets.begin(), targets.end(), std::back_inserter(culledTargets),
+			[=](IntersectedTarget intersectedTarget) -> bool {
+				return intersectedTarget.second->intersects;
 			});
 
 		// sort elements closest to furthest
-		targets.sort(
-			[&b](std::shared_ptr<Entity> entityA, std::shared_ptr<Entity> entityB) -> bool {
-				auto distanceA = entityA->DistanceTo(b->GetPosition());
-				auto distanceB = entityB->DistanceTo(b->GetPosition());
+		culledTargets.sort(
+			[&b](IntersectedTarget targetA, IntersectedTarget targetB) -> bool {
+				auto distanceA = targetA.first->DistanceTo(b->GetPosition());
+				auto distanceB = targetB.first->DistanceTo(b->GetPosition());
 				return distanceA < distanceB;
 			});
 
-		for (auto& t : targets)
+		for (auto& t : culledTargets)
 		{
-			if (t->DetectCollision(b->GetRound()->getGlobalBounds()))
+			if (t.first->DetectCollision(b->GetRound()->getGlobalBounds()))
 			{
 				auto damage = b->GetDamage();
 
 				// update target
 				if (damage.first > 0.0f)
 				{
-					t->TakeDamage(damage.first);
-					if (t->HasDied() && b->GetOwner())
+					t.first->TakeDamage(damage.first);
+					if (t.first->HasDied() && b->GetOwner())
 					{
 						b->GetOwner()->RegisterKill(damage.first);
 					}
@@ -58,16 +69,16 @@ void BulletSystem::Update(float dt, float worldSpeed, std::list<std::shared_ptr<
 					if (debrisGenerator)
 					{
 						auto config = *this->debrisConfigs->onCollision;
-						if (t->HasDied())
+						if (t.first->HasDied())
 						{
 							config = *this->debrisConfigs->onDeath;
 						}
-						debrisGenerator->Fire(t->GetPosition(), config);
+						debrisGenerator->Fire(t.second->point, config);
 					}
 				}
 
 				// spend round - we can just go to the next bullet if we dont need to penetrate the enemy
-				b->CollisionDetected(&t->GetPosition());
+				b->CollisionDetected(&t.second->point);
 				if (!damage.second)
 				{
 					break;

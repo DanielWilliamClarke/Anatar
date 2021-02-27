@@ -79,7 +79,7 @@ bool EntityObject::DetectCollision(sf::FloatRect hitbox) const
 	return this->hitboxComponent->Intersects(hitbox);
 }
 
-bool EntityObject::DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
+std::shared_ptr<RayIntersection> EntityObject::DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
 {
 	return this->hitboxComponent->IntersectsWithRay(origin, direction);
 }

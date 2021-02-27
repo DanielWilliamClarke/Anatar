@@ -14,6 +14,7 @@ class IAttributeComponent;
 class EntityObject;
 struct EntityUpdate;
 struct BulletConfig;
+struct RayIntersection;
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 
@@ -36,7 +37,7 @@ public:
 	virtual sf::Vector2f GetPosition() const;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
-	bool DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
+	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
 
 	void TakeDamage(float damage);
 	void RegisterKill(float score);

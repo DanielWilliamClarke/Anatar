@@ -35,7 +35,8 @@ bool HitboxComponent::Intersects(const sf::FloatRect& hitbox)
 	return this->hitbox.getGlobalBounds().intersects(hitbox);
 }
 
-bool HitboxComponent::IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
+// See https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection for details
+std::shared_ptr<RayIntersection> HitboxComponent::IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
 {
 	auto bounds = this->hitbox.getGlobalBounds();
 
@@ -79,14 +80,19 @@ bool HitboxComponent::IntersectsWithRay(const sf::Vector2f& origin, const sf::Ve
 			continue;
 		}
 
-		auto t = ((x1 - x3) * (y3 - y4) - (y1 - y3)* (x3 - x4)) / den;
+		auto t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
 		auto u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+
 		if (t > 0 && t < 1 && u > 0) {
-			return true;
+			return std::make_shared<RayIntersection>(
+				true,
+				sf::Vector2f(
+					x1 + t * (x2 - x1),
+					y1 + t * (y2 - y1)));
 		}
 	}
 
-	return false;
+	return std::make_shared<RayIntersection>(false);
 }
 
 const bool HitboxComponent::IsRequired() const

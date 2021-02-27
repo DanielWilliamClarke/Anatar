@@ -10,6 +10,7 @@ class IAnimationComponent;
 class IHitboxComponent;
 class ILocalMovementComponent;
 class IWeaponComponent;
+struct RayIntersection;
 
 class EntityObject
 {
@@ -35,7 +36,7 @@ public:
 	void Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const;
 
 	bool DetectCollision(sf::FloatRect hitbox) const;
-	bool DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
+	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
 
 private:
 	std::shared_ptr<IAnimationComponent> animationComponent;

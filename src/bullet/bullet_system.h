@@ -13,6 +13,9 @@ struct BulletConfig;
 class Entity;
 class IGlowShaderRenderer;
 class IWeaponComponent;
+struct RayIntersection;
+
+typedef std::pair<std::shared_ptr<Entity>, std::shared_ptr<RayIntersection>> IntersectedTarget;
 
 struct BulletSystemDebrisConfig
 {
