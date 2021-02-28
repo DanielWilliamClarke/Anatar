@@ -7,7 +7,7 @@
 Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),
 	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 5.0f))),
-	collisionPosition(&sf::Vector2f(bounds.width, position.y)),
+	collisionPosition(std::shared_ptr<sf::Vector2f>(nullptr)),
 	bounds(bounds),
 	damageRateAccumulator(0.0f),
 	damageRate(damageRate),
@@ -61,9 +61,13 @@ void Beam::Update(float dt, float worldSpeed)
 
 void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 {
-	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
+   	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->ExposeTarget().draw(*round);
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
+
+	if (collisionPosition) {
+		renderer->AddGlowAtPosition(*collisionPosition, this->round->getFillColor(), config.glowAttenuation);
+	}
 }
 
 std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<Entity>> targets)
@@ -92,9 +96,9 @@ std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<
 		});
 
 	// Set collision point to hit the first entity if the beam cant pretrate
-	if (!config.penetrating && collisions.size()) 
+	if (!config.penetrating && collisions.size())
 	{
-		collisionPosition = &collisions.front().point;
+		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front().point);
 	}
 
 	return collisions;
