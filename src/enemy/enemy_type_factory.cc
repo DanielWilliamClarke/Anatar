@@ -13,6 +13,7 @@
 #include "../components/movement/enemy_movement_component.h"
 #include "../components/attributes/health_attribute_component.h"
 #include "../components/weapon/i_weapon_component_factory.h"
+#include "../bullet/bullet.h"
 
 #include "../entity/entity_object.h"
 
@@ -23,7 +24,7 @@ EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 std::shared_ptr<Entity> EnemyTypeFactory::Create()
 {
     auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
-	auto attributeComponent = std::make_shared<HealthAttributeComponent>(config.attributeConfig.health);
+	auto attributeComponent = std::make_shared<HealthAttributeComponent>(config.attributeConfig.damageEffects, config.attributeConfig.health);
 
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();

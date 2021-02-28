@@ -2,8 +2,11 @@
 
 #include <math.h>
 
-HealthAttributeComponent::HealthAttributeComponent(float health)
-	: health(health), maxHealth(health)
+#include "components/weapon/i_weapon_component.h"
+#include "bullet/bullet.h"
+
+HealthAttributeComponent::HealthAttributeComponent(std::shared_ptr<DamageEffects> damageEffects, float health)
+	: damageEffects(damageEffects), health(health), maxHealth(health)
 {}
 
 void HealthAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoint)
@@ -11,9 +14,16 @@ void HealthAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoin
 	if (this->health < damage)
 	{
 		this->health -= damage - (damage - this->health);
-		return;
 	}
-	this->health -= damage;
+	else 
+	{
+		this->health -= damage;
+	}
+
+	damageEffects->generator->Fire(impactPoint,
+		this->IsDead() ?
+		*damageEffects->onDeath :
+		*damageEffects->onCollision);
 }
 
 bool HealthAttributeComponent::IsDead() const

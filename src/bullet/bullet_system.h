@@ -12,25 +12,13 @@ class Bullet;
 struct BulletConfig;
 class Entity;
 class IGlowShaderRenderer;
-class IWeaponComponent;
-struct RayIntersection;
-
-struct BulletSystemDebrisConfig
-{
-	std::shared_ptr<BulletConfig> onDeath;
-	std::shared_ptr<BulletConfig> onCollision;
-
-	BulletSystemDebrisConfig(std::shared_ptr<BulletConfig> onDeath, std::shared_ptr<BulletConfig> onCollision)
-		: onDeath(onDeath), onCollision(onCollision)
-	{}
-};
 
 class BulletSystem : public IBulletSystem
 {
 public:
 	enum affinities { LEFT = -1, RIGHT = 1 };
 
-	BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<IWeaponComponent> debrisGenerator = nullptr, std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs = nullptr);
+	BulletSystem(sf::FloatRect bounds, int affinity);
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
@@ -39,8 +27,6 @@ public:
 
 private:
 	std::vector<std::shared_ptr<Bullet>> bullets;
-	std::shared_ptr<IWeaponComponent> debrisGenerator;
-	std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs;
 	sf::FloatRect bounds;
 	int affinity;
 };

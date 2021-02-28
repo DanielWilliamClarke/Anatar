@@ -4,6 +4,20 @@
 
 #include <SFML/Graphics.hpp>
 
+struct BulletConfig;
+class IWeaponComponent;
+
+struct DamageEffects
+{
+	std::shared_ptr<IWeaponComponent> generator;
+	std::shared_ptr<BulletConfig> onDeath;
+	std::shared_ptr<BulletConfig> onCollision;
+
+	DamageEffects(std::shared_ptr<IWeaponComponent> generator, std::shared_ptr<BulletConfig> onDeath, std::shared_ptr<BulletConfig> onCollision)
+		: generator(generator), onDeath(onDeath), onCollision(onCollision)
+	{}
+};
+
 class IAttributeComponent
 {
 public:

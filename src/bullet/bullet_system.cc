@@ -6,8 +6,8 @@
 #include "../components/weapon/i_weapon_component.h"
 #include "../components/hitbox/i_hitbox_component.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity, std::shared_ptr<IWeaponComponent> debrisGenerator, std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs)
-	: bounds(bounds), affinity(affinity), debrisGenerator(debrisGenerator), debrisConfigs(debrisConfigs)
+BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
+	: bounds(bounds), affinity(affinity)
 {}
 
 std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
@@ -35,15 +35,6 @@ void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_pt
 				if (c.target->HasDied() && b->GetOwner())
 				{
 					b->GetOwner()->RegisterKill(damage);
-				}
-
-				// Effects
-				if (debrisGenerator)
-				{
-					debrisGenerator->Fire(c.point,
-						c.target->HasDied() ?
-						*this->debrisConfigs->onDeath :
-						*this->debrisConfigs->onCollision);
 				}
 			}
 		}

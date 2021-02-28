@@ -13,6 +13,7 @@
 
 class IWeaponComponentFactory;
 class ILocalMovementComponent;
+struct DamageEffects;
 
 struct EnemyWeaponConfig
 {
@@ -50,11 +51,12 @@ struct EnemyAnimationConfig
 
 struct EnemyAttributeConfig
 {
+	std::shared_ptr<DamageEffects> damageEffects;
 	float health;
 	float shields;
 
-	EnemyAttributeConfig(float health, float shields)
-		: health(health), shields(shields)
+	EnemyAttributeConfig(std::shared_ptr<DamageEffects> damageEffects, float health, float shields)
+		: damageEffects(damageEffects), health(health), shields(shields)
 	{}
 };
 

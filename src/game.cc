@@ -101,23 +101,23 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
+	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
 	this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
 
-	this->debrisConfigs = std::make_shared<BulletSystemDebrisConfig>(
+	auto projectileFactory = std::make_shared<ProjectileFactory>();
+	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
+	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 25.0f);
+
+	this->damageEffects = std::make_shared<DamageEffects>(
+		this->debrisGenerator,
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
 			sf::Color(248, 99, 0, 255), 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f),
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.05f, 3); },
 			sf::Color(248, 99, 0, 255), 200.0f, 0.0f, 100.0f, false, 0.0f, 0.3f));
-
-	auto projectileFactory = std::make_shared<ProjectileFactory>();
-	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-
-	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 25.0f);
-	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT, this->debrisGenerator, this->debrisConfigs);
-	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT, this->debrisGenerator, this->debrisConfigs);
 }
 
 void Game::InitPlayer()
@@ -126,7 +126,7 @@ void Game::InitPlayer()
 	auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
 
 	this->playerHud = std::make_shared<PlayerHud>(this->bounds);
-	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, 100.0f, 50.0f, 10.0f, 3.0f);
+	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, this->damageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
 
 	this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
 	this->playerTargets.push_back(this->player);
@@ -146,38 +146,36 @@ void Game::InitEnemySystem()
 				EnemyMotionConfig(bounds, worldSpeed, 200.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 1.0f),
-				EnemyAttributeConfig(20.0f, 0.0f))))
+				EnemyAttributeConfig(this->damageEffects, 20.0f, 0.0f))))
 
 		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 300.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 2.0f),
-				EnemyAttributeConfig(40.0f, 0.0f))))
+				EnemyAttributeConfig(this->damageEffects, 40.0f, 0.0f))))
 
 		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 75.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 45.0f, 7.0f), this->enemyBulletSystem, 3.0f),
-				EnemyAttributeConfig(60.0f, 0.0f))))
+				EnemyAttributeConfig(this->damageEffects, 60.0f, 0.0f))))
 
 		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 100.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 360.0f, 8.0f), this->enemyBulletSystem, 1.0f),
-				EnemyAttributeConfig(30.0f, 0.0f))))
+				EnemyAttributeConfig(this->damageEffects, 30.0f, 0.0f))))
 
 		->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 50.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 110.0f, 50.0f), this->enemyBulletSystem, 10.0f),
-				EnemyAttributeConfig(150.0f, 0.0f))));
+				EnemyAttributeConfig(this->damageEffects, 150.0f, 0.0f))));
 }
-
-
 
 void Game::WindowEvents()
 {

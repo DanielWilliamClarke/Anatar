@@ -7,10 +7,22 @@
 
 class IPlayerHud;
 
+struct PlayerAttributeConfig
+{
+	float health;
+	float shields;
+	float shieldRecharge;
+	float shieldRechargeDelay;
+
+	PlayerAttributeConfig(float health, float shields, float shieldRecharge, float shieldRechargeDelay)
+		: health(health), shields(shields), shieldRecharge(shieldRecharge), shieldRechargeDelay(shieldRechargeDelay) 
+	{}
+};
+
 class PlayerAttributeComponent : public IPlayerAttributeComponent
 {
 public:
-	PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, float health, float shields, float shieldRecharge, float shieldRechargeDelay);
+	PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, std::shared_ptr<DamageEffects> damageEffects, PlayerAttributeConfig config);
 	virtual ~PlayerAttributeComponent() = default;
 
 	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
@@ -22,6 +34,7 @@ public:
 private:
 
 	std::shared_ptr<IPlayerHud> hud;
+	std::shared_ptr<DamageEffects> damageEffects;
 
 	float maxHealth;
 	float health;

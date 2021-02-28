@@ -4,15 +4,26 @@
 #include <iostream>
 
 #include "../../ui/i_player_hud.h"
+#include "components/weapon/i_weapon_component.h"
+#include "bullet/bullet.h"
 
-PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, float health, float shields, float shieldRecharge, float shieldRechargeDelay)
-	: hud(hud), health(health), shields(shields), maxHealth(health), maxShields(shields), accumulator(0.0f), shieldRecharge(shieldRecharge), shieldRechargeDelay(shieldRechargeDelay), score(0.0f)
+PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, std::shared_ptr<DamageEffects> damageEffects, PlayerAttributeConfig config)
+	: hud(hud),
+	damageEffects(damageEffects),
+	health(config.health),
+	shields(config.shields),
+	maxHealth(config.health),
+	maxShields(config.shields),
+	accumulator(0.0f),
+	shieldRecharge(config.shieldRecharge),
+	shieldRechargeDelay(config.shieldRechargeDelay),
+	score(0.0f)
 {}
 
 void PlayerAttributeComponent::Update(float dt)
 {
 	this->accumulator += this->clock.restart().asSeconds();
-	if (this->accumulator >= this->shieldRechargeDelay && 
+	if (this->accumulator >= this->shieldRechargeDelay &&
 		this->shields < this->maxShields)
 	{
 		auto shieldRechargeIncremenet = this->shieldRecharge * dt;
@@ -41,21 +52,31 @@ void PlayerAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoin
 	if (this->shields > damage)
 	{
 		this->shields -= damage;
-		return;
+	}
+	else
+	{
+		auto throughDamange = damage - this->shields;
+		if (this->shields > 0)
+		{
+			// Ensures shields does not go below 0
+			this->shields -= damage - throughDamange;
+		}
+
+		if (this->health < throughDamange)
+		{
+			// Ensures health does not go below 0
+			this->health -= throughDamange - (throughDamange - this->health);
+		}
+		else 
+		{
+			this->health -= throughDamange;
+		}
 	}
 
-	auto throughDamange = damage - this->shields;
-	if (this->shields > 0)
-	{
-		this->shields -= damage - throughDamange;
-	}
-
-	if (this->health < throughDamange)
-	{
-		this->health -= throughDamange - (throughDamange - this->health);
-		return;
-	}
-	this->health -= throughDamange;
+	damageEffects->generator->Fire(impactPoint,
+		this->IsDead() ?
+		*damageEffects->onDeath :
+		*damageEffects->onCollision);
 }
 
 bool PlayerAttributeComponent::IsDead() const
