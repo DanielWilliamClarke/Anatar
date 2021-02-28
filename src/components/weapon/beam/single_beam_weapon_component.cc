@@ -19,18 +19,15 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	}
 
 	this->accumulator += this->clock.restart().asSeconds();
-	if (this->accumulator < this->duration)
+	if (!beam->isSpent() && this->accumulator < this->duration)
 	{
 		beam->Reignite();
+		return;
 	} 
-	else
-	{
-		auto delay = beam->isSpent() ? this->coolDown : this->duration + this->coolDown;
-		if (this->accumulator >= delay)
-		{
-			// once beam is depleted, wait for a while before creating a new beam
-			beam = nullptr;
-			this->accumulator = 0;
-		}
+
+	if (beam->isSpent() && this->accumulator > coolDown) {
+		// once beam is depleted, wait for a while before creating a new beam
+		beam = nullptr;
+		this->accumulator = 0;
 	}
 }

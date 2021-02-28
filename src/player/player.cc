@@ -91,7 +91,7 @@ void Player::InitBullets()
 
 	this->bulletConfigs["ship"] = std::make_shared<BulletConfig>(self,
 		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); },
-		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, false, 15.0f, 1.0f);
+		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, false, 15.0f, 0.5f);
 
 	this->bulletConfigs["turret"] = std::make_shared<BulletConfig>(self,
 		[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); },

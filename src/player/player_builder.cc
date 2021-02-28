@@ -48,7 +48,7 @@ void PlayerBuilder::BuildShip()
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
 
 	auto beamFactory = std::make_shared<BeamFactory>(this->bounds, 0.5f);
-	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 5.0f, 1.0f);
+	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 3.0f, 1.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 
