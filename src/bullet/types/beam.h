@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "bullet.h"
+#include "bullet/bullet.h"
 
 class Beam : public Bullet
 {

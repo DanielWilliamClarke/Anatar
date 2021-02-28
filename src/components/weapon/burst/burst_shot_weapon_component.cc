@@ -4,9 +4,9 @@
 #include <cmath>
 #include <math.h>
 
-#include "../../../bullet/i_bullet_system.h"
-#include "../../../bullet/i_bullet_factory.h"
-#include "../../../bullet/bullet.h"
+#include "bullet/i_bullet_system.h"
+#include "bullet/i_bullet_factory.h"
+#include "bullet/bullet.h"
 
 BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay, float arcAngle, float numBullets)
 	: bulletSystem(bulletSystem), factory(factory), arcAngle(arcAngle * ((float)M_PI / 180.0f)), delay(delay), numBullets(numBullets), accumulator(0.0f)

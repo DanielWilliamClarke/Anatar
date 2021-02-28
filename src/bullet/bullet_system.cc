@@ -1,10 +1,10 @@
 #include "bullet_system.h"
-#include "projectile.h"
+#include "types/projectile.h"
 
 #include "i_bullet_factory.h"
-#include "../entity/entity.h"
-#include "../components/weapon/i_weapon_component.h"
-#include "../components/hitbox/i_hitbox_component.h"
+#include "entity/entity.h"
+#include "components/weapon/i_weapon_component.h"
+#include "components/hitbox/i_hitbox_component.h"
 
 BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
 	: bounds(bounds), affinity(affinity)

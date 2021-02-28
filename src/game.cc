@@ -29,7 +29,7 @@
 
 #include "bullet/bullet_system.h"
 #include "bullet/bullet.h"
-#include "bullet/projectile_factory.h"
+#include "bullet/types/projectile_factory.h"
 
 #include "components/weapon/burst/random_shot_weapon_component.h"
 #include "components/weapon/burst/burst_shot_weapon_component_factory.h"

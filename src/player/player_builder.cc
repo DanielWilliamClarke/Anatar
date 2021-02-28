@@ -2,20 +2,20 @@
 
 #include "player_builder.h"
 
-#include "../util/i_texture_atlas.h"
-#include "../components/animation/animation_component.h"
-#include "../components/hitbox/hitbox_component.h"
-#include "../components/movement/offset_movement_component.h"
-#include "../components/movement/orbital_movement_component.h"
-#include "../components/weapon/single/single_shot_weapon_component.h"
-#include "../components/weapon/burst/burst_shot_weapon_component.h"
-#include "../components/weapon/player/player_weapon_component.h"
-#include "../components/weapon/inert_weapon_component.h"
-#include "../components/weapon/beam/single_beam_weapon_component.h"
-#include "../entity/entity_object.h"
+#include "util/i_texture_atlas.h"
+#include "components/animation/animation_component.h"
+#include "components/hitbox/hitbox_component.h"
+#include "components/movement/offset_movement_component.h"
+#include "components/movement/orbital_movement_component.h"
+#include "components/weapon/single/single_shot_weapon_component.h"
+#include "components/weapon/burst/burst_shot_weapon_component.h"
+#include "components/weapon/player/player_weapon_component.h"
+#include "components/weapon/inert_weapon_component.h"
+#include "components/weapon/beam/single_beam_weapon_component.h"
+#include "entity/entity_object.h"
 
-#include "../bullet/projectile_factory.h"
-#include "../bullet/beam_factory.h"
+#include "bullet/types/projectile_factory.h"
+#include "bullet/types/beam_factory.h"
 
 PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds)
 	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds)

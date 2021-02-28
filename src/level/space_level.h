@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 
-#include "../util/i_random_number_source.h"
+#include "util/i_random_number_source.h"
 
 class IGlowShaderRenderer;
 

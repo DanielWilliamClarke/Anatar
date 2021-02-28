@@ -5,9 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-#include "../entity/entity.h"
+#include "entity/entity.h"
 
-#include "../util/i_random_number_source.h"
+#include "util/i_random_number_source.h"
 
 class Enemy : public Entity
 {

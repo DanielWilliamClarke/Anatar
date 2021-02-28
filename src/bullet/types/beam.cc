@@ -1,8 +1,8 @@
 #include "beam.h"
 
-#include "../entity/entity.h"
-#include "../util/i_glow_shader_renderer.h"
-#include "../components/hitbox/i_hitbox_component.h"
+#include "entity/entity.h"
+#include "util/i_glow_shader_renderer.h"
+#include "components/hitbox/i_hitbox_component.h"
 
 Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),

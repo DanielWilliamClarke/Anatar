@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "../entity/i_entity_builder.h"
+#include "entity/i_entity_builder.h"
 #include "player.h"
 
 class EntityObject;

@@ -1,8 +1,8 @@
 #include "projectile.h"
 
-#include "../util/i_glow_shader_renderer.h"
-#include "../entity/entity.h"
-#include "../components/hitbox/i_hitbox_component.h"
+#include "util/i_glow_shader_renderer.h"
+#include "entity/entity.h"
+#include "components/hitbox/i_hitbox_component.h"
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: Bullet(position, velocity, config),

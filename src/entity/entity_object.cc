@@ -1,9 +1,9 @@
 #include "entity_object.h"
 
-#include "../components/animation/i_animation_component.h"
-#include "../components/hitbox/i_hitbox_component.h"
-#include "../components/movement/i_local_movement_component.h"
-#include "../components/weapon/i_weapon_component.h"
+#include "components/animation/i_animation_component.h"
+#include "components/hitbox/i_hitbox_component.h"
+#include "components/movement/i_local_movement_component.h"
+#include "components/weapon/i_weapon_component.h"
 
 EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,

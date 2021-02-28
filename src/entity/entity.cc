@@ -5,9 +5,9 @@
 
 #include "entity_object.h"
 #include "entity_update.h"
-#include "../components/movement/i_global_movement_component.h"
+#include "components/movement/i_global_movement_component.h"
 #include "components/attributes/i_attribute_component.h"
-#include "../components/hitbox/i_hitbox_component.h"
+#include "components/hitbox/i_hitbox_component.h"
 
 Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,

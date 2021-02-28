@@ -4,8 +4,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../i_weapon_component.h"
-#include "../../../util/i_random_number_source.h"
+#include "components/weapon/i_weapon_component.h"
+#include "util/i_random_number_source.h"
 
 class IBulletSystem;
 class IBulletFactory;

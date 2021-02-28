@@ -4,8 +4,8 @@
 
 #include "enemy.h"
 #include "i_enemy_type_factory.h"
-#include "../entity/entity_object.h"
-#include "../entity/entity.h"
+#include "entity/entity_object.h"
+#include "entity/entity.h"
 
 EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0)

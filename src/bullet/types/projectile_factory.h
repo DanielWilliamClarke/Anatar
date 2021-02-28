@@ -4,9 +4,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "i_bullet_factory.h"
+#include "bullet/i_bullet_factory.h"
 #include "projectile.h"
-#include "bullet.h"
+#include "bullet/bullet.h"
 
 class ProjectileFactory : public IBulletFactory
 {

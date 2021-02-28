@@ -3,11 +3,11 @@
 
 #include "enemy.h"
 
-#include "../entity/i_entity_builder.h"
-#include "../entity/entity_object.h"
+#include "entity/i_entity_builder.h"
+#include "entity/entity_object.h"
 
-#include "../components/movement/i_global_movement_component.h"
-#include "../bullet/bullet.h"
+#include "components/movement/i_global_movement_component.h"
+#include "bullet/bullet.h"
 
 Enemy::Enemy(
 	EntityManifest manifest,

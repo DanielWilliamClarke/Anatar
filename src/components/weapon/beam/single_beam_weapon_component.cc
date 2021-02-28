@@ -1,9 +1,9 @@
 #include "single_beam_weapon_component.h"
 
-#include "../../../bullet/i_bullet_system.h"
-#include "../../../bullet/i_bullet_system.h"
-#include "../../../bullet/bullet.h"
-#include "../../../bullet/beam.h"
+#include "bullet/i_bullet_system.h"
+#include "bullet/i_bullet_system.h"
+#include "bullet/bullet.h"
+#include "bullet/types/beam.h"
 
 SingleBeamWeaponComponent::SingleBeamWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float duration, float coolDown)
 	: bulletSystem(bulletSystem), factory(factory), duration(duration), coolDown(coolDown), accumulator(0.0f), beam(nullptr)

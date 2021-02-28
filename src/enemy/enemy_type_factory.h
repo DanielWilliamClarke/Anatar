@@ -9,7 +9,7 @@
 #include "i_enemy_type_factory.h"
 #include "enemy.h"
 
-#include "../bullet/i_bullet_system.h"
+#include "bullet/i_bullet_system.h"
 
 class IWeaponComponentFactory;
 class ILocalMovementComponent;

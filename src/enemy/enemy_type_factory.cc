@@ -6,16 +6,16 @@
 
 #include "util/random_number_mersenne_source.cc"
 
-#include "../components/animation/animation_component.h"
-#include "../components/hitbox/hitbox_component.h"
-#include "../components/movement/offset_movement_component.h"
-#include "../components/movement/orbital_movement_component.h"
-#include "../components/movement/enemy_movement_component.h"
-#include "../components/attributes/health_attribute_component.h"
-#include "../components/weapon/i_weapon_component_factory.h"
-#include "../bullet/bullet.h"
+#include "components/animation/animation_component.h"
+#include "components/hitbox/hitbox_component.h"
+#include "components/movement/offset_movement_component.h"
+#include "components/movement/orbital_movement_component.h"
+#include "components/movement/enemy_movement_component.h"
+#include "components/attributes/health_attribute_component.h"
+#include "components/weapon/i_weapon_component_factory.h"
+#include "bullet/bullet.h"
 
-#include "../entity/entity_object.h"
+#include "entity/entity_object.h"
 
 EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 	: config(config)

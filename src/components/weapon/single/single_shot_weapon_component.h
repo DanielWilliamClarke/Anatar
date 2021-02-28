@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../i_weapon_component.h"
+#include "components/weapon/i_weapon_component.h"
 
 class IBulletSystem;
 class IBulletFactory;

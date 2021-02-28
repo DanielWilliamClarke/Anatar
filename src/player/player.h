@@ -6,7 +6,7 @@
 #include <memory>
 #include <map>
 
-#include "../entity/entity.h"
+#include "entity/entity.h"
 
 class IPlayerMovementComponent;
 class IPlayerAttributeComponent;

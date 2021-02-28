@@ -5,15 +5,14 @@
 
 #include "player.h"
 
-#include "../entity/i_entity_builder.h"
-#include "../entity/entity_object.h"
-#include "../entity/entity_update.h"
+#include "entity/i_entity_builder.h"
+#include "entity/entity_object.h"
+#include "entity/entity_update.h"
 
 #include "player_input.h"
-#include "../components/movement/i_player_movement_component.h"
-#include "../components/attributes/i_player_attribute_component.h"
-
-#include "../bullet/bullet.h"
+#include "components/movement/i_player_movement_component.h"
+#include "components/attributes/i_player_attribute_component.h"
+#include "bullet/bullet.h"
 
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,

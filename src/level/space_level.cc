@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "../util/i_glow_shader_renderer.h"
+#include "util/i_glow_shader_renderer.h"
 
 SpaceLevel::SpaceLevel(std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
 	: randSource(randSource), viewSize(viewSize)
