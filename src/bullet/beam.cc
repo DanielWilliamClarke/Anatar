@@ -95,7 +95,7 @@ std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<
 			return distanceA < distanceB;
 		});
 
-	// Set collision point to hit the first entity if the beam cant pretrate
+	// Set collision point to hit the first entity if the beam cant penetrate
 	if (!config.penetrating && collisions.size())
 	{
 		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front().point);
