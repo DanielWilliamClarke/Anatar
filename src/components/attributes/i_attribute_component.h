@@ -10,11 +10,12 @@ class IWeaponComponent;
 struct DamageEffects
 {
 	std::shared_ptr<IWeaponComponent> generator;
-	std::shared_ptr<BulletConfig> onDeath;
-	std::shared_ptr<BulletConfig> onCollision;
+	std::shared_ptr<BulletConfig> death;
+	std::shared_ptr<BulletConfig> health;
+	std::shared_ptr<BulletConfig> shield;
 
-	DamageEffects(std::shared_ptr<IWeaponComponent> generator, std::shared_ptr<BulletConfig> onDeath, std::shared_ptr<BulletConfig> onCollision)
-		: generator(generator), onDeath(onDeath), onCollision(onCollision)
+	DamageEffects(std::shared_ptr<IWeaponComponent> generator, std::shared_ptr<BulletConfig> death, std::shared_ptr<BulletConfig> health, std::shared_ptr<BulletConfig> shield)
+		: generator(generator), death(death), health(health), shield(shield)
 	{}
 };
 

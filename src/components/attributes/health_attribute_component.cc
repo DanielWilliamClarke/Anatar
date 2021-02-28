@@ -14,16 +14,13 @@ void HealthAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoin
 	if (this->health < damage)
 	{
 		this->health -= damage - (damage - this->health);
+		damageEffects->generator->Fire(impactPoint, *damageEffects->death);
 	}
 	else 
 	{
 		this->health -= damage;
+		damageEffects->generator->Fire(impactPoint, *damageEffects->health);
 	}
-
-	damageEffects->generator->Fire(impactPoint,
-		this->IsDead() ?
-		*damageEffects->onDeath :
-		*damageEffects->onCollision);
 }
 
 bool HealthAttributeComponent::IsDead() const

@@ -57,7 +57,6 @@ private:
 	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<BulletSystem> enemyBulletSystem;
 	std::shared_ptr<BulletSystem> debrisSystem;
-	std::shared_ptr<DamageEffects> damageEffects;
 	std::shared_ptr<RandomShotWeaponComponent> debrisGenerator;
 
 	std::shared_ptr<sf::Clock> clock;
