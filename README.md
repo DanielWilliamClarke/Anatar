@@ -33,34 +33,39 @@ conan install --build=missing --profile ../../profile.txt ../..
 # then run cmake
 cmake ..
 ```
+
 then build
 
 ## Done
 
-- Create base entity class so players and enemies may implement / derive - ✓
-- Create enemies and enemy movement ✓
-- Player weapons ✓
-- Flesh out player ✓
-- Player enemy interactions ✓
-- Stage background for fun ✓ (base space stage in place)
-- Skin player and enemies using previous assets before new ones are made ✓
+- [x] Create base entity class so players and enemies may implement / derive 
+- [x] Create enemies and enemy movement
+- [x] Player weapons
+- [x] Flesh out player
+- [x] Player enemy interactions
+- [x] Stage background for fun (base space stage in place)
+- [x] Skin player and enemies using previous assets before new ones are made
+- [x] Better weapons: (now able to add new weapon types easily)
+  - [x] beam weapons
+  - [ ] homing projectiles
+  - [ ] mines.
+  - [ ] barriers
+  - [ ] bolas's
 
 ## Next Up
 
-- Game states - main menu, gameplay, pause, settings, highscores etc
-- Level design: missions, bosses, enemy squadrons, mission select screen? 
-- Power ups 
-- Helpers: have own health, add buffs, ammo can fire autonmously or on player action (dies on timeout, ammo depletion and health loss)
+- [ ] Game states - main menu, gameplay, pause, settings, highscores etc
+- [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
+- [ ] Power ups
+- [ ] Helpers: have own health, add buffs, ammo can fire autonmously or on player action (dies on timeout, ammo depletion and health loss)
   - Can be encountered mid level, will attach themselves to the player
-- Limpets: like helpers but add debuffs or damage over time.
+- [ ] Limpets: like helpers but add debuffs or damage over time.
   - Can be encountered mid level, will attach themselves to the player
-- Intelligent enemies: track and shoot towards player
-- Bosses, multiple firing patterns, interesting mechanics, weak points?
-- Enemy waves, Sqaudrons?
-- Android app?
-- Better weapons: beam weapons, seeker missiles, bombs.
-- Visualise weapon stats, as in weapon temp, weapon energy etc.
+- [ ] Intelligent enemies: track and shoot towards player
+- [ ] Bosses, multiple firing patterns, interesting mechanics, weak points?
+- [ ] Enemy waves, Sqaudrons?
+- [ ] Android app?
+- [ ] Visualise weapon stats, as in weapon temp, weapon energy etc.
   - Visualise kills
-- Highscore and points system?
-
-- *Could even have online coop?*
+- [ ] Highscore and points system?
+- [ ] online coop - Boost ASIO?
