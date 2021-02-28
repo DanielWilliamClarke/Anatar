@@ -10,7 +10,7 @@ public:
 	HealthAttributeComponent(float health);
 	virtual ~HealthAttributeComponent() = default;
 
-	virtual void TakeDamage(float damage) override;
+	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
 	virtual bool IsDead() const override;
 	virtual void RegisterKill(float score) override {};
 private:

@@ -34,7 +34,7 @@ void PlayerAttributeComponent::RegisterKill(float score)
 	this->score += score;
 }
 
-void PlayerAttributeComponent::TakeDamage(float damage)
+void PlayerAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoint)
 {
 	this->accumulator = 0;
 

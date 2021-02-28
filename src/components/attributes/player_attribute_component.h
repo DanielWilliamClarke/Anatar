@@ -2,6 +2,7 @@
 #define PLAYER_ATTRBUTE_COMPONENT_H
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include "i_player_attribute_component.h"
 
 class IPlayerHud;
@@ -12,7 +13,7 @@ public:
 	PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, float health, float shields, float shieldRecharge, float shieldRechargeDelay);
 	virtual ~PlayerAttributeComponent() = default;
 
-	virtual void TakeDamage(float damage) override;
+	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
 	virtual bool IsDead() const override;
 
 	virtual void Update(float dt) override;

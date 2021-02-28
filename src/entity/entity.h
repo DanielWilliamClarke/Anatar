@@ -39,7 +39,7 @@ public:
 	bool DetectCollision(sf::FloatRect hitbox) const;
 	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
 
-	void TakeDamage(float damage);
+	void TakeDamage(float damage, sf::Vector2f& impactPoint);
 	void RegisterKill(float score);
 	bool HasDied() const;
 

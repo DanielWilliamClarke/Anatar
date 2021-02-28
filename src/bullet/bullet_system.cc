@@ -31,7 +31,7 @@ void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_pt
 			for (auto& c : collisions)
 			{
 				// update target
-				c.target->TakeDamage(damage);
+				c.target->TakeDamage(damage, c.point);
 				if (c.target->HasDied() && b->GetOwner())
 				{
 					b->GetOwner()->RegisterKill(damage);

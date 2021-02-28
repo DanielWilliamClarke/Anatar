@@ -6,7 +6,7 @@ HealthAttributeComponent::HealthAttributeComponent(float health)
 	: health(health), maxHealth(health)
 {}
 
-void HealthAttributeComponent::TakeDamage(float damage)
+void HealthAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoint)
 {
 	if (this->health < damage)
 	{

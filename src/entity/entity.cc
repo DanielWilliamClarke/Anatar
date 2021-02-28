@@ -78,9 +78,9 @@ std::shared_ptr<RayIntersection> Entity::DetectCollisionWithRay(const sf::Vector
 }
 
 
-void Entity::TakeDamage(float damage)
+void Entity::TakeDamage(float damage, sf::Vector2f& impactPoint)
 {
-	this->attributeComponent->TakeDamage(damage);
+	this->attributeComponent->TakeDamage(damage, impactPoint);
 }
 
 bool Entity::HasDied() const
