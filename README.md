@@ -51,6 +51,7 @@ then build
   - [ ] mines.
   - [ ] barriers
   - [ ] bolas's
+  - [ ] EMP's - or other debuff weapons
 - [ ] Game states - main menu, gameplay, pause, settings, highscores etc
 - [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
 - [ ] Power ups
