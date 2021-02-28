@@ -36,7 +36,7 @@ cmake ..
 
 then build
 
-## Done
+## Plan
 
 - [x] Create base entity class so players and enemies may implement / derive 
 - [x] Create enemies and enemy movement
@@ -51,9 +51,6 @@ then build
   - [ ] mines.
   - [ ] barriers
   - [ ] bolas's
-
-## Next Up
-
 - [ ] Game states - main menu, gameplay, pause, settings, highscores etc
 - [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
 - [ ] Power ups
