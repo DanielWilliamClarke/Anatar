@@ -81,10 +81,6 @@ std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<
 		auto c = t->DetectCollisionWithRay(this->position, this->velocity);
 		if (c->intersects) {
 			collisions.push_back(EntityCollision(t, c->point));
-
-			if (!config.penetrating) {
-				break;
-			}
 		}
 	}
 
