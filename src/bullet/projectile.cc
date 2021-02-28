@@ -1,6 +1,8 @@
 #include "projectile.h"
 
 #include "../util/i_glow_shader_renderer.h"
+#include "../entity/entity.h"
+#include "../components/hitbox/i_hitbox_component.h"
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: Bullet(position, velocity, config),
@@ -50,12 +52,35 @@ void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float inter
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-void Projectile::CollisionDetected(sf::Vector2f* point)
+std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::shared_ptr<Entity>> targets)
 {
-	spent = point && !config.penetrating ? true : false;
-}
+	std::vector<std::shared_ptr<Entity>> culledTargets;
+	std::copy_if(targets.begin(), targets.end(), std::back_inserter(culledTargets),
+		[this](std::shared_ptr<Entity> entity) -> bool {
+			return entity->DetectCollisionWithRay(this->position, this->velocity)->intersects;
+		});
 
-std::shared_ptr<sf::Shape> Projectile::GetRound() const
-{
-	return round;
+	// sort elements closest to furthest
+	std::sort(culledTargets.begin(), culledTargets.end(),
+		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
+			auto distanceA = collisionA.target->DistanceTo(this->position);
+			auto distanceB = collisionB.target->DistanceTo(this->position);
+			return distanceA < distanceB;
+		});
+
+	std::vector<EntityCollision> collisions;
+	for (auto& t : culledTargets)
+	{
+		if (t->DetectCollision(this->round->getGlobalBounds()))
+		{
+			collisions.push_back(EntityCollision(t, this->position));
+
+			if (!config.penetrating) {
+				this->spent = true;
+				break;
+			}
+		}
+	}
+
+	return collisions;
 }

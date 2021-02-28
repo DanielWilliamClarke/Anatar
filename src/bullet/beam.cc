@@ -2,6 +2,7 @@
 
 #include "../entity/entity.h"
 #include "../util/i_glow_shader_renderer.h"
+#include "../components/hitbox/i_hitbox_component.h"
 
 Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),
@@ -30,10 +31,10 @@ void Beam::Update(float dt, float worldSpeed)
 			this->round->getSize().y));
 
 	config.damage = 0;
-	this->damageRateAccumulator += this->damageClock .restart().asSeconds();
+	this->damageRateAccumulator += this->damageClock.restart().asSeconds();
 	if (this->damageRateAccumulator >= this->damageRate)
-	{   
-		config.damage = damageCache;             
+	{
+		config.damage = damageCache;
 		this->damageRateAccumulator = 0;
 	}
 
@@ -65,15 +66,38 @@ void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-
-void Beam::CollisionDetected(sf::Vector2f* point)
+std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<Entity>> targets)
 {
-	collisionPosition = point;
-}
+	// Clear collision point before detection
+	collisionPosition = nullptr;
 
-std::shared_ptr<sf::Shape> Beam::GetRound() const
-{
-	return round;
+	std::vector<EntityCollision> collisions;
+	for (auto& t : targets)
+	{
+		auto c = t->DetectCollisionWithRay(this->position, this->velocity);
+		if (c->intersects) {
+			collisions.push_back(EntityCollision(t, c->point));
+
+			if (!config.penetrating) {
+				break;
+			}
+		}
+	}
+
+	std::sort(collisions.begin(), collisions.end(),
+		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
+			auto distanceA = collisionA.target->DistanceTo(this->position);
+			auto distanceB = collisionB.target->DistanceTo(this->position);
+			return distanceA < distanceB;
+		});
+
+	// Set collision point to hit the first entity if the beam cant pretrate
+	if (!config.penetrating && collisions.size()) 
+	{
+		collisionPosition = &collisions.front().point;
+	}
+
+	return collisions;
 }
 
 void Beam::Reignite()

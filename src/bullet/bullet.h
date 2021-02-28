@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <iostream>
+#include <list>
 
 class IGlowShaderRenderer;
 class Entity;
@@ -28,6 +29,15 @@ struct BulletConfig
 	{}
 };
 
+struct EntityCollision {
+	std::shared_ptr<Entity> target;
+	sf::Vector2f point;
+
+	EntityCollision(std::shared_ptr<Entity> target, sf::Vector2f point = sf::Vector2f())
+		: target(target), point(point)
+	{}
+};
+
 class Bullet
 {
 public:
@@ -36,14 +46,13 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
-	virtual void CollisionDetected(sf::Vector2f* point) = 0;
-	virtual std::shared_ptr<sf::Shape> GetRound() const = 0;
+	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) = 0;
 
 	bool isSpent() const;
 	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
 	sf::Vector2f GetVelocity() const;
-	std::pair<float, bool> GetDamage() const;
+	float GetDamage() const;
 	std::shared_ptr<Entity> GetOwner() const;
 
 protected:

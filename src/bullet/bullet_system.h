@@ -15,8 +15,6 @@ class IGlowShaderRenderer;
 class IWeaponComponent;
 struct RayIntersection;
 
-typedef std::pair<std::shared_ptr<Entity>, std::shared_ptr<RayIntersection>> IntersectedTarget;
-
 struct BulletSystemDebrisConfig
 {
 	std::shared_ptr<BulletConfig> onDeath;
@@ -36,12 +34,11 @@ public:
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
-
-	void Update(float dt, float worldSpeed, std::list<std::shared_ptr<Entity>>& collisionTargets);
+	void Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
-	std::list<std::shared_ptr<Bullet>> bullets;
+	std::vector<std::shared_ptr<Bullet>> bullets;
 	std::shared_ptr<IWeaponComponent> debrisGenerator;
 	std::shared_ptr<BulletSystemDebrisConfig> debrisConfigs;
 	sf::FloatRect bounds;

@@ -7,11 +7,11 @@
 #include "../entity/entity_object.h"
 #include "../entity/entity.h"
 
-EnemySystem::EnemySystem() 
+EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0)
 {}
 
-void EnemySystem::Update(float dt) 
+void EnemySystem::Update(float dt)
 {
 	// Create enemies
 	this->accumulator += dt;
@@ -32,12 +32,17 @@ void EnemySystem::Update(float dt)
 	}
 
 	// Remove enemies
-	enemies.remove_if([=](std::shared_ptr<Entity> e) -> bool {
-		auto enemySprite = e->GetObject("enemy")->GetSprite();
-		auto enemyBounds = enemySprite->getGlobalBounds();
-		auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
-		return enemyX <= 0 || e->HasDied();
-	});
+
+	enemies.erase(
+		std::remove_if(
+			enemies.begin(), enemies.end(),
+			[=](std::shared_ptr<Entity> e) -> bool {
+				auto enemySprite = e->GetObject("enemy")->GetSprite();
+				auto enemyBounds = enemySprite->getGlobalBounds();
+				auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
+				return enemyX <= 0 || e->HasDied();
+			}),
+		enemies.end());
 
 	// Update all remaining enemies
 	for (auto& e : enemies)
@@ -63,7 +68,7 @@ std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::s
 	return shared_from_this();
 }
 
-std::list<std::shared_ptr<Entity>>& EnemySystem::GetEnemies()
+std::vector<std::shared_ptr<Entity>>& EnemySystem::GetEnemies()
 {
 	return enemies;
 }

@@ -52,7 +52,7 @@ private:
 	std::shared_ptr<PlayerHud> playerHud;
 	std::shared_ptr<PlayerInput> playerInput;
 	std::shared_ptr<BulletSystem> playerBulletSystem;
-	std::list<std::shared_ptr<Entity>> playerTargets;
+	std::vector<std::shared_ptr<Entity>> playerTargets;
 
 	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<BulletSystem> enemyBulletSystem;

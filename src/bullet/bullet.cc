@@ -37,9 +37,9 @@ sf::Vector2f Bullet::GetVelocity() const
 	return velocity;
 }
 
-std::pair<float, bool> Bullet::GetDamage() const
+float Bullet::GetDamage() const
 {
-	return std::make_pair(config.damage, config.penetrating);
+	return config.damage;
 }
 
 std::shared_ptr<Entity> Bullet::GetOwner() const

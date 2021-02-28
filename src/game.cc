@@ -209,7 +209,7 @@ void Game::Update()
 		this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
 		this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets);
 
-		std::list<std::shared_ptr<Entity>> debrisTargets;
+		std::vector<std::shared_ptr<Entity>> debrisTargets;
 		this->debrisSystem->Update(dt, worldSpeed, debrisTargets);
 
 		this->fps->Update();
