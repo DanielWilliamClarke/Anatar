@@ -68,17 +68,13 @@ std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::share
 			return distanceA < distanceB;
 		});
 
+	// Even if the projectile is penetrating, it can only hit one target at a time
 	std::vector<EntityCollision> collisions;
-	for (auto& t : culledTargets)
+	if (culledTargets.size() && culledTargets.front()->DetectCollision(this->round->getGlobalBounds()))
 	{
-		if (t->DetectCollision(this->round->getGlobalBounds()))
-		{
-			collisions.push_back(EntityCollision(t, this->position));
-
-			if (!config.penetrating) {
-				this->spent = true;
-				break;
-			}
+		collisions.push_back(EntityCollision(culledTargets.front(), this->position));
+		if (!config.penetrating) {
+			this->spent = true;
 		}
 	}
 
