@@ -1,5 +1,7 @@
 #include "single_beam_weapon_component.h"
 
+#include "util/math_helpers.h"
+
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_system.h"
 #include "bullet/bullet.h"
@@ -14,8 +16,10 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 {
 	if (!beam)
 	{
+		auto theta = AngleConversion::ToRadians(0.0f);
+		sf::Vector2f velocity(config.speed * std::cos(theta), config.speed * std::sin(theta));
 		beam = std::dynamic_pointer_cast<Beam>(
-			this->bulletSystem->FireBullet(factory, position, { config.speed, 0 }, config));
+			this->bulletSystem->FireBullet(factory, position, velocity, config));
 	}
 
 	this->accumulator += this->clock.restart().asSeconds();

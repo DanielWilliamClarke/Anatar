@@ -1,5 +1,7 @@
 #include "beam.h"
 
+#include "util/math_helpers.h"
+
 #include "entity/entity.h"
 #include "util/i_glow_shader_renderer.h"
 #include "components/hitbox/i_hitbox_component.h"
@@ -16,6 +18,7 @@ Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf
 	this->round->setFillColor(config.color);
 	auto roundBounds = this->round->getLocalBounds();
 	this->round->setOrigin(0, roundBounds.height / 2.0f);
+	this->round->setRotation(AngleConversion::ToDegrees(atan2(this->velocity.y, this->velocity.x)));
 }
 
 void Beam::Update(float dt, float worldSpeed)

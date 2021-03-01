@@ -1,9 +1,8 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
+#include "player.h"
 
 #include <iostream>
 
-#include "player.h"
+#include "util/math_helpers.h"
 
 #include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"
@@ -64,8 +63,7 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 	{
 		const auto y = lastPosition.y - position.y;
 		const auto x = lastPosition.x - position.x;
-		const auto angle = std::floor(std::atan2(y, x) * (180.0 / M_PI));
-
+		const auto angle = std::floor(AngleConversion::ToDegrees(atan2(y, x)));
 
 		if (angle == 0 || angle == 180)
 		{

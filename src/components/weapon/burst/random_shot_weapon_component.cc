@@ -1,8 +1,6 @@
 #include "random_shot_weapon_component.h"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <math.h>
+#include "util/math_helpers.h"
 
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_factory.h"
@@ -16,7 +14,7 @@ void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 {
 	for (float i = 0; i < numBullets; i++)
 	{
-		auto theta = randSource->Generate(0, 360) * ((float)M_PI / 180.0f);
+		auto theta = AngleConversion::ToRadians(randSource->Generate(0, 360));
 		auto speed = config.speed * randSource->Generate(50, 250) / 100;
 		sf::Vector2f arcVelocity(speed * std::cos(theta), speed * std::sin(theta));
 		this->bulletSystem->FireBullet(factory, position, arcVelocity, config);

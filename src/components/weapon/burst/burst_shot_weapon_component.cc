@@ -1,15 +1,13 @@
 #include "burst_shot_weapon_component.h"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <math.h>
+#include "util/math_helpers.h"
 
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
 
 BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay, float arcAngle, float numBullets)
-	: bulletSystem(bulletSystem), factory(factory), arcAngle(arcAngle * ((float)M_PI / 180.0f)), delay(delay), numBullets(numBullets), accumulator(0.0f)
+	: bulletSystem(bulletSystem), factory(factory), arcAngle(AngleConversion::ToRadians(arcAngle)), delay(delay), numBullets(numBullets), accumulator(0.0f)
 {}
 
 void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
