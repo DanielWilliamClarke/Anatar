@@ -16,9 +16,10 @@
 
 #include "bullet/types/projectile_factory.h"
 #include "bullet/types/beam_factory.h"
+#include "util/ray_caster.h"
 
 PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds)
-	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds)
+	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds), rayCaster(std::make_shared<RayCaster>())
 {}
 
 EntityManifest PlayerBuilder::Build()
@@ -44,10 +45,10 @@ void PlayerBuilder::BuildShip()
 		spriteFrameSize.y / 2);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
+	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
 
-	auto beamFactory = std::make_shared<BeamFactory>(this->bounds, 0.5f);
+	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
 	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 3.0f, 1.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
@@ -92,7 +93,7 @@ void PlayerBuilder::BuildExhaust()
 	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
+	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Green);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(sf::Vector2f(-10.0, shipSpriteOrigin.y + 2));
 	auto weaponComponent = std::make_shared<InertWeaponComponent>();
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
@@ -129,7 +130,7 @@ void PlayerBuilder::BuildTurret()
 	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Blue);
+	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 50.0f, 100.0f);
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto weaponComponent = std::make_shared<SingleShotWeaponComponent>(bulletSystem, projectileFactory, 0.0f);
@@ -173,7 +174,7 @@ void PlayerBuilder::BuildGlowie()
 	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Blue);
+	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 75.0f, -100.0f);
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 10.0f, 360.0f, 50.0f);

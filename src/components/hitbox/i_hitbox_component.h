@@ -5,14 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-struct RayIntersection {
-	bool intersects;
-	sf::Vector2f point;
-
-	RayIntersection(bool intersects, sf::Vector2f point = sf::Vector2f())
-		: intersects(intersects), point(point)
-	{}
-};
+struct RayIntersection;
 
 class IHitboxComponent
 {
@@ -24,6 +17,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw(sf::RenderTarget& target) = 0;
 	virtual bool Intersects(const sf::FloatRect& hitbox) = 0;
+	virtual bool Contains(const sf::Vector2f& position) = 0;
 	virtual std::shared_ptr<RayIntersection> IntersectsWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const = 0;
 	virtual const bool IsRequired() const = 0;
 };

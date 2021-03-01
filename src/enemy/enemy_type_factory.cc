@@ -16,6 +16,7 @@
 #include "bullet/bullet.h"
 
 #include "entity/entity_object.h"
+#include <util/ray_caster.h>
 
 EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 	: config(config)
@@ -69,7 +70,8 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 		(float)textureSize.y);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
+	auto rayCaster = std::make_shared<RayCaster>();
+	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Red);
 	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
 

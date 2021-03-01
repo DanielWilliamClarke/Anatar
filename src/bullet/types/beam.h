@@ -6,10 +6,12 @@
 
 #include "bullet/bullet.h"
 
+class IRayCaster;
+
 class Beam : public Bullet
 {
 public:
-	Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate);
+	Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
 	virtual ~Beam() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;
@@ -19,6 +21,7 @@ public:
 	void Reignite();
 
 protected:
+	std::shared_ptr<IRayCaster> rayCaster;
 	std::shared_ptr<sf::RectangleShape> round;
 	std::shared_ptr<sf::Vector2f> collisionPosition;
 	sf::FloatRect bounds;

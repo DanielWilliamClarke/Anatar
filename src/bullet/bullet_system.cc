@@ -21,25 +21,27 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets)
 {
 	// Update and perform collision detection
-	for (auto&& b : this->bullets)
+	for (auto& b : this->bullets)
 	{
-		auto collisions = b->DetectCollisions(collisionTargets);
+		b->Update(dt, worldSpeed);
 
-		auto damage = b->GetDamage();
-		if (damage > 0.0f)
+		if (collisionTargets.size())
 		{
-			for (auto& c : collisions)
+			auto collisions = b->DetectCollisions(collisionTargets);
+			auto damage = b->GetDamage();
+			if (damage > 0.0f)
 			{
-				// update target
-				c.target->TakeDamage(damage, c.point);
-				if (c.target->HasDied() && b->GetOwner())
+				for (auto& c : collisions)
 				{
-					b->GetOwner()->RegisterKill(damage);
+					// update target
+					c.target->TakeDamage(damage, c.point);
+					if (c.target->HasDied() && b->GetOwner())
+					{
+						b->GetOwner()->RegisterKill(damage);
+					}
 				}
 			}
 		}
-
-		b->Update(dt, worldSpeed);
 	}
 
 	this->bullets.erase(

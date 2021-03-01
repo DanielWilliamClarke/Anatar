@@ -1,3 +1,7 @@
+#ifndef MATH_HELPERS_H
+#define MATH_HELPERS_H
+#pragma once
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <math.h>
@@ -15,4 +19,26 @@ public:
 		return degrees * ((float)M_PI / 180.0f);
 	}
 };
+
+class Dimensions
+{
+public:
+	static float DistanceBetween(sf::Vector2f start, sf::Vector2f end)
+	{
+		auto dx = start.x - end.x;
+		auto dy = start.y - end.y;
+		return sqrtf(dx * dx + dy * dy);
+	}
+
+	static float ManhattanDistance(sf::Vector2f start, sf::Vector2f end)
+	{
+		auto dx = abs(start.x - end.x);
+		auto dy = abs(start.y - end.y);
+		return dx + dy;
+	}
+};
+
+#endif // MATH_HELPERS_H
+
+
 

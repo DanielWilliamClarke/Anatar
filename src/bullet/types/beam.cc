@@ -4,10 +4,11 @@
 
 #include "entity/entity.h"
 #include "util/i_glow_shader_renderer.h"
-#include "components/hitbox/i_hitbox_component.h"
+#include "util/i_ray_caster.h"
 
-Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, sf::FloatRect bounds, float damageRate)
+Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
 	: Bullet(position, velocity, config),
+	rayCaster(rayCaster),
 	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 5.0f))),
 	collisionPosition(std::shared_ptr<sf::Vector2f>(nullptr)),
 	bounds(bounds),
@@ -27,10 +28,13 @@ void Beam::Update(float dt, float worldSpeed)
 	this->position = this->config.owner->GetPosition();
 	this->round->setPosition(this->position);
 
-	auto beamEnd = sf::Vector2f(collisionPosition ? collisionPosition->x : this->bounds.width, this->position.y);
+	auto beamEnd = collisionPosition ?
+		*collisionPosition :
+		this->rayCaster->RayBoxIntersects(this->position, this->velocity, bounds)->point;
+
 	this->round->setSize(
 		sf::Vector2f(
-			this->config.owner->DistanceTo(beamEnd),
+			Dimensions::DistanceBetween(this->config.owner->GetPosition(), beamEnd),
 			this->round->getSize().y));
 
 	config.damage = 0;
@@ -89,8 +93,8 @@ std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<
 
 	std::sort(collisions.begin(), collisions.end(),
 		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
-			auto distanceA = collisionA.target->DistanceTo(this->position);
-			auto distanceB = collisionB.target->DistanceTo(this->position);
+			auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
+			auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
 			return distanceA < distanceB;
 		});
 

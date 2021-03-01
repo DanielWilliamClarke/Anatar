@@ -7,7 +7,8 @@
 #include "entity_update.h"
 #include "components/movement/i_global_movement_component.h"
 #include "components/attributes/i_attribute_component.h"
-#include "components/hitbox/i_hitbox_component.h"
+#include "util/i_ray_caster.h"
+#include "util/math_helpers.h"
 
 Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
@@ -50,11 +51,11 @@ void Entity::DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) c
 	}
 }
 
-bool Entity::DetectCollision(sf::FloatRect hitbox) const
+bool Entity::DetectCollision(sf::Vector2f& position) const
 {
 	for (auto& o : objects)
 	{
-		if (o.second->DetectCollision(hitbox))
+		if (o.second->DetectCollision(position))
 		{
 			return true;
 		}
@@ -91,14 +92,6 @@ bool Entity::HasDied() const
 void Entity::RegisterKill(float score)
 {
 	this->attributeComponent->RegisterKill(score);
-}
-
-float Entity::DistanceTo(sf::Vector2f point) const
-{
-	auto position = this->GetPosition();
-	auto dx = position.x - point.x;
-	auto dy = position.y - point.y;
-	return sqrtf(dx * dx + dy * dy);
 }
 
 sf::Vector2f Entity::GetPosition() const

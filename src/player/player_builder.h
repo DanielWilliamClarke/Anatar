@@ -10,6 +10,7 @@
 class EntityObject;
 class ITextureAtlas;
 class IBulletSystem;
+class RayCaster;
 
 class PlayerBuilder : public IEntityObjectBuilder, public Player
 {
@@ -25,6 +26,7 @@ private:
 
 	EntityManifest manifest;
 
+	std::shared_ptr<RayCaster> rayCaster;
 	std::shared_ptr<ITextureAtlas> textureAtlas;
 	std::shared_ptr<IBulletSystem> bulletSystem;
 

@@ -1,8 +1,10 @@
 #include "projectile.h"
 
+#include "util/math_helpers.h"
+
 #include "util/i_glow_shader_renderer.h"
 #include "entity/entity.h"
-#include "components/hitbox/i_hitbox_component.h"
+#include "util/i_ray_caster.h"
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
 	: Bullet(position, velocity, config),
@@ -63,14 +65,14 @@ std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::share
 	// sort elements closest to furthest
 	std::sort(culledTargets.begin(), culledTargets.end(),
 		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
-			auto distanceA = collisionA.target->DistanceTo(this->position);
-			auto distanceB = collisionB.target->DistanceTo(this->position);
+			auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
+			auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
 			return distanceA < distanceB;
 		});
 
 	// Even if the projectile is penetrating, it can only hit one target at a time
 	std::vector<EntityCollision> collisions;
-	if (culledTargets.size() && culledTargets.front()->DetectCollision(this->round->getGlobalBounds()))
+	if (culledTargets.size() && culledTargets.front()->DetectCollision(this->position))
 	{
 		collisions.push_back(EntityCollision(culledTargets.front(), this->position));
 		if (!config.penetrating) {
