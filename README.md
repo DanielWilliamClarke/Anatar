@@ -60,7 +60,7 @@ then build
 - [ ] Limpets: like helpers but add debuffs or damage over time.
   - Can be encountered mid level, will attach themselves to the player
 - [ ] Intelligent enemies: track and shoot towards player
-- [ ] Bosses, multiple firing patterns, interesting mechanics, weak points?
+- [ ] Bosses, multiple firing patterns, interesting mechanics, weak points? youtube.com/watch?v=V4ctJETN-mg?
 - [ ] Enemy waves, Sqaudrons?
 - [ ] Android app?
 - [ ] Visualise weapon stats, as in weapon temp, weapon energy etc.
