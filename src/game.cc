@@ -228,13 +228,9 @@ void Game::Update()
 		auto enemyTargets = this->enemySystem->GetEnemies();
 
 		this->threadableWorkload
-			->Reserve(3)
-			->AddThread(
-				std::thread([&]() {	this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets); }))
-			->AddThread(
-				std::thread([&]() {	this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets); }))
-			->AddThread(
-				std::thread([&]() { this->debrisSystem->Update(dt, worldSpeed, std::vector<std::shared_ptr<Entity>>{});	}))
+			->AddTask([&]() { this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets); })
+			->AddTask([&]() { this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets); })
+			->AddTask([&]() { this->debrisSystem->Update(dt, worldSpeed, std::vector<std::shared_ptr<Entity>>{}); })
 			->Join();
 
 		this->fps->Update();

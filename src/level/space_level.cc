@@ -26,16 +26,15 @@ SpaceLevel::SpaceLevel(std::shared_ptr<IThreadedWorkload> threadableWorkload, st
 void SpaceLevel::Update(float worldSpeed, float dt)
 {
 	auto chunkSize = stars.size() / 2;
-	this->threadableWorkload->Reserve(chunkSize);
 	for (size_t index = 0; index < stars.size(); index += chunkSize)
 	{
 		auto start = stars.begin() + index;
 		auto end = stars.begin() + std::min(stars.size(), index + chunkSize);
 		this->threadableWorkload
-			->AddThread(std::thread(
-				[&](StarIter start, StarIter end, int index) {
+			->AddTask(
+				[this, start, end, index, worldSpeed, dt]() {
 					this->UpdateStars(start, end, index, worldSpeed, dt);
-				}, start, end, index));
+				});
 	}
 	this->threadableWorkload->Join();
 }
@@ -82,7 +81,7 @@ void SpaceLevel::UpdateStars(StarIter start, StarIter end, int index, float worl
 		{
 			paralaxFactor = 0.5f;
 			s->setFillColor(sf::Color(255, 0, 0));
-			s->setRadius(0.7f);
+			s->setRadius(2.0f);
 		}
 
 		starPosition.x -= worldSpeed * dt * paralaxFactor;

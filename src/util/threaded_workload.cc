@@ -1,24 +1,33 @@
 #include "threaded_workload.h"
 
-std::shared_ptr<IThreadedWorkload> ThreadedWorkload::Reserve(size_t expectedThreads)
+std::shared_ptr<IThreadedWorkload> ThreadedWorkload::AddTask(std::function<void(void)> task)
 {
-	this->threads.reserve(expectedThreads);
-	return shared_from_this();
-}
-
-std::shared_ptr<IThreadedWorkload> ThreadedWorkload::AddThread(std::thread& thread)
-{
-	this->threads.emplace_back(std::move(thread));
+	this->tasks.push_back(task);
 	return shared_from_this();
 }
 
 void ThreadedWorkload::Join()
 {
-	for (auto& t : this->threads)
+	// If only one task is available just run it in the same thread
+	if (tasks.size() == 1) 
 	{
-		if (t.joinable()) {
-			t.join();
+		tasks.front()();
+	}
+	else if (tasks.size() > 1)
+	{
+		std::vector<std::thread> threads;
+		for (auto t : tasks)
+		{
+			threads.push_back(std::move(std::thread(t)));
+		}
+		for (auto& t : threads)
+		{
+			if (t.joinable())
+			{
+				t.join();
+			}
 		}
 	}
-	this->threads.clear();
+
+	tasks.clear();
 }

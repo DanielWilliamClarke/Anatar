@@ -14,9 +14,9 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::vector<std:
 {
 	// sort elements closest to furthest
 	std::sort(targets.begin(), targets.end(),
-		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
-			auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
-			auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
+		[this](std::shared_ptr<Entity> entityA, std::shared_ptr<Entity> entityB) -> bool {
+			auto distanceA = Dimensions::ManhattanDistance(entityA->GetPosition(), this->position);
+			auto distanceB = Dimensions::ManhattanDistance(entityB->GetPosition(), this->position);
 			return distanceA < distanceB;
 		});
 
@@ -26,7 +26,7 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::vector<std:
 		auto direction = targets.front()->GetPosition() - this->position;
 		auto magnitude = Dimensions::Magnitude(direction);
 		auto normalisedDirection = Dimensions::Normalise(direction);
-		this->velocity += normalisedDirection / (0.1f * magnitude);
+		this->velocity += normalisedDirection / (0.2f * magnitude);
 	}
 
 	std::vector<std::shared_ptr<Entity>> culledTargets;

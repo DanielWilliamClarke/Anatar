@@ -11,11 +11,10 @@ class ThreadedWorkload : public IThreadedWorkload
 public:
 	ThreadedWorkload() = default;
 	virtual ~ThreadedWorkload() = default;
-	virtual std::shared_ptr<IThreadedWorkload> Reserve(size_t expectedThreads) override;
-	virtual std::shared_ptr<IThreadedWorkload> AddThread(std::thread& thread) override;
+	virtual std::shared_ptr<IThreadedWorkload> AddTask(std::function<void(void)> task) override;
 	virtual void Join() override;
 private:
-	std::vector<std::thread> threads;
+	std::vector<std::function<void(void)>> tasks;
 };
 
 #endif // THREADED_WORKLOAD_H

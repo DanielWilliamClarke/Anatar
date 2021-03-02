@@ -14,8 +14,8 @@ void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 {
 	for (float i = 0; i < numBullets; i++)
 	{
-		auto theta = AngleConversion::ToRadians(randSource->Generate(0, 360));
-		auto speed = config.speed * randSource->Generate(50, 250) / 100;
+		auto theta = AngleConversion::ToRadians((float)randSource->Generate(0, 360));
+		auto speed = config.speed * (float)randSource->Generate(50, 250) / 100;
 		sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
 		auto traj = BulletTrajectory(position, arcVelocity, speed);
 		this->bulletSystem->FireBullet(factory, traj, config);

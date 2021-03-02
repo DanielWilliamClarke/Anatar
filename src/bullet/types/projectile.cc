@@ -64,9 +64,9 @@ std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::share
 
 	// sort elements closest to furthest
 	std::sort(culledTargets.begin(), culledTargets.end(),
-		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
-			auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
-			auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
+		[this](std::shared_ptr<Entity> entityA, std::shared_ptr<Entity> entityB) -> bool {
+			auto distanceA = Dimensions::ManhattanDistance(entityA->GetPosition(), this->position);
+			auto distanceB = Dimensions::ManhattanDistance(entityB->GetPosition(), this->position);
 			return distanceA < distanceB;
 		});
 

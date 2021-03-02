@@ -21,10 +21,11 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets)
+void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> collisionTargets)
 {
-	this->MultiThreadedUpdate(dt, worldSpeed, collisionTargets);
 	this->EraseBullets();
+
+	this->MultiThreadedUpdate(dt, worldSpeed, collisionTargets);
 }
 
 void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
@@ -41,26 +42,24 @@ void BulletSystem::AddBullet(std::shared_ptr<Bullet> bullet)
 	this->bullets.push_back(bullet);
 }
 
-void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& targets)
+void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> targets)
 {
+	std::unique_lock<std::mutex> lock(this->mutex);
 	auto chunks = ArrayUtils::Chunk<
 		std::vector<std::shared_ptr<Bullet>>,
 		std::vector<std::vector<std::shared_ptr<Bullet>>>>
-		(this->bullets, 10);
+		(this->bullets, 50);
+	lock.unlock();
 
-	this->threadableWorkload->Reserve(chunks.size());
 	for (auto& chunk : chunks)
 	{
 		this->threadableWorkload
-			->AddThread(std::thread(
-				[&](std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>> targets) {
-					this->UpdateBullets(chunk, targets, dt, worldSpeed);
-				}, chunk, targets));
+			->AddTask([&]() { this->UpdateBullets(chunk, targets, dt, worldSpeed); });
 	}
 	this->threadableWorkload->Join();
 }
 
-void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>>& targets, float& dt, float& worldSpeed) const
+void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>> targets, float& dt, float& worldSpeed) const
 {
 	for (auto& b : bullets)
 	{
@@ -68,10 +67,7 @@ void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, 
 
 		if (targets.size())
 		{
-			//// Here we need to create a copy as each bullet may sort the targets
-			std::vector<std::shared_ptr<Entity>> clonedTargets;
-			std::copy(targets.begin(), targets.end(), std::back_inserter(clonedTargets));
-			auto collisions = b->DetectCollisions(clonedTargets);
+			auto collisions = b->DetectCollisions(targets);
 
 			auto damage = b->GetDamage();
 			if (damage > 0.0f)
