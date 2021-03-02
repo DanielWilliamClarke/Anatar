@@ -32,7 +32,7 @@ std::shared_ptr<RayIntersection> RayCaster::RayBoxIntersects(const sf::Vector2f&
 		[&origin](Line lineA, Line lineB) -> bool {
 			// Here I want to be able to mesaure distance between the origin and the center of each line
 			auto distanceA = Dimensions::ManhattanDistance(lineA.second - lineA.first, origin);
-			auto distanceB = Dimensions::ManhattanDistance(lineA.second - lineB.first, origin);
+			auto distanceB = Dimensions::ManhattanDistance(lineB.second - lineB.first, origin);
 			return distanceA < distanceB;
 		});
 
