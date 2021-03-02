@@ -29,6 +29,17 @@ struct BulletConfig
 	{}
 };
 
+struct BulletTrajectory
+{
+	sf::Vector2f position;
+	sf::Vector2f velocity;
+	float speed;
+
+	BulletTrajectory(sf::Vector2f position, sf::Vector2f velocity, float speed)
+		: position(position), velocity(velocity), speed(speed)
+	{}
+};
+
 struct EntityCollision {
 	std::shared_ptr<Entity> target;
 	sf::Vector2f point;
@@ -41,7 +52,7 @@ struct EntityCollision {
 class Bullet
 {
 public:
-	Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config);
+	Bullet(BulletTrajectory& trajectory, BulletConfig config);
 	virtual ~Bullet() = default;
 
 	virtual void Update(float dt, float worldSpeed) = 0;
@@ -60,6 +71,7 @@ protected:
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;
+	float speed;
 	bool spent; // used in hit detection
 
 	sf::Clock clock;

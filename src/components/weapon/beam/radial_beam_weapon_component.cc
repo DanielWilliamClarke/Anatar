@@ -26,11 +26,13 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		float thetaStart = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
 		float thetaEnd = thetaStart + arcAngle;
 
-		for (float theta = thetaStart; theta < thetaEnd; theta += arcAngle / numBeams)
+		for (float theta = thetaStart; theta <= thetaEnd; theta += arcAngle / (numBeams - 1.0f))
 		{
-			sf::Vector2f arcVelocity(config.speed * std::cos(theta), config.speed * std::sin(theta));
+			sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
+			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
+
 			auto beam = std::dynamic_pointer_cast<Beam>(
-				this->bulletSystem->FireBullet(factory, position, -arcVelocity, config));
+				this->bulletSystem->FireBullet(factory, traj, config));
 
 			beams.push_back(beam);
 		}

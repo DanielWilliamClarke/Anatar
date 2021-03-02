@@ -6,6 +6,7 @@
 
 class Bullet;
 struct BulletConfig;
+struct BulletTrajectory;
 class IBulletFactory;
 
 class IBulletSystem
@@ -14,7 +15,7 @@ public:
 	IBulletSystem() = default;
 	virtual ~IBulletSystem() = default;
 
-	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) = 0;
+	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) = 0;
 };
 
 #endif // I_BULLET_SYSTEM_H

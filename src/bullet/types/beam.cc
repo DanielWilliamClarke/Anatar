@@ -6,8 +6,8 @@
 #include "util/i_glow_shader_renderer.h"
 #include "util/i_ray_caster.h"
 
-Beam::Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
-	: Bullet(position, velocity, config),
+Beam::Beam(BulletTrajectory& trajectory, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
+	: Bullet(trajectory, config),
 	rayCaster(rayCaster),
 	round(std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 5.0f))),
 	collisionPosition(std::shared_ptr<sf::Vector2f>(nullptr)),

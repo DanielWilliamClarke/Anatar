@@ -6,8 +6,8 @@
 #include "entity/entity.h"
 #include "util/i_ray_caster.h"
 
-Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
-	: Bullet(position, velocity, config),
+Projectile::Projectile(BulletTrajectory& trajectory, BulletConfig config)
+	: Bullet(trajectory, config),
 	round(config.shapeBuilder())
 {
 	this->round->setFillColor(config.color);
@@ -18,7 +18,7 @@ Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfi
 void Projectile::Update(float dt, float worldSpeed)
 {
 	this->lastPosition = this->position;
-	this->position += (this->velocity + sf::Vector2f(worldSpeed, 0.0f)) * dt;
+	this->position += ((this->velocity * this->speed) + sf::Vector2f(worldSpeed, 0.0f)) * dt;
 	this->round->setPosition(this->position);
 
 	if (config.rotation)

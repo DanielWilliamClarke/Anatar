@@ -23,8 +23,9 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 
 		for (float theta = thetaStart; theta < thetaEnd; theta += arcAngle / numBullets)
 		{
-			sf::Vector2f arcVelocity(config.speed * std::cos(theta), config.speed * std::sin(theta));
-			this->bulletSystem->FireBullet(factory, position, -arcVelocity, config);
+			sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
+			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
+			this->bulletSystem->FireBullet(factory, traj, config);
 		}
 	}
 }

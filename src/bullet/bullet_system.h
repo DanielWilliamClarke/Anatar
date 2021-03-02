@@ -11,6 +11,7 @@
 
 class Bullet;
 struct BulletConfig;
+struct BulletTrajectory;
 class Entity;
 class IGlowShaderRenderer;
 class IThreadedWorkload;
@@ -23,7 +24,7 @@ public:
 	BulletSystem(std::shared_ptr<IThreadedWorkload> threadableWorkload, sf::FloatRect bounds, int affinity);
 	virtual ~BulletSystem() = default;
 
-	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config) override;
+	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
 	void Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 

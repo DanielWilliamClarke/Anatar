@@ -13,10 +13,10 @@ BulletSystem::BulletSystem(std::shared_ptr<IThreadedWorkload> threadableWorkload
 	: threadableWorkload(threadableWorkload), bounds(bounds), affinity(affinity)
 {}
 
-std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, sf::Vector2f position, sf::Vector2f velocity, BulletConfig& config)
+std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, BulletConfig& config)
 {
-	auto alignedVelocity = sf::Vector2f(velocity.x * (float)affinity, velocity.y);
-	auto bullet = factory->Construct(position, alignedVelocity, config);
+	trajectory.velocity.x *= (float)affinity;
+	auto bullet = factory->Construct(trajectory, config);
 	this->AddBullet(bullet);
 	return bullet;
 }

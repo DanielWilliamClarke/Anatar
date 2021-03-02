@@ -17,9 +17,10 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	if (!beam)
 	{
 		auto theta = AngleConversion::ToRadians(0.0f);
-		sf::Vector2f velocity(config.speed * std::cos(theta), config.speed * std::sin(theta));
+		sf::Vector2f velocity(std::cos(theta),std::sin(theta));
+		auto traj = BulletTrajectory(position, velocity, config.speed);
 		beam = std::dynamic_pointer_cast<Beam>(
-			this->bulletSystem->FireBullet(factory, position, velocity, config));
+			this->bulletSystem->FireBullet(factory, traj, config));
 	}
 
 	this->accumulator += this->clock.restart().asSeconds();

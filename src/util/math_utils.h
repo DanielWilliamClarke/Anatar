@@ -36,6 +36,16 @@ public:
 		auto dy = abs(start.y - end.y);
 		return dx + dy;
 	}
+
+	static float Magnitude(sf::Vector2f point)
+	{
+		return sqrtf((point.x * point.x) + (point.y * point.y));
+	}
+
+	static sf::Vector2f Normalise(sf::Vector2f point)
+	{
+		return point / Magnitude(point);
+	}
 };
 
 #endif // MATH_HELPERS_H

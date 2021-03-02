@@ -14,8 +14,8 @@ public:
 	ProjectileFactory() {}
 	virtual ~ProjectileFactory() = default;
 
-	virtual std::shared_ptr<Bullet> Construct(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config) const override {
-		return std::make_shared<Projectile>(position, velocity, config);
+	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig config) const override {
+		return std::make_shared<Projectile>(trajectory, config);
 	};
 };
 

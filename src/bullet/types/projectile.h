@@ -9,14 +9,14 @@
 class Projectile : public Bullet
 {
 public:
-	Projectile(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config);
+	Projectile(BulletTrajectory& trajectory, BulletConfig config);
 	virtual ~Projectile() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
 	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) override;
 
-private:
+protected:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 };
 

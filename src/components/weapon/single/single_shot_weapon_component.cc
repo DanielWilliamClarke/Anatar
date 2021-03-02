@@ -15,6 +15,7 @@ void SingleShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	if (this->accumulator >= this->delay)
 	{
 		this->accumulator = 0;
-		this->bulletSystem->FireBullet(factory, position, { config.speed, 0 }, config);
+		auto traj = BulletTrajectory(position, { 1, 0 }, config.speed);
+		this->bulletSystem->FireBullet(factory, traj, config);
 	}
 }

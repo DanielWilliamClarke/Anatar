@@ -5,10 +5,11 @@
 #include <math.h>
 #include <iostream>
 
-Bullet::Bullet(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config)
-	: position(position),
-	lastPosition(position),
-	velocity(velocity),
+Bullet::Bullet(BulletTrajectory& trajectory, BulletConfig config)
+	: position(trajectory.position),
+	lastPosition(trajectory.position),
+	velocity(trajectory.velocity),
+	speed(trajectory.speed),
 	config(config),
 	spent(false),
 	accumulator(0.0f),

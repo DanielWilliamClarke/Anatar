@@ -11,7 +11,7 @@ class IRayCaster;
 class Beam : public Bullet
 {
 public:
-	Beam(sf::Vector2f position, sf::Vector2f velocity, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
+	Beam(BulletTrajectory& trajectory, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
 	virtual ~Beam() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;
