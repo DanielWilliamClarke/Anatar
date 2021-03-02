@@ -24,9 +24,9 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::vector<std:
 	if (targets.size()) 
 	{
 		auto direction = targets.front()->GetPosition() - this->position;
-		auto magnitude = 0.05f * Dimensions::Magnitude(direction);
+		auto magnitude = Dimensions::Magnitude(direction);
 		auto normalisedDirection = Dimensions::Normalise(direction);
-		this->velocity += normalisedDirection / magnitude;
+		this->velocity += normalisedDirection / (0.1f * magnitude);
 	}
 
 	std::vector<std::shared_ptr<Entity>> culledTargets;

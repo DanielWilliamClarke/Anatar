@@ -25,13 +25,13 @@ public:
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets);
+	void Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& targets);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
 
 	void AddBullet(std::shared_ptr<Bullet> bullet);
-	void MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets);
+	void MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& targets);
 	void UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>>& collisionTargets, float& dt, float& worldSpeed) const;
 	void EraseBullets();
 

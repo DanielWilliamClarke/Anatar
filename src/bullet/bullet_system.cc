@@ -41,7 +41,7 @@ void BulletSystem::AddBullet(std::shared_ptr<Bullet> bullet)
 	this->bullets.push_back(bullet);
 }
 
-void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& collisionTargets)
+void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>>& targets)
 {
 	auto chunks = ArrayUtils::Chunk<
 		std::vector<std::shared_ptr<Bullet>>,
@@ -53,22 +53,26 @@ void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<s
 	{
 		this->threadableWorkload
 			->AddThread(std::thread(
-				[&](std::vector<std::shared_ptr<Bullet>>& bullets) {
-					this->UpdateBullets(chunk, collisionTargets, dt, worldSpeed);
-				}, chunk));
+				[&](std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>> targets) {
+					this->UpdateBullets(chunk, targets, dt, worldSpeed);
+				}, chunk, targets));
 	}
 	this->threadableWorkload->Join();
 }
 
-void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>>& collisionTargets, float& dt, float& worldSpeed) const
+void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>>& targets, float& dt, float& worldSpeed) const
 {
 	for (auto& b : bullets)
 	{
 		b->Update(dt, worldSpeed);
 
-		if (collisionTargets.size())
+		if (targets.size())
 		{
-			auto collisions = b->DetectCollisions(collisionTargets);
+			//// Here we need to create a copy as each bullet may sort the targets
+			std::vector<std::shared_ptr<Entity>> clonedTargets;
+			std::copy(targets.begin(), targets.end(), std::back_inserter(clonedTargets));
+			auto collisions = b->DetectCollisions(clonedTargets);
+
 			auto damage = b->GetDamage();
 			if (damage > 0.0f)
 			{
