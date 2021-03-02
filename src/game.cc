@@ -100,7 +100,7 @@ void Game::InitLevel()
 {
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	this->level = std::make_shared<SpaceLevel>(randGenerator, this->window->getView().getSize());
+	this->level = std::make_shared<SpaceLevel>(std::make_shared<ThreadedWorkload>(), randGenerator, this->window->getView().getSize());
 }
 
 void Game::InitBulletSystem()
