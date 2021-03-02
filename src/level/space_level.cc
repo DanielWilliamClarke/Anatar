@@ -5,8 +5,6 @@
 #include "util/i_glow_shader_renderer.h"
 #include "util/i_threaded_workload.h"
 
-
-
 SpaceLevel::SpaceLevel(std::shared_ptr<IThreadedWorkload> threadableWorkload, std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
 	: threadableWorkload(threadableWorkload), randSource(randSource), viewSize(viewSize), totalStars(200)
 {
