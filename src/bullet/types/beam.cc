@@ -1,6 +1,6 @@
 #include "beam.h"
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 #include "entity/entity.h"
 #include "util/i_glow_shader_renderer.h"

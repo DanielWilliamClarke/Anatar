@@ -18,6 +18,7 @@
 #include "enemy/enemy_system.h"
 #include "enemy/enemy_type_factory.h"
 
+#include "util/threaded_workload.h"
 #include "util/random_number_mersenne_source.cc"
 #include "level/space_level.h"
 
@@ -69,6 +70,8 @@ void Game::InitWindow()
 		viewSize.y);
 
 	this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
+
+	this->threadableWorkload = std::make_shared<ThreadedWorkload>();
 }
 
 void Game::InitFps()
@@ -102,9 +105,9 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
-	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
-	this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->enemyBulletSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::LEFT);
+	this->playerBulletSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::RIGHT);
+	this->debrisSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::LEFT);
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
@@ -212,6 +215,7 @@ void Game::Update()
 	auto in = this->playerInput->SampleInput();
 
 	this->accumulator += this->clock->restart().asSeconds();
+
 	while (this->accumulator >= this->dt)
 	{
 		this->level->Update(worldSpeed, dt);
@@ -222,11 +226,16 @@ void Game::Update()
 
 		this->enemySystem->Update(dt);
 		auto enemyTargets = this->enemySystem->GetEnemies();
-		this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets);
-		this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets);
 
-		std::vector<std::shared_ptr<Entity>> debrisTargets;
-		this->debrisSystem->Update(dt, worldSpeed, debrisTargets);
+		this->threadableWorkload
+			->Reserve(3)
+			->AddThread(
+				std::thread([&]() {	this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets); }))
+			->AddThread(
+				std::thread([&]() {	this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets); }))
+			->AddThread(
+				std::thread([&]() { this->debrisSystem->Update(dt, worldSpeed, std::vector<std::shared_ptr<Entity>>{});	}))
+			->Join();
 
 		this->fps->Update();
 		this->accumulator -= this->dt;

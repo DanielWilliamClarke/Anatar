@@ -1,6 +1,6 @@
 #include "radial_beam_weapon_component.h"
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_system.h"

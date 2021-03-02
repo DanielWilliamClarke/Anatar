@@ -177,7 +177,7 @@ void PlayerBuilder::BuildGlowie()
 	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 75.0f, -100.0f);
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 10.0f, 360.0f, 50.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 10.0f, 90.0f, 10.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto glowie = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 	auto sprite = glowie->GetSprite();

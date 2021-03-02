@@ -1,6 +1,6 @@
 #include "ray_caster.h"
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 typedef std::pair<sf::Vector2f, sf::Vector2f> Line;
 

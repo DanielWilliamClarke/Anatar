@@ -10,6 +10,7 @@
 class Fps;
 class TextureAtlas;
 class GlowShaderRenderer;
+class IThreadedWorkload;
 
 class SpaceLevel;
 class Entity;
@@ -44,6 +45,8 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<GlowShaderRenderer> glowRenderer;
 
+	std::shared_ptr<IThreadedWorkload> threadableWorkload;
+
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;
 	std::shared_ptr<SpaceLevel> level;
@@ -62,6 +65,7 @@ private:
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;
+
 
 	float dt;
 	float accumulator;

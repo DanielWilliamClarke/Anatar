@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 #include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"

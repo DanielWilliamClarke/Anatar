@@ -1,6 +1,6 @@
 #include "projectile.h"
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 #include "util/i_glow_shader_renderer.h"
 #include "entity/entity.h"

@@ -1,6 +1,6 @@
 #include "orbital_movement_component.h"
 
-#include "util/math_helpers.h"
+#include "util/math_utils.h"
 
 OrbitalMovementComponent::OrbitalMovementComponent(sf::Vector2f offset, float radius, float speed)
 	: OffSetMovementComponent{ offset }, radius(radius), speed(speed), angle(0.0f)
