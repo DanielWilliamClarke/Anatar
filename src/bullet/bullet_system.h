@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <list>
+#include <thread>
 
 #include "i_bullet_system.h"
 
@@ -26,9 +26,15 @@ public:
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
+
+	void UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>>& collisionTargets, float& dt, float& worldSpeed);
+
+private:
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	sf::FloatRect bounds;
 	int affinity;
+
+	std::vector<std::thread> updateThreads;
 };
 
 #endif // BULLET_SYSTEM_H
