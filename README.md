@@ -47,7 +47,7 @@ then build
 - [x] Skin player and enemies using previous assets before new ones are made
 - [x] Better weapons: (now able to add new weapon types easily)
   - [x] beam weapons
-  - [ ] homing projectiles
+  - [x] homing projectiles
   - [ ] mines.
   - [ ] barriers
   - [ ] bolas's
