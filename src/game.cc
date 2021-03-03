@@ -113,7 +113,7 @@ void Game::InitBulletSystem()
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 25.0f);
+	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 1.0f);
 }
 
 void Game::InitPlayer()
@@ -128,14 +128,14 @@ void Game::InitPlayer()
 	auto playerDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
-			healthDamageColor, 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f),
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(10.0f, 3); },
+			healthDamageColor, 1.0f, 0.0f, .0f, false, 0.0f, 0.5f),
 		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.05f, 3); },
-			healthDamageColor, 200.0f, 0.0f, 100.0f, false, 0.0f, 0.3f),
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
+			healthDamageColor, 10.0f, 0.0f, 0.0f, false, 0.0f, 0.2f),
 		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(10.0f, 1.0f)); },
-			sheildDamageColor, 200.0f, 40.0f, 100.0f, false, 0.0f, 0.5f));
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(1.0f, 1.0f)); },
+			sheildDamageColor, 10.0f, 0.0f, 0.0f, false, 0.0f, 0.2f));
 
 	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, playerDamageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
 
@@ -155,11 +155,11 @@ void Game::InitEnemySystem()
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.5f, 3); },
-			healthDamageColor, 50.0f, 50.0f, 500.0f, false, 0.0f, 1.5f),
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(10.0f, 3); },
+			healthDamageColor, 1.0f, 10.0f, 0.0f, false, 0.0f, 0.5f),
 		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.05f, 3); },
-			healthDamageColor, 200.0f, 0.0f, 100.0f, false, 0.0f, 0.3f),
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
+			healthDamageColor, 10.0f, 10.0f, 0.0f, false, 0.0f, 0.2f),
 		nullptr);
 
 	this->enemySystem

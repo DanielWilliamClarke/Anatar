@@ -11,7 +11,7 @@ HealthAttributeComponent::HealthAttributeComponent(std::shared_ptr<DamageEffects
 
 void HealthAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoint)
 {
-	if (this->health < damage)
+	if (this->health <= damage)
 	{
 		this->health -= damage - (damage - this->health);
 		damageEffects->generator->Fire(impactPoint, *damageEffects->death);
