@@ -20,7 +20,15 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::vector<std:
 		auto direction = closest->GetPosition() - this->position;
 		auto magnitude = Dimensions::Magnitude(direction);
 		auto normalisedDirection = Dimensions::Normalise(direction);
-		this->velocity += normalisedDirection / (0.2f * magnitude);
+		this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
+
+		// Potential modes identified
+		// Evadable
+		//this->velocity += normalisedDirection / (0.2f * magnitude);
+		// Accurate
+		//this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
+		// Search and destroy
+		//this->velocity = Dimensions::Normalise(this->velocity + (direction / (0.2f * magnitude)));
 
 		if(closest->DetectCollision(this->position))
 		{
