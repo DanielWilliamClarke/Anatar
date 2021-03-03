@@ -91,12 +91,15 @@ std::vector<EntityCollision> Beam::DetectCollisions(std::vector<std::shared_ptr<
 		}
 	}
 
-	std::sort(collisions.begin(), collisions.end(),
-		[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
-			auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
-			auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
-			return distanceA < distanceB;
-		});
+	if (collisions.size() > 1) 
+	{
+		std::sort(collisions.begin(), collisions.end(),
+			[this](EntityCollision collisionA, EntityCollision collisionB) -> bool {
+				auto distanceA = Dimensions::ManhattanDistance(collisionA.target->GetPosition(), this->position);
+				auto distanceB = Dimensions::ManhattanDistance(collisionB.target->GetPosition(), this->position);
+				return distanceA < distanceB;
+			});
+	}
 
 	// Set collision point to hit the first entity if the beam cant penetrate
 	if (!config.penetrating && collisions.size())
@@ -111,4 +114,3 @@ void Beam::Reignite()
 {
 	this->accumulator = 0;
 }
-

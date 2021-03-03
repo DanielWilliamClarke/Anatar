@@ -12,38 +12,24 @@ HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig co
 
 std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::vector<std::shared_ptr<Entity>> targets)
 {
-	// sort elements closest to furthest
-	std::sort(targets.begin(), targets.end(),
-		[this](std::shared_ptr<Entity> entityA, std::shared_ptr<Entity> entityB) -> bool {
-			auto distanceA = Dimensions::ManhattanDistance(entityA->GetPosition(), this->position);
-			auto distanceB = Dimensions::ManhattanDistance(entityB->GetPosition(), this->position);
-			return distanceA < distanceB;
-		});
-
-	// Home in on closest target
-	if (targets.size()) 
+	std::vector<EntityCollision> collisions;
+	auto closest = this->FindClosest(targets);
+	if (closest)
 	{
-		auto direction = targets.front()->GetPosition() - this->position;
+		// tend towards closest target
+		auto direction = closest->GetPosition() - this->position;
 		auto magnitude = Dimensions::Magnitude(direction);
 		auto normalisedDirection = Dimensions::Normalise(direction);
 		this->velocity += normalisedDirection / (0.2f * magnitude);
-	}
 
-	std::vector<std::shared_ptr<Entity>> culledTargets;
-	std::copy_if(targets.begin(), targets.end(), std::back_inserter(culledTargets),
-		[this](std::shared_ptr<Entity> entity) -> bool {
-			return entity->DetectCollisionWithRay(this->position, this->velocity)->intersects;
-		});
+		if(closest->DetectCollision(this->position))
+		{
+			collisions.push_back(EntityCollision(closest, this->position));
 
-	std::vector<EntityCollision> collisions;
-	if (culledTargets.size() && culledTargets.front()->DetectCollision(this->position))
-	{
-		// Even if the projectile is penetrating, it can only hit one target at a time
-		collisions.push_back(EntityCollision(culledTargets.front(), this->position));
-		if (!config.penetrating) {
-			this->spent = true;
+			if (!config.penetrating) {
+				this->spent = true;
+			}
 		}
 	}
-
 	return collisions;
 }

@@ -32,7 +32,7 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 		auto end = stars.begin() + std::min(stars.size(), index + chunkSize);
 		this->threadableWorkload
 			->AddTask(
-				[this, start, end, index, worldSpeed, dt]() {
+				[this, start, end, index, &worldSpeed, &dt]() {
 					this->UpdateStars(start, end, index, worldSpeed, dt);
 				});
 	}
@@ -51,7 +51,7 @@ void SpaceLevel::Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const
 	}
 }
 
-void SpaceLevel::UpdateStars(StarIter start, StarIter end, int index, float worldSpeed, float dt) const
+void SpaceLevel::UpdateStars(StarIter start, StarIter end, size_t index, float worldSpeed, float dt) const
 {
 	auto totalStars = stars.size();
 	for (auto iter = start; iter != end; iter++)

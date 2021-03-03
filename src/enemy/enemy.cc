@@ -47,4 +47,16 @@ void Enemy::InitBullets()
 	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(self,
 		[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
 		sf::Color::Red, 150.0f, 10.0f, 350.0f, false, 10.0f, 3.0f);
-} 
+}
+
+sf::Vector2f Enemy::GetPosition() const
+{
+	auto enemy = this->GetObject("enemy")->GetSprite();
+	auto bounds = enemy->getLocalBounds();
+	auto position = enemy->getPosition();
+
+	position.x += bounds.width / 2;
+	position.y += bounds.height / 2;
+
+	return position;
+}

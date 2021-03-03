@@ -23,7 +23,7 @@ public:
 
 private:
 
-	void UpdateStars(StarIter start, StarIter end, int index,  float worldSpeed, float dt) const;
+	void UpdateStars(StarIter start, StarIter end, size_t index, float worldSpeed, float dt) const;
 
 private:
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;

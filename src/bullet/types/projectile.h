@@ -17,6 +17,11 @@ public:
 	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) override;
 
 protected:
+
+	std::shared_ptr<Entity> FindClosest(std::vector<std::shared_ptr<Entity>> targets) const;
+
+protected:
+
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 };
 

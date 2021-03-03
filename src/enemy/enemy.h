@@ -22,6 +22,7 @@ public:
 	virtual ~Enemy() = default;
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
+	virtual sf::Vector2f GetPosition() const;
 
 private:
 	void InitBullets();

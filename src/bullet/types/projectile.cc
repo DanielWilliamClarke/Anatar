@@ -62,23 +62,38 @@ std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::share
 			return entity->DetectCollisionWithRay(this->position, this->velocity)->intersects;
 		});
 
-	// sort elements closest to furthest
-	std::sort(culledTargets.begin(), culledTargets.end(),
-		[this](std::shared_ptr<Entity> entityA, std::shared_ptr<Entity> entityB) -> bool {
-			auto distanceA = Dimensions::ManhattanDistance(entityA->GetPosition(), this->position);
-			auto distanceB = Dimensions::ManhattanDistance(entityB->GetPosition(), this->position);
-			return distanceA < distanceB;
-		});
+	std::vector<EntityCollision> collisions;
+	auto closest = this->FindClosest(culledTargets);
 
 	// Even if the projectile is penetrating, it can only hit one target at a time
-	std::vector<EntityCollision> collisions;
-	if (culledTargets.size() && culledTargets.front()->DetectCollision(this->position))
+	if (closest && closest->DetectCollision(this->position))
 	{
-		collisions.push_back(EntityCollision(culledTargets.front(), this->position));
+		collisions.push_back(EntityCollision(closest, this->position));
+
 		if (!config.penetrating) {
 			this->spent = true;
 		}
 	}
 
 	return collisions;
+}
+
+std::shared_ptr<Entity> Projectile::FindClosest(std::vector<std::shared_ptr<Entity>> targets) const
+{
+	if (targets.size() == 1)
+	{
+		return targets.front();
+	}
+
+	std::shared_ptr<Entity> closest = nullptr;
+	float minDistance = std::numeric_limits<float>::infinity();
+	for (auto& t : targets)
+	{
+		auto distance = Dimensions::ManhattanDistance(this->position, t->GetPosition());
+		if (distance < minDistance) {
+			minDistance = distance;
+			closest = t;
+		}
+	}
+	return closest;
 }
