@@ -70,7 +70,7 @@ void EntityObject::Draw(sf::RenderTarget& target, sf::Vector2f interPosition) co
 	target.draw(*this->sprite);
 	if (this->hitboxComponent->IsRequired()) {
 		this->hitboxComponent->Update();
-		this->hitboxComponent->Draw(target);
+		//this->hitboxComponent->Draw(target);
 	}
 }
 
