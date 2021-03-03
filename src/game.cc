@@ -38,6 +38,7 @@
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
+#include <bullet/types/homing_projectile_factory.h>
 
 Game::Game()
 	: clock(std::make_shared<sf::Clock>()),
@@ -148,6 +149,7 @@ void Game::InitEnemySystem()
 	this->enemySystem = std::make_shared<EnemySystem>();
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
+	auto homingProjectileFactory = std::make_shared<HomingProjectileFactory>();
 
 	auto healthDamageColor = sf::Color(248, 99, 0, 255);
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
@@ -173,7 +175,7 @@ void Game::InitEnemySystem()
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 300.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
-				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 2.0f),
+				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(homingProjectileFactory), this->enemyBulletSystem, 2.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 40.0f, 0.0f))))
 
 		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
