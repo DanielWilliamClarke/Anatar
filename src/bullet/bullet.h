@@ -24,7 +24,16 @@ struct BulletConfig
 
 	float lifeTime;
 
-	BulletConfig(std::shared_ptr<Entity> owner, std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder, sf::Color color, float glowAttenuation, float rotation, float speed, bool penetrating, float damage, float lifeTime = 0.0f)
+	BulletConfig(
+		std::shared_ptr<Entity> owner,
+		std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder,
+		sf::Color color, 
+		float glowAttenuation,
+		float rotation, 
+		float speed, 
+		bool penetrating, 
+		float damage, 
+		float lifeTime = 0.0f)
 		: owner(owner), shapeBuilder(shapeBuilder), color(color), glowAttenuation(glowAttenuation), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage), lifeTime(lifeTime)
 	{}
 };
