@@ -128,11 +128,15 @@ void PlayerBuilder::BuildTurret()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
+	auto shipSprite = manifest.at("ship")->GetSprite();
+	auto bounds = shipSprite->getLocalBounds();
+	auto offset = shipSprite->getOrigin();
+	offset.x += bounds.width;
+	offset.y += bounds.height;
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
-	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 50.0f, 100.0f);
+	auto movementComponent = std::make_shared<OffSetMovementComponent>(offset);
 	auto projectileFactory = std::make_shared<HomingProjectileFactory>();
 	auto weaponComponent = std::make_shared<SingleShotWeaponComponent>(bulletSystem, projectileFactory, 0.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
@@ -143,7 +147,7 @@ void PlayerBuilder::BuildTurret()
 	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
 	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
 
-	auto spriteBounds = sprite->getLocalBounds();
+	//auto spriteBounds = sprite->getLocalBounds();
 	//turret->InitHitboxComponent(
 	//	spriteBounds.left - spriteFrameSize.x / 2,
 	//	spriteBounds.top - spriteFrameSize.y / 2,

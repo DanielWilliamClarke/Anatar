@@ -29,6 +29,8 @@ private:
 	sf::Clock spawnClock;
 	float accumulator;
 	float maxInterval;
+
+	float maxEnemies;
 };
 
 #endif //ENEMY_SYSTEM_H

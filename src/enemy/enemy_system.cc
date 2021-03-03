@@ -8,17 +8,16 @@
 #include "entity/entity.h"
 
 EnemySystem::EnemySystem()
-	: accumulator(0), maxInterval(0)
+	: accumulator(0), maxInterval(0), maxEnemies(8)
 {}
 
 void EnemySystem::Update(float dt)
 {
 	// Create enemies
 	this->accumulator += dt;
-
 	for (auto& f : factories)
 	{
-		if (std::fmod(this->accumulator, f.first) < dt)
+		if (std::fmod(this->accumulator, f.first) < dt && this->enemies.size() <= maxEnemies)
 		{
 			for (auto& fe : f.second)
 			{
