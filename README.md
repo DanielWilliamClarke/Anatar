@@ -45,6 +45,23 @@ then build
 - [x] Player enemy interactions
 - [x] Stage background for fun (base space stage in place)
 - [x] Skin player and enemies using previous assets before new ones are made
+- [ ] Spatial partitioning for better collision detection performance
+  - [ ] Player -> enemy collisions
+  - [ ] bullet -> bullet collisions? 
+- [ ] Game states - main menu, gameplay, pause, settings, highscores etc 
+- [ ] Improve player control scheme
+  - [ ] Demo mode (AI controlled player)
+  - [ ] Weapon selection
+- [ ] Finite state logic
+  - [ ] Generic state machine functionality that can be dropped in to simplify logic for movement, weapons etc
+- [ ] Visualise player stats, as in weapon temp, weapon energy, ammo, current weapon etc.
+  - [x] Visualise damage
+- [ ] Debug visualisation (both current and timeseries data)
+  - [ ] total bullets on screen
+  - [ ] total enemise
+  - [ ] total memory usage
+  - [ ] total cpu usage
+- [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
 - [x] Better weapons: (now able to add new weapon types easily)
   - [x] beam weapons
   - [x] homing projectiles
@@ -52,18 +69,16 @@ then build
   - [ ] barriers
   - [ ] bolas's
   - [ ] EMP's - or other debuff weapons
-- [ ] Game states - main menu, gameplay, pause, settings, highscores etc
-- [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
-- [ ] Power ups
-- [ ] Helpers: have own health, add buffs, ammo can fire autonmously or on player action (dies on timeout, ammo depletion and health loss)
-  - Can be encountered mid level, will attach themselves to the player
-- [ ] Limpets: like helpers but add debuffs or damage over time.
-  - Can be encountered mid level, will attach themselves to the player
+
+### Nice to haves:
 - [ ] Intelligent enemies: track and shoot towards player
-- [ ] Bosses, multiple firing patterns, interesting mechanics, weak points? youtube.com/watch?v=V4ctJETN-mg?
-- [ ] Enemy waves, Sqaudrons?
+  - [ ] Bosses, multiple firing patterns, interesting mechanics, weak points? youtube.com/watch?v=V4ctJETN-mg?
+  - [ ] Enemy waves, Sqaudrons?
+- [ ] Buff - Can be encountered mid level, will attach themselves to the player
+  - [ ] Helpers: have own health, add buffs, ammo can fire autonmously or on player action (dies on timeout, ammo depletion and health loss)
+  - [ ] Stat buffs - shield regen, health regen, invincibility, damage multiplier
+- [ ] Debuff - can be encountered mid level, will attach themselves to the player
+  - [ ] stat debuffs or damage over time.
 - [ ] Android app?
-- [ ] Visualise weapon stats, as in weapon temp, weapon energy etc.
-  - Visualise kills
-- [ ] Highscore and points system?
-- [ ] online coop - Boost ASIO?
+- [ ] Highscores?
+- [ ] online coop - Boost ASIO, SFML network?
