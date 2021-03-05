@@ -26,7 +26,6 @@ private:
 	std::vector<std::shared_ptr<Entity>> enemies;
 	std::map<float, std::vector<std::shared_ptr<IEnemyTypeFactory>>> factories;
 
-	sf::Clock spawnClock;
 	float accumulator;
 	float maxInterval;
 

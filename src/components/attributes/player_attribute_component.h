@@ -43,7 +43,6 @@ private:
 
 	float score;
 
-	sf::Clock clock;
 	float accumulator;
 	float shieldRecharge;
 	float shieldRechargeDelay;

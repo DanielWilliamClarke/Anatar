@@ -38,7 +38,7 @@ void Beam::Update(float dt, float worldSpeed)
 			this->round->getSize().y));
 
 	config.damage = 0;
-	this->damageRateAccumulator += this->damageClock.restart().asSeconds();
+	this->damageRateAccumulator += dt;
 	if (this->damageRateAccumulator >= this->damageRate)
 	{
 		config.damage = damageCache;
@@ -47,7 +47,7 @@ void Beam::Update(float dt, float worldSpeed)
 
 	if (config.lifeTime > 0)
 	{
-		this->accumulator += this->clock.restart().asSeconds();
+		this->accumulator += dt;
 
 		auto percentage = 1 - ((config.lifeTime - this->accumulator) / config.lifeTime);
 		if (percentage > minFadeout && percentage <= maxFadeout)

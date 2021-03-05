@@ -24,7 +24,6 @@ private:
 	std::shared_ptr<Beam> beam;
 
 	sf::Clock clock;
-
 	float accumulator;
 	float duration;
 	float coolDown;

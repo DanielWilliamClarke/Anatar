@@ -22,7 +22,7 @@ PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> h
 
 void PlayerAttributeComponent::Update(float dt)
 {
-	this->accumulator += this->clock.restart().asSeconds();
+	this->accumulator += dt;
 	if (this->accumulator >= this->shieldRechargeDelay &&
 		this->shields < this->maxShields)
 	{

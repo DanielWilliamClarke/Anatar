@@ -19,7 +19,6 @@ private:
 	std::shared_ptr<IWeaponComponent> weaponComponent;
 
 	sf::Clock clockFire;
-
 	float gunTemp;
 	float gunReload;
 	float gunReloadTime;

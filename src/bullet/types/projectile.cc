@@ -28,7 +28,7 @@ void Projectile::Update(float dt, float worldSpeed)
 
 	if (config.lifeTime > 0)
 	{
-		this->accumulator += this->clock.restart().asSeconds();
+		this->accumulator += dt;
 
 		auto percentage = 1 - ((config.lifeTime - this->accumulator) / config.lifeTime);
 		if (percentage > minFadeout && percentage <= maxFadeout)

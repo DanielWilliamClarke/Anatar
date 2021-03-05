@@ -26,7 +26,6 @@ protected:
 	std::shared_ptr<sf::Vector2f> collisionPosition;
 	sf::FloatRect bounds;
 
-	sf::Clock damageClock;
 	float damageRateAccumulator;
 	float damageRate;
 	float damageCache;
