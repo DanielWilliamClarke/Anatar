@@ -23,10 +23,8 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	if (!beams.size())
 	{
 		// burst center point is (360 - theta) / 2
-		float thetaStart = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
-		float thetaEnd = thetaStart + arcAngle;
-
-		for (float theta = thetaStart; theta <= thetaEnd; theta += arcAngle / (numBeams - 1.0f))
+		float theta = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
+		for (float i = 0; i < numBeams; i++)
 		{
 			sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
@@ -35,6 +33,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 				this->bulletSystem->FireBullet(factory, traj, config));
 
 			beams.push_back(beam);
+			theta += arcAngle / numBeams;
 		}
 	}
 
@@ -61,7 +60,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 			}),
 		this->beams.end());
 
-	if (!beams.size() && this->accumulator > coolDown)
+	if (!beams.size() && this->accumulator > this->duration + config.lifeTime + this->coolDown)
 	{
 		this->accumulator = 0;
 	}

@@ -6,8 +6,14 @@
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
 
-BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay, float arcAngle, float numBullets)
-	: bulletSystem(bulletSystem), factory(factory), arcAngle(AngleConversion::ToRadians(arcAngle)), delay(delay), numBullets(numBullets), accumulator(0.0f)
+BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float numBullets, float delay, float arcAngle, float offsetAngle)
+	: bulletSystem(bulletSystem),
+	factory(factory),
+	arcAngle(AngleConversion::ToRadians(arcAngle)),
+	offsetAngle(AngleConversion::ToRadians(offsetAngle)),
+	delay(delay),
+	numBullets(numBullets),
+	accumulator(0.0f)
 {}
 
 void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
@@ -18,14 +24,13 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 		this->accumulator = 0;
 
 		// burst center point is (360 - theta) / 2
-		float thetaStart = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
-		float thetaEnd = thetaStart + arcAngle;
-
-		for (float theta = thetaStart; theta < thetaEnd; theta += arcAngle / numBullets)
+		float theta = ((((float)M_PI * 2.0f) - arcAngle) / 2.0f) + offsetAngle;
+		for (float i = 0; i < numBullets; i++)
 		{
 			sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
 			this->bulletSystem->FireBullet(factory, traj, config);
+			theta += arcAngle / numBullets;
 		}
 	}
 }
