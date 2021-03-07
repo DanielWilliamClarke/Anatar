@@ -40,6 +40,8 @@
 #include "components/hitbox/hitbox_component.h"
 #include <bullet/types/homing_projectile_factory.h>
 
+#include "quad_tree/quad_tree.h"
+
 Game::Game()
 	: clock(std::make_shared<sf::Clock>()),
 	dt(1.0f / 60.0f),
@@ -73,6 +75,8 @@ void Game::InitWindow()
 	this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
 
 	this->threadableWorkload = std::make_shared<ThreadedWorkload>();
+
+	auto qt = std::make_unique<QuadTree<std::shared_ptr<Entity>>>(bounds, 4);
 }
 
 void Game::InitFps()
