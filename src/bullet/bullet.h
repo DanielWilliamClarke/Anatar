@@ -9,8 +9,9 @@
 
 #include "quad_tree/quad_tree.h"
 
-class IGlowShaderRenderer;
 class Entity;
+struct EntityCollision;
+class IGlowShaderRenderer;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 
@@ -65,15 +66,6 @@ struct BulletTrajectory
 	{}
 };
 
-struct EntityCollision {
-	std::shared_ptr<Entity> target;
-	sf::Vector2f point;
-
-	EntityCollision(std::shared_ptr<Entity> target, sf::Vector2f point = sf::Vector2f())
-		: target(target), point(point)
-	{}
-};
-
 class Bullet
 {
 public:
@@ -82,7 +74,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
-	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) = 0;
+	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree) = 0;
 
 	bool isSpent() const;
 	sf::Vector2f GetPosition() const;

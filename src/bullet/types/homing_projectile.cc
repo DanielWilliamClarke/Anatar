@@ -11,22 +11,31 @@ HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& c
 	: Projectile(trajectory, config)
 {}
 
-std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
 {
+	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	auto query = CircleQuery(this->position, 2.5f);
-	auto closest = quadTree->Closest(this->position, &query, [this](std::shared_ptr<Entity> target) -> bool {
-		return target != this->GetOwner() &&
-			target->GetTag() != this->GetOwner()->GetTag();
+	quadTree->Query(&query, collisions,
+		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
+			if (target != this->GetOwner() &&
+				target->GetTag() != this->GetOwner()->GetTag())
+			{
+				// here dont really care if we hit bang on, only that we are close
+				return std::make_shared<EntityCollision>(target, this->position);
+			}
+			return nullptr;
 		});
 
-	std::vector<EntityCollision> collisions;
-	if (closest.size())
+	std::vector<std::shared_ptr<EntityCollision>> fineTuned;
+	if (collisions.size())
 	{
-		// tend towards closest target
-		auto direction = closest.front().data->GetPosition() - this->position;
-		auto magnitude = Dimensions::Magnitude(direction);
-		auto normalisedDirection = Dimensions::Normalise(direction);
-		this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
+		// find closest
+		auto closest = std::min_element(collisions.begin(), collisions.end(),
+			[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
+				auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
+				auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
+				return aDist < bDist;
+			});
 
 		// Potential modes identified
 		// Evadable
@@ -36,14 +45,21 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::shared_ptr<
 		// Search and destroy
 		//this->velocity = Dimensions::Normalise(this->velocity + (direction / (0.2f * magnitude)));
 
-		if(closest.front().data->DetectCollision(this->position))
-		{
-			collisions.push_back(EntityCollision(closest.front().data, this->position));
+		// tend towards closest target
+		auto direction = (*closest)->target->GetPosition() - this->position;
+		auto magnitude = Dimensions::Magnitude(direction);
+		auto normalisedDirection = Dimensions::Normalise(direction);
+		this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
 
-			if (!config.penetrating) {
+		if ((*closest)->target->DetectCollision(this->position))
+		{
+			fineTuned.push_back(std::make_shared<EntityCollision>((*closest)->target, this->position));
+			if (!config.penetrating)
+			{
 				this->spent = true;
 			}
 		}
 	}
-	return collisions;
+
+	return fineTuned;
 }

@@ -16,6 +16,7 @@ class IThreadedWorkload;
 
 class SpaceLevel;
 class Entity;
+struct EntityCollision;
 class Player;
 class PlayerHud;
 class PlayerInput;
@@ -47,7 +48,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<GlowShaderRenderer> glowRenderer;
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;
-	std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree;
+	std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree;
 
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;

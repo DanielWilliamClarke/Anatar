@@ -19,7 +19,7 @@ public:
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
-	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt) override;
+	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt) override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 	virtual sf::Vector2f GetPosition() const;
 

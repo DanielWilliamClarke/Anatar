@@ -11,16 +11,15 @@
 
 #include "shapes.h"
 
-template <typename T>
+template <typename U, typename C>
 class QuadTree
 {
 public:
 	QuadTree(sf::FloatRect boundry, unsigned int capacity);
 	virtual ~QuadTree() = default;
 
-	bool Insert(Point<T>& point);
-	void Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const;
-	std::vector<Point<T>> Closest(sf::Vector2f origin, ShapeQuery* range, std::function<bool(T)> handler) const;
+	bool Insert(Point<U>& point);
+	void Query(ShapeQuery* range, std::vector<C>& found, std::function<C(U)> handler) const;
 	void Draw(sf::RenderTarget& target) const;
 
 private:
@@ -31,18 +30,18 @@ private:
 	sf::FloatRect boundry;
 	unsigned int capacity;
 
-	std::vector<Point<T>> points;
+	std::vector<Point<U>> points;
 
-	std::unique_ptr<QuadTree<T>> nw;
-	std::unique_ptr<QuadTree<T>> ne;
-	std::unique_ptr<QuadTree<T>> se;
-	std::unique_ptr<QuadTree<T>> sw;
+	std::unique_ptr<QuadTree<U, C>> nw;
+	std::unique_ptr<QuadTree<U, C>> ne;
+	std::unique_ptr<QuadTree<U, C>> se;
+	std::unique_ptr<QuadTree<U, C>> sw;
 
 	bool isDivided;
 };
 
-template <typename T>
-QuadTree<T>::QuadTree(sf::FloatRect boundry, unsigned int capacity)
+template <typename U, typename C>
+QuadTree<U, C>::QuadTree(sf::FloatRect boundry, unsigned int capacity)
 	: boundry(boundry),
 	capacity(capacity),
 	points({}),
@@ -51,8 +50,8 @@ QuadTree<T>::QuadTree(sf::FloatRect boundry, unsigned int capacity)
 {
 }
 
-template <typename T>
-bool QuadTree<T>::Insert(Point<T>& point)
+template <typename U, typename C>
+bool QuadTree<U, C>::Insert(Point<U>& point)
 {
 	if (!this->boundry.contains(point.point))
 	{
@@ -74,8 +73,8 @@ bool QuadTree<T>::Insert(Point<T>& point)
 		this->se->Insert(point) || this->sw->Insert(point);
 }
 
-template <typename T>
-void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const
+template <typename U, typename C>
+void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<C>& found, std::function<C(U)> handler) const
 {
 	if (!range->Intersects(this->boundry))
 	{
@@ -84,9 +83,10 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 
 	for (auto& p : this->points)
 	{
-		if (handler(p.data))
+		auto output = handler(p.data);
+		if (output)
 		{
-			found.push_back(p);
+			found.push_back(output);
 		}
 	}
 
@@ -99,29 +99,8 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 	}
 }
 
-template <typename T>
-std::vector<Point<T>> QuadTree<T>::Closest(sf::Vector2f origin, ShapeQuery* range, std::function<bool(T)> handler) const
-{
-	if (this->points.size() == 0)
-	{
-		return this->points;
-	}
-
-	std::vector<Point<T>> points;
-	this->Query(range, points, handler);
-
-	std::sort(points.begin(), points.end(),
-		[&origin](Point<T> a, Point<T> b) -> bool {
-			auto aDist = Dimensions::ManhattanDistance(origin, a.point);
-			auto bDist = Dimensions::ManhattanDistance(origin, b.point);
-			return aDist < bDist;
-		});
-
-	return points;
-}
-
-template <typename T>
-void QuadTree<T>::Draw(sf::RenderTarget& target) const
+template <typename U, typename C>
+void QuadTree<U, C>::Draw(sf::RenderTarget& target) const
 {
 	if (this->isDivided)
 	{
@@ -142,8 +121,8 @@ void QuadTree<T>::Draw(sf::RenderTarget& target) const
 	target.draw(rectangle);
 }
 
-template <typename T>
-void QuadTree<T>::Subdivide()
+template <typename U, typename C>
+void QuadTree<U, C>::Subdivide()
 {
 	auto w = this->boundry.width / 2;
 	auto h = this->boundry.height / 2;
@@ -151,13 +130,13 @@ void QuadTree<T>::Subdivide()
 	auto x = this->boundry.left + w;
 	auto y = this->boundry.top + h;
 
-	this->ne = std::make_unique<QuadTree<T>>(
+	this->ne = std::make_unique<QuadTree<U, C>>(
 		sf::FloatRect(x, y - h, w, h), this->capacity);
-	this->nw = std::make_unique<QuadTree<T>>(
+	this->nw = std::make_unique<QuadTree<U, C>>(
 		sf::FloatRect(x - w, y - h, w, h), this->capacity);
-	this->se = std::make_unique<QuadTree<T>>(
+	this->se = std::make_unique<QuadTree<U, C>>(
 		sf::FloatRect(x, y, w, h), this->capacity);
-	this->sw = std::make_unique<QuadTree<T>>(
+	this->sw = std::make_unique<QuadTree<U, C>>(
 		sf::FloatRect(x - w, y, w, h), this->capacity);
 
 	this->isDivided = true;

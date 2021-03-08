@@ -55,44 +55,25 @@ void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float inter
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-std::vector<EntityCollision> Projectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
 {
-	std::vector<Point<std::shared_ptr<Entity>>> targets;
+	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());
-	quadTree->Query(&query, targets, [this](std::shared_ptr<Entity> target) -> bool {
-		return target != this->GetOwner() &&
-			target->GetTag() != this->GetOwner()->GetTag() &&
-			target->DetectCollision(this->position);
-	});
+	quadTree->Query(&query, collisions,
+		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
+			if (target != this->GetOwner() &&
+				target->GetTag() != this->GetOwner()->GetTag() &&
+				target->DetectCollision(this->position))
+			{
+				return std::make_shared<EntityCollision>(target, this->position);
+			}
+			return nullptr;
+		});
 
-	std::vector<EntityCollision> collisions;
-	if (targets.size())
+	if (collisions.size() && !config.penetrating)
 	{
-		collisions.push_back(EntityCollision(targets.front().data, this->position));
-		if (!config.penetrating) {
-			this->spent = true;
-		}
+		this->spent = true;
 	}
 
 	return collisions;
-}
-
-std::shared_ptr<Entity> Projectile::FindClosest(std::vector<std::shared_ptr<Entity>> targets) const
-{
-	if (targets.size() == 1)
-	{
-		return targets.front();
-	}
-
-	std::shared_ptr<Entity> closest = nullptr;
-	float minDistance = std::numeric_limits<float>::infinity();
-	for (auto& t : targets)
-	{
-		auto distance = Dimensions::ManhattanDistance(this->position, t->GetPosition());
-		if (distance < minDistance) {
-			minDistance = distance;
-			closest = t;
-		}
-	}
-	return closest;
 }

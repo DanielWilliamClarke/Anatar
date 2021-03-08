@@ -8,10 +8,12 @@
 #include "i_bullet_system.h"
 #include "quad_tree/quad_tree.h"
 
+
 class Bullet;
 struct BulletConfig;
 struct BulletTrajectory;
 class Entity;
+struct EntityCollision;
 class IGlowShaderRenderer;
 class IThreadedWorkload;
 
@@ -23,7 +25,7 @@ public:
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed);
+	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:

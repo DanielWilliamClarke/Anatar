@@ -21,7 +21,7 @@ Enemy::Enemy(
 	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject("enemy")->GetSprite()->getGlobalBounds());
 }
 
-void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt)
+void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{

@@ -77,31 +77,42 @@ void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 	}
 }
 
-std::vector<EntityCollision> Beam::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;
 
+	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	auto query = RayQuery(rayCaster, this->position, this->velocity);
-	auto closest = quadTree->Closest(this->position , &query,
-		[this](std::shared_ptr<Entity> target) -> bool {
-		return target != this->GetOwner() &&
-			target->GetTag() != this->GetOwner()->GetTag() &&
-			target->DetectCollisionWithRay(this->position, this->velocity)->intersects;
+	quadTree->Query(&query, collisions,
+		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
+			if (target != this->GetOwner() &&
+				target->GetTag() != this->GetOwner()->GetTag())
+			{
+				auto check = target->DetectCollisionWithRay(this->position, this->velocity);
+				if (check->intersects)
+				{
+					return std::make_shared<EntityCollision>(target, check->point);
+				}
+			}
+			return nullptr;
 		});
 
-	std::vector<EntityCollision> collisions;
-	if (closest.size())
+	if (collisions.size() > 1)
 	{
-		collisions.push_back(EntityCollision(
-			closest.front().data,
-			closest.front().data->DetectCollisionWithRay(this->position, this->velocity)->point));
+		std::sort(collisions.begin(), collisions.end(),
+			[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
+				auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
+				auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
+				return aDist < bDist;
+			});
 	}
 
 	// Set collision point to hit the first entity if the beam cant penetrate
 	if (!config.penetrating && collisions.size())
 	{
-		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front().point);
+		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front()->point);
+		collisions = { collisions.front() };
 	}
 
 	return collisions;

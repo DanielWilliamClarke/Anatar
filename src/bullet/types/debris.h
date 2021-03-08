@@ -15,7 +15,7 @@ public:
 
 	virtual ~Debris() = default;
 
-	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) override { return {}; }
+	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree) override { return {}; }
 };
 
 #endif // DEBRIS_H

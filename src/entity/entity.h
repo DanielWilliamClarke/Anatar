@@ -20,6 +20,16 @@ struct RayIntersection;
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 
+class Entity;
+struct EntityCollision {
+	std::shared_ptr<Entity> target;
+	sf::Vector2f point;
+
+	EntityCollision(std::shared_ptr<Entity> target, sf::Vector2f point = sf::Vector2f())
+		: target(target), point(point)
+	{}
+};
+
 class Entity: public std::enable_shared_from_this<Entity>
 {
 public:
@@ -35,7 +45,7 @@ public:
 	void RemoveObject(std::string name);
 	std::shared_ptr<EntityObject> GetObject(std::string name) const;
 
-	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt) = 0;
+	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt) = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 	virtual sf::Vector2f GetPosition() const;
 

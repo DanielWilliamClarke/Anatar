@@ -9,6 +9,7 @@
 #include "quad_tree/quad_tree.h"
 
 class Entity;
+struct EntityCollision;
 class IEnemyTypeFactory;
 
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
@@ -17,7 +18,7 @@ public:
 	EnemySystem();
 	virtual ~EnemySystem() = default;
 
-	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt);
+	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt);
 	void Draw(sf::RenderTarget& target, float interp) const;
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);

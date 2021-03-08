@@ -8,6 +8,7 @@
 #include "quad_tree/quad_tree.h"
 
 class Entity;
+struct EntityCollision;
 
 class Projectile : public Bullet
 {
@@ -17,11 +18,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
-	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) override;
-
-protected:
-
-	std::shared_ptr<Entity> FindClosest(std::vector<std::shared_ptr<Entity>> targets) const;
+	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree) override;
 
 protected:
 

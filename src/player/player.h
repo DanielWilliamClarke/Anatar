@@ -22,12 +22,12 @@ public:
 		std::shared_ptr<IPlayerMovementComponent> movementComponent,
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent);
 	virtual ~Player() = default;
-	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, Input& in, float dt);
+	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, Input& in, float dt);
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
 
 protected:
-	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt) override {};
+	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt) override {};
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
 	void InitBullets();
 

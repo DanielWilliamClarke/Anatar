@@ -10,18 +10,15 @@
 #include "components/hitbox/i_hitbox_component.h"
 
 #include "quad_tree/quad_tree.h"
-
 #include "util/container_utils.h"
 #include "util/i_threaded_workload.h"
-
-#include "entity/entity.h"
 
 struct UnresolvedCollisions
 {
 	std::shared_ptr<Bullet> bullet;
-	std::vector<EntityCollision> collisions;
+	std::vector<std::shared_ptr<EntityCollision>> collisions;
 
-	UnresolvedCollisions(std::shared_ptr<Bullet> b, std::vector<EntityCollision> c) 
+	UnresolvedCollisions(std::shared_ptr<Bullet> b, std::vector<std::shared_ptr<EntityCollision>> c)
 		: bullet(b), collisions(c)
 	{}
 };
@@ -37,7 +34,7 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed)
+void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt, float worldSpeed)
 {
 	this->EraseBullets();
 
@@ -63,8 +60,8 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> qua
 			auto damage = u.bullet->GetDamage();
 			for (auto& collision : u.collisions)
 			{
-				collision.target->TakeDamage(damage, collision.point);
-				if (u.bullet->GetOwner() && collision.target->HasDied())
+				collision->target->TakeDamage(damage, collision->point);
+				if (u.bullet->GetOwner() && collision->target->HasDied())
 				{
 					u.bullet->GetOwner()->RegisterKill(damage);
 				}
