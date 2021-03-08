@@ -12,7 +12,7 @@ public:
 	PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent);
 	virtual ~PlayerWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config) override;
+	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 

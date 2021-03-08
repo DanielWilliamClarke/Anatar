@@ -77,7 +77,7 @@ struct EntityCollision {
 class Bullet
 {
 public:
-	Bullet(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config);
+	Bullet(BulletTrajectory& trajectory, BulletConfig& config);
 	virtual ~Bullet() = default;
 
 	virtual void Update(float dt, float worldSpeed) = 0;
@@ -91,7 +91,7 @@ public:
 	std::shared_ptr<Entity> GetOwner() const;
 
 protected:
-	std::shared_ptr<BulletConfig> config;
+	BulletConfig config;
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;

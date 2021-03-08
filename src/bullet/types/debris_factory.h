@@ -14,7 +14,7 @@ public:
 	DebrisFactory() {}
 	virtual ~DebrisFactory() = default;
 
-	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config) const override {
+	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
 		return std::make_shared<Debris>(trajectory, config);
 	};
 };

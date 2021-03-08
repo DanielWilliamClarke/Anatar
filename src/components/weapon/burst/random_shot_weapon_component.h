@@ -16,7 +16,7 @@ public:
 	RandomShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, std::shared_ptr<IRandomNumberSource<int>> randSource, float numBullets);
 	virtual ~RandomShotWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config) override;
+	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

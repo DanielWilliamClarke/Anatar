@@ -45,10 +45,10 @@ void Player::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree,
 	auto glowieConfig = this->bulletConfigs.at("glowie");
 
 	this->UpdateObjects({
-		{ "ship", EntityUpdate(position, direction, shipConfig, in.fire, false) },
-		{ "exhaust",  EntityUpdate(position, IDLE, shipConfig, in.fire) },
-		{ "turret",  EntityUpdate(position, IDLE, turrentConfig, in.fire) },
-		{ "glowie",  EntityUpdate(position, IDLE, glowieConfig, in.fire) }
+		{ "ship", EntityUpdate(position, direction, *shipConfig, in.fire, false) },
+		{ "exhaust",  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
+		{ "turret",  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
+		{ "glowie",  EntityUpdate(position, IDLE, *glowieConfig, in.fire) }
 	}, dt);
 
 	this->attributeComponent->Update(dt);

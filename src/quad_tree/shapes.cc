@@ -39,7 +39,7 @@ bool CircleQuery::Intersects(sf::FloatRect range) const
 		return true;
 	}
 
-	return edges <= this->rSq;
+	return edges < this->rSq;
 }
 
 RayQuery::RayQuery(std::shared_ptr<IRayCaster> rayCaster, sf::Vector2f origin, sf::Vector2f direction)

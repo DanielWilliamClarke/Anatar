@@ -16,7 +16,7 @@ BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem
 	accumulator(0.0f)
 {}
 
-void BurstShotWeaponComponent::Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config)
+void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {
 	this->accumulator += this->clockFire.restart().asSeconds();
 	if (this->accumulator >= this->delay)
@@ -27,8 +27,8 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, std::shared_ptr<Bulle
 		float theta = ((((float)M_PI * 2.0f) - arcAngle) / 2.0f) + offsetAngle;
 		for (float i = 0; i < numBullets; i++)
 		{
-			sf::Vector2f arcVelocity(std::cos(theta) * (float)config->affinity, std::sin(theta));
-			auto traj = BulletTrajectory(position, -arcVelocity, config->speed);
+			sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
+			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
 			this->bulletSystem->FireBullet(factory, traj, config);
 			theta += arcAngle / numBullets;
 		}

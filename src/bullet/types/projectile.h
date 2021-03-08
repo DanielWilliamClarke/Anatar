@@ -12,7 +12,7 @@ class Entity;
 class Projectile : public Bullet
 {
 public:
-	Projectile(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config);
+	Projectile(BulletTrajectory& trajectory, BulletConfig& config);
 	virtual ~Projectile() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;

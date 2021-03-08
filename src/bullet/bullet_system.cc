@@ -30,7 +30,7 @@ BulletSystem::BulletSystem(sf::FloatRect bounds)
 	: bounds(bounds)
 {}
 
-std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config)
+std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, BulletConfig& config)
 {
 	auto bullet = factory->Construct(trajectory, config);
 	this->AddBullet(bullet);
@@ -39,6 +39,8 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 
 void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed)
 {
+	this->EraseBullets();
+
 	// Determine collisions to resolve
 	std::vector<UnresolvedCollisions> unresolved;
 	for (auto& b : this->bullets)
@@ -68,8 +70,6 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> qua
 				}
 			}
 		});
-
-	this->EraseBullets();
 }
 
 void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)

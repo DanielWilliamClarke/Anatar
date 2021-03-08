@@ -34,7 +34,7 @@ void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, 
 
 	auto config = this->bulletConfigs.at("enemy");
 	this->UpdateObjects({
-		{ "enemy", EntityUpdate(position, IDLE, config) },
+		{ "enemy", EntityUpdate(position, IDLE, *config) },
 	}, dt);
 }
 

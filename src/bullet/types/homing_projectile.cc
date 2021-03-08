@@ -7,18 +7,17 @@
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
 
-HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config)
+HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Projectile(trajectory, config)
 {}
 
 std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree)
 {
-	unsigned int total = 1;
-	float maxDistance = 2.5f;
-	auto closest = quadTree->Closest(this->position, total, [this](std::shared_ptr<Entity> target) -> bool {
+	auto query = CircleQuery(this->position, 2.5f);
+	auto closest = quadTree->Closest(this->position, &query, [this](std::shared_ptr<Entity> target) -> bool {
 		return target != this->GetOwner() &&
 			target->GetTag() != this->GetOwner()->GetTag();
-		}, maxDistance);
+		});
 
 	std::vector<EntityCollision> collisions;
 	if (closest.size())
@@ -41,7 +40,7 @@ std::vector<EntityCollision> HomingProjectile::DetectCollisions(std::shared_ptr<
 		{
 			collisions.push_back(EntityCollision(closest.front().data, this->position));
 
-			if (!config->penetrating) {
+			if (!config.penetrating) {
 				this->spent = true;
 			}
 		}

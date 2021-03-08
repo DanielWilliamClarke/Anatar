@@ -20,13 +20,12 @@ public:
 
 	bool Insert(Point<T>& point);
 	void Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const;
-	std::vector<Point<T>> Closest(sf::Vector2f& origin, unsigned int& count, std::function<bool(T)> handler, float& maxDistance = std::numeric_limits<float>::infinity()) const;
+	std::vector<Point<T>> Closest(sf::Vector2f origin, ShapeQuery* range, std::function<bool(T)> handler) const;
 	void Draw(sf::RenderTarget& target) const;
 
 private:
 
 	void Subdivide();
-	size_t Length() const;
 
 private:
 	sf::FloatRect boundry;
@@ -101,66 +100,15 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 }
 
 template <typename T>
-std::vector<Point<T>> QuadTree<T>::Closest(sf::Vector2f& origin, unsigned int& count, std::function<bool(T)> handler, float& maxDistance) const
+std::vector<Point<T>> QuadTree<T>::Closest(sf::Vector2f origin, ShapeQuery* range, std::function<bool(T)> handler) const
 {
-	// Handle 0 elements or no sub trees
-	auto length = this->Length();
-	if (length == 0)
-	{
-		return std::vector<Point<T>>{};
-	}
-	if (length < count)
+	if (this->points.size() == 0)
 	{
 		return this->points;
 	}
 
-	if (maxDistance == std::numeric_limits<float>::infinity())
-	{
-		auto w = this->boundry.width;
-		auto h = this->boundry.height;
-		auto outerReach = sqrtf(w * w + h * h);
-
-		auto x = this->boundry.left;
-		auto y = this->boundry.top;
-		auto pointDistance = sqrtf(x * x + y * y);
-
-		maxDistance = outerReach + pointDistance;
-	}
-	else
-	{
-		auto maxOuter = std::make_unique<CircleQuery>(origin, maxDistance);
-		std::vector<Point<T>> points;
-		this->Query(maxOuter.get(), points, handler);
-		if (points.size() < count) {
-			return points;
-		}
-	}
-
-	auto inner = 0.0f;
-	auto outer = maxDistance;
-	auto limit = 3;
 	std::vector<Point<T>> points;
-	while (limit > 0)
-	{
-		auto radius = (inner + outer) / 2;
-		auto range = std::make_unique<CircleQuery>(origin, radius);
-		this->Query(range.get(), points, handler);
-		if (points.size() == count)
-		{
-			return points;
-		}
-		else if (points.size() < count)
-		{
-			// grow
-			inner = radius;
-		}
-		else
-		{
-			// shrink
-			outer = radius;
-			limit--;
-		}
-	}
+	this->Query(range, points, handler);
 
 	std::sort(points.begin(), points.end(),
 		[&origin](Point<T> a, Point<T> b) -> bool {
@@ -169,7 +117,7 @@ std::vector<Point<T>> QuadTree<T>::Closest(sf::Vector2f& origin, unsigned int& c
 			return aDist < bDist;
 		});
 
-	return std::vector<Point<T>>{points.begin(), points.begin() + count};
+	return points;
 }
 
 template <typename T>
@@ -213,20 +161,6 @@ void QuadTree<T>::Subdivide()
 		sf::FloatRect(x - w, y, w, h), this->capacity);
 
 	this->isDivided = true;
-}
-
-template <typename T>
-size_t QuadTree<T>::Length() const
-{
-	auto total = this->points.size();
-	if (this->isDivided)
-	{
-		total += this->nw->Length();
-		total += this->ne->Length();
-		total += this->sw->Length();
-		total += this->se->Length();
-	}
-	return total;
 }
 
 #endif // I_QUAD_TREE_H

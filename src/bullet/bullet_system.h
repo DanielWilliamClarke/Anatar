@@ -22,7 +22,7 @@ public:
 	BulletSystem(sf::FloatRect bounds);
 	virtual ~BulletSystem() = default;
 
-	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config) override;
+	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
 	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
