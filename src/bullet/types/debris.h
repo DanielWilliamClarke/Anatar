@@ -9,8 +9,8 @@
 class Debris : public Projectile
 {
 public:
-	Debris(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config) :
-		Projectile(trajectory, config)
+	Debris(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config) 
+		: Projectile(trajectory, config)
 	{}
 
 	virtual ~Debris() = default;

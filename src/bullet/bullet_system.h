@@ -4,8 +4,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <thread>
-#include <mutex>
 
 #include "i_bullet_system.h"
 #include "quad_tree/quad_tree.h"
@@ -36,8 +34,6 @@ private:
 private:
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	sf::FloatRect bounds;
-
-	std::mutex mutex;
 };
 
 #endif // BULLET_SYSTEM_H

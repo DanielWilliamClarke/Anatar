@@ -1,4 +1,7 @@
 #include "bullet_system.h"
+
+#include <algorithm>
+
 #include "types/projectile.h"
 
 #include "i_bullet_factory.h"
@@ -13,6 +16,16 @@
 
 #include "entity/entity.h"
 
+struct UnresolvedCollisions
+{
+	std::shared_ptr<Bullet> bullet;
+	std::vector<EntityCollision> collisions;
+
+	UnresolvedCollisions(std::shared_ptr<Bullet> b, std::vector<EntityCollision> c) 
+		: bullet(b), collisions(c)
+	{}
+};
+
 BulletSystem::BulletSystem(sf::FloatRect bounds)
 	: bounds(bounds)
 {}
@@ -26,25 +39,31 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 
 void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed)
 {
-	for (auto& b : bullets)
+	// Determine collisions to resolve
+	std::vector<UnresolvedCollisions> unresolved;
+	for (auto& b : this->bullets)
 	{
 		b->Update(dt, worldSpeed);
-
 		auto collisions = b->DetectCollisions(quadTree);
-		auto damage = b->GetDamage();
-		if (damage > 0.0f)
+		if (collisions.size() && b->GetDamage() > 0.0f)
 		{
-			for (auto& c : collisions)
-			{
-				// update target
-				c.target->TakeDamage(damage, c.point);
-				if (b->GetOwner() && c.target->HasDied())
-				{
-					b->GetOwner()->RegisterKill(damage);
-				}
-			}
+			unresolved.push_back(UnresolvedCollisions(b, collisions));
 		}
 	}
+
+	// Resolve each collision
+	std::for_each(unresolved.begin(), unresolved.end(),
+		[&](UnresolvedCollisions& u) {
+			auto damage = u.bullet->GetDamage();
+			for (auto& collision : u.collisions)
+			{
+				collision.target->TakeDamage(damage, collision.point);
+				if (u.bullet->GetOwner() && collision.target->HasDied())
+				{
+					u.bullet->GetOwner()->RegisterKill(damage);
+				}
+			}
+		});
 
 	this->EraseBullets();
 }
@@ -59,13 +78,11 @@ void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float int
 
 void BulletSystem::AddBullet(std::shared_ptr<Bullet> bullet)
 {
-	std::lock_guard<std::mutex> lock(this->mutex);
 	this->bullets.push_back(bullet);
 }
 
 void BulletSystem::EraseBullets()
 {
-	std::lock_guard<std::mutex> lock(this->mutex);
 	this->bullets.erase(
 		std::remove_if(
 			this->bullets.begin(), this->bullets.end(),
