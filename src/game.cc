@@ -224,7 +224,7 @@ void Game::Update()
 
 	while (this->accumulator >= this->dt)
 	{
-		this->quadTree = std::make_shared<QuadTree<std::shared_ptr<Entity>, EntityCollision>>(bounds, 4);
+		this->quadTree = std::make_shared<CollisionQuadTree>(bounds, 4);
 
 		this->level->Update(worldSpeed, dt);
 		this->player->Update(this->quadTree, in, this->dt);

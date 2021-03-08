@@ -12,13 +12,15 @@ class Entity;
 struct EntityCollision;
 class IEnemyTypeFactory;
 
+typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
 {
 public:
 	EnemySystem();
 	virtual ~EnemySystem() = default;
 
-	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree, float dt);
+	void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt);
 	void Draw(sf::RenderTarget& target, float interp) const;
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
