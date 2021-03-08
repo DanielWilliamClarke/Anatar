@@ -12,12 +12,12 @@ struct EntityUpdate
 	int direction;
 	bool loop;
 	bool fire;
-	BulletConfig& bulletConfig;
+	std::shared_ptr<BulletConfig> bulletConfig;
 
 	EntityUpdate() = default;
 	EntityUpdate(sf::Vector2f position,
 		int direction,
-		BulletConfig& bulletConfig,
+		std::shared_ptr<BulletConfig> bulletConfig,
 		bool fire = true,
 		bool loop = true)
 		: position(position), direction(direction), bulletConfig(bulletConfig), fire(fire), loop(loop)

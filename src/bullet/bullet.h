@@ -12,18 +12,22 @@
 class IGlowShaderRenderer;
 class Entity;
 
+enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
+
 struct BulletConfig
 {
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
 	std::shared_ptr<Entity> owner;
+
 	sf::Color color;
 	float glowAttenuation;
-	float rotation;
 
+	float rotation;
 	float speed;
+	AFFINITY affinity;
+
 	bool penetrating;
 	float damage;
-
 	float lifeTime;
 
 	BulletConfig(
@@ -33,10 +37,20 @@ struct BulletConfig
 		float glowAttenuation,
 		float rotation, 
 		float speed, 
+		AFFINITY affinity,
 		bool penetrating, 
 		float damage, 
 		float lifeTime = 0.0f)
-		: owner(owner), shapeBuilder(shapeBuilder), color(color), glowAttenuation(glowAttenuation), speed(speed), rotation(rotation), penetrating(penetrating), damage(damage), lifeTime(lifeTime)
+		: owner(owner), 
+		shapeBuilder(shapeBuilder),
+		color(color),
+		glowAttenuation(glowAttenuation),
+		speed(speed),
+		affinity(affinity), 
+		rotation(rotation),
+		penetrating(penetrating),
+		damage(damage), 
+		lifeTime(lifeTime)
 	{}
 };
 
@@ -63,7 +77,7 @@ struct EntityCollision {
 class Bullet
 {
 public:
-	Bullet(BulletTrajectory& trajectory, BulletConfig config);
+	Bullet(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config);
 	virtual ~Bullet() = default;
 
 	virtual void Update(float dt, float worldSpeed) = 0;
@@ -71,14 +85,13 @@ public:
 	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) = 0;
 
 	bool isSpent() const;
-	BulletConfig GetConfig() const;
 	sf::Vector2f GetPosition() const;
 	sf::Vector2f GetVelocity() const;
 	float GetDamage() const;
 	std::shared_ptr<Entity> GetOwner() const;
 
 protected:
-	BulletConfig config;
+	std::shared_ptr<BulletConfig> config;
 	sf::Vector2f position;
 	sf::Vector2f lastPosition;
 	sf::Vector2f velocity;

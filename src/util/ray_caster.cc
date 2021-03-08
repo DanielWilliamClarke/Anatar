@@ -13,7 +13,7 @@ std::shared_ptr<RayIntersection> RayCaster::RayBoxIntersects(const sf::Vector2f&
 	auto right = box.left + box.width;
 
 	// Here I define each line of the hitbox
-	auto lines = std::vector< Line>({
+	auto lines = std::vector<Line>({
 		Line( // left
 			sf::Vector2f(left, top),
 			sf::Vector2f(left, bottom)),

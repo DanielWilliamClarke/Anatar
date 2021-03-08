@@ -13,13 +13,12 @@
 
 #include "entity/entity.h"
 
-BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
-	: bounds(bounds), affinity(affinity)
+BulletSystem::BulletSystem(sf::FloatRect bounds)
+	: bounds(bounds)
 {}
 
-std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, BulletConfig& config)
+std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config)
 {
-	trajectory.velocity.x *= (float)affinity;
 	auto bullet = factory->Construct(trajectory, config);
 	this->AddBullet(bullet);
 	return bullet;
@@ -27,8 +26,6 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 
 void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed)
 {
-	this->EraseBullets();
-
 	for (auto& b : bullets)
 	{
 		b->Update(dt, worldSpeed);
@@ -48,6 +45,8 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> qua
 			}
 		}
 	}
+
+	this->EraseBullets();
 }
 
 void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)

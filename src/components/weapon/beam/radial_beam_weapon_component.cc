@@ -18,7 +18,7 @@ RadialBeamWeaponComponent::RadialBeamWeaponComponent(std::shared_ptr<IBulletSyst
 {
 }
 
-void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
+void RadialBeamWeaponComponent::Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config)
 {
 	if (!beams.size())
 	{
@@ -26,8 +26,8 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		float theta = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
 		for (float i = 0; i < numBeams; i++)
 		{
-			sf::Vector2f arcVelocity(std::cos(theta), std::sin(theta));
-			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
+			sf::Vector2f arcVelocity(std::cos(theta) * (float)config->affinity, std::sin(theta));
+			auto traj = BulletTrajectory(position, -arcVelocity, config->speed);
 
 			auto beam = std::dynamic_pointer_cast<Beam>(
 				this->bulletSystem->FireBullet(factory, traj, config));
@@ -60,7 +60,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 			}),
 		this->beams.end());
 
-	if (!beams.size() && this->accumulator > this->duration + config.lifeTime + this->coolDown)
+	if (!beams.size() && this->accumulator > this->duration + config->lifeTime + this->coolDown)
 	{
 		this->accumulator = 0;
 	}

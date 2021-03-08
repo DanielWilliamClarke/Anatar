@@ -8,7 +8,7 @@
 #include "entity/entity.h"
 
 EnemySystem::EnemySystem()
-	: accumulator(0), maxInterval(0), maxEnemies(8)
+	: accumulator(0), maxInterval(0), maxEnemies(50)
 {}
 
 void EnemySystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt)

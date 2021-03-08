@@ -13,7 +13,7 @@ class Entity;
 class Beam : public Bullet
 {
 public:
-	Beam(BulletTrajectory& trajectory, BulletConfig config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
+	Beam(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
 	virtual ~Beam() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;

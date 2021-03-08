@@ -27,7 +27,8 @@ public:
 	Entity(
 		std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
-		std::shared_ptr<IAttributeComponent> attributeComponent);
+		std::shared_ptr<IAttributeComponent> attributeComponent,
+		std::string tag);
 	virtual ~Entity() = default;
 
 	void AddObject(std::string name, std::shared_ptr<EntityObject> object);
@@ -45,6 +46,8 @@ public:
 	void RegisterKill(float score);
 	bool HasDied() const;
 
+	std::string GetTag() const;
+
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
 	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;
@@ -55,6 +58,7 @@ protected:
 	std::shared_ptr<IAttributeComponent> attributeComponent;
 
 	std::map<std::string, std::shared_ptr<BulletConfig>> bulletConfigs;
+	std::string tag;
 
 private:
 

@@ -13,7 +13,7 @@ public:
 	IBulletFactory() = default;
 	virtual ~IBulletFactory() = default;
 
-	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig config) const = 0;
+	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config) const = 0;
 };
 
 #endif // I_BULLET_SYSTEM_H

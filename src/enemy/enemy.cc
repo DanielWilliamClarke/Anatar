@@ -14,7 +14,7 @@ Enemy::Enemy(
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	sf::Vector2f initialPosition)
-	: Entity{ nullptr, globalMovementComponent, attributeComponent }
+	: Entity{ nullptr, globalMovementComponent, attributeComponent, "enemy" }
 {
 	this->objects = manifest;
 	this->GetObject("enemy")->GetSprite()->setPosition(initialPosition);
@@ -34,7 +34,7 @@ void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, 
 
 	auto config = this->bulletConfigs.at("enemy");
 	this->UpdateObjects({
-		{ "enemy", EntityUpdate(position, IDLE, *config) },
+		{ "enemy", EntityUpdate(position, IDLE, config) },
 	}, dt);
 }
 
@@ -46,10 +46,9 @@ void Enemy::Draw(sf::RenderTarget& target, float interp) const
 
 void Enemy::InitBullets()
 {
-	std::shared_ptr<Entity> self = shared_from_this();
-	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(self,
+	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(shared_from_this(),
 		[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
-		sf::Color::Red, 150.0f, 10.0f, 350.0f, false, 10.0f, 3.0f);
+		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 10.0f, 3.0f);
 }
 
 sf::Vector2f Enemy::GetPosition() const

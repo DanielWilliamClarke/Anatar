@@ -20,12 +20,13 @@ public:
 
 	bool Insert(Point<T>& point);
 	void Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const;
-	std::vector<Point<T>> Closest(Point<T>& point, unsigned int& count, std::function<bool(T)> handler, float& maxDistance = std::numeric_limits<float>::infinity()) const;
+	std::vector<Point<T>> Closest(sf::Vector2f& origin, unsigned int& count, std::function<bool(T)> handler, float& maxDistance = std::numeric_limits<float>::infinity()) const;
+	void Draw(sf::RenderTarget& target) const;
 
 private:
 
 	void Subdivide();
-	unsigned int Length() const;
+	size_t Length() const;
 
 private:
 	sf::FloatRect boundry;
@@ -75,26 +76,6 @@ bool QuadTree<T>::Insert(Point<T>& point)
 }
 
 template <typename T>
-void QuadTree<T>::Subdivide()
-{
-	auto x = this->boundry.left;
-	auto y = this->boundry.top;
-	auto w = this->boundry.width / 2;
-	auto h = this->boundry.height / 2;
-
-	this->ne = std::make_unique<QuadTree<T>>(
-		sf::FloatRect(x + w, y - h, w, h), this->capacity);
-	this->nw = std::make_unique<QuadTree<T>>(
-		sf::FloatRect(x - w, y - h, w, h), this->capacity);
-	this->se = std::make_unique<QuadTree<T>>(
-		sf::FloatRect(x + w, y + h, w, h), this->capacity);
-	this->sw = std::make_unique<QuadTree<T>>(
-		sf::FloatRect(x - w, y + h, w, h), this->capacity);
-
-	this->isDivided = true;
-}
-
-template <typename T>
 void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const
 {
 	if (!range->Intersects(this->boundry))
@@ -120,7 +101,7 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 }
 
 template <typename T>
-std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count, std::function<bool(T)> handler, float& maxDistance) const
+std::vector<Point<T>> QuadTree<T>::Closest(sf::Vector2f& origin, unsigned int& count, std::function<bool(T)> handler, float& maxDistance) const
 {
 	// Handle 0 elements or no sub trees
 	auto length = this->Length();
@@ -147,7 +128,7 @@ std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count,
 	}
 	else
 	{
-		auto maxOuter = std::make_unique<Circle>(point.x, point.y, maxDistance);
+		auto maxOuter = std::make_unique<CircleQuery>(origin, maxDistance);
 		std::vector<Point<T>> points;
 		this->Query(maxOuter.get(), points, handler);
 		if (points.size() < count) {
@@ -157,12 +138,12 @@ std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count,
 
 	auto inner = 0.0f;
 	auto outer = maxDistance;
-	auto limit = 8;
+	auto limit = 3;
 	std::vector<Point<T>> points;
-	while (limit > 8)
+	while (limit > 0)
 	{
 		auto radius = (inner + outer) / 2;
-		auto range = std::make_unique<Circle>(point.x, point.y, radius);
+		auto range = std::make_unique<CircleQuery>(origin, radius);
 		this->Query(range.get(), points, handler);
 		if (points.size() == count)
 		{
@@ -182,13 +163,9 @@ std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count,
 	}
 
 	std::sort(points.begin(), points.end(),
-		[&point](Point<T> a, Point<t> b) -> bool {
-			auto aDist = Dimensions::ManhattanDistance(
-				sf::Vector2f(point.x, point.y),
-				sf::Vector2f(a.x, a.y));
-			auto bDist = Dimensions::ManhattanDistance(
-				sf::Vector2f(point.x, point.y),
-				sf::Vector2f(b.x, b.y));
+		[&origin](Point<T> a, Point<T> b) -> bool {
+			auto aDist = Dimensions::ManhattanDistance(origin, a.point);
+			auto bDist = Dimensions::ManhattanDistance(origin, b.point);
 			return aDist < bDist;
 		});
 
@@ -196,7 +173,50 @@ std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count,
 }
 
 template <typename T>
-unsigned int QuadTree<T>::Length() const
+void QuadTree<T>::Draw(sf::RenderTarget& target) const
+{
+	if (this->isDivided)
+	{
+		this->nw->Draw(target);
+		this->ne->Draw(target);
+		this->sw->Draw(target);
+		this->se->Draw(target);
+	}
+
+	auto rectangle = sf::RectangleShape();
+	rectangle.setPosition(
+		sf::Vector2f(this->boundry.left, this->boundry.top));
+	rectangle.setSize(
+		sf::Vector2f(this->boundry.width, this->boundry.height));
+	rectangle.setFillColor(sf::Color::Transparent);
+	rectangle.setOutlineColor(sf::Color::White);
+	rectangle.setOutlineThickness(-1.0f);
+	target.draw(rectangle);
+}
+
+template <typename T>
+void QuadTree<T>::Subdivide()
+{
+	auto w = this->boundry.width / 2;
+	auto h = this->boundry.height / 2;
+
+	auto x = this->boundry.left + w;
+	auto y = this->boundry.top + h;
+
+	this->ne = std::make_unique<QuadTree<T>>(
+		sf::FloatRect(x, y - h, w, h), this->capacity);
+	this->nw = std::make_unique<QuadTree<T>>(
+		sf::FloatRect(x - w, y - h, w, h), this->capacity);
+	this->se = std::make_unique<QuadTree<T>>(
+		sf::FloatRect(x, y, w, h), this->capacity);
+	this->sw = std::make_unique<QuadTree<T>>(
+		sf::FloatRect(x - w, y, w, h), this->capacity);
+
+	this->isDivided = true;
+}
+
+template <typename T>
+size_t QuadTree<T>::Length() const
 {
 	auto total = this->points.size();
 	if (this->isDivided)
@@ -206,7 +226,7 @@ unsigned int QuadTree<T>::Length() const
 		total += this->sw->Length();
 		total += this->se->Length();
 	}
-	return count;
+	return total;
 }
 
 #endif // I_QUAD_TREE_H

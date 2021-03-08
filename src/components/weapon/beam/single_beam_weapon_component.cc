@@ -12,13 +12,13 @@ SingleBeamWeaponComponent::SingleBeamWeaponComponent(std::shared_ptr<IBulletSyst
 {
 }
 
-void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
+void SingleBeamWeaponComponent::Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config)
 {
 	if (!beam)
 	{
 		auto theta = AngleConversion::ToRadians(0.0f);
-		sf::Vector2f velocity(std::cos(theta),std::sin(theta));
-		auto traj = BulletTrajectory(position, velocity, config.speed);
+		sf::Vector2f velocity(std::cos(theta) * (float)config->affinity ,std::sin(theta));
+		auto traj = BulletTrajectory(position, velocity, config->speed);
 		beam = std::dynamic_pointer_cast<Beam>(
 			this->bulletSystem->FireBullet(factory, traj, config));
 	}

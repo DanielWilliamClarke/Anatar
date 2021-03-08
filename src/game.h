@@ -56,13 +56,12 @@ private:
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerHud> playerHud;
 	std::shared_ptr<PlayerInput> playerInput;
-	std::shared_ptr<BulletSystem> playerBulletSystem;
 	std::vector<std::shared_ptr<Entity>> playerTargets;
 
 	std::shared_ptr<EnemySystem> enemySystem;
-	std::shared_ptr<BulletSystem> enemyBulletSystem;
-	std::shared_ptr<BulletSystem> debrisSystem;
 	std::shared_ptr<RandomShotWeaponComponent> debrisGenerator;
+
+	std::shared_ptr<BulletSystem> bulletSystem;
 
 	std::shared_ptr<sf::Clock> clock;
 

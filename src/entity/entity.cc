@@ -13,8 +13,9 @@
 Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
-	std::shared_ptr<IAttributeComponent> attributeComponent)
-	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent)
+	std::shared_ptr<IAttributeComponent> attributeComponent,
+	std::string tag)
+	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), tag(tag)
 {}
 
 void Entity::AddObject(std::string name, std::shared_ptr<EntityObject> object)
@@ -97,4 +98,9 @@ void Entity::RegisterKill(float score)
 sf::Vector2f Entity::GetPosition() const
 {
 	return this->globalMovementComponent->GetPosition();
+}
+
+std::string Entity::GetTag() const
+{
+	return tag;
 }

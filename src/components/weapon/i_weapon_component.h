@@ -12,7 +12,7 @@ public:
 	IWeaponComponent() = default;
 	virtual ~IWeaponComponent() = default;
 
-	virtual void Fire(sf::Vector2f position, BulletConfig& config) = 0;
+	virtual void Fire(sf::Vector2f position, std::shared_ptr<BulletConfig> config) = 0;
 };
 
 #endif //I_WEAPON_COMPONENT_H

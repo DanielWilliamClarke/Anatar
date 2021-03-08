@@ -39,6 +39,7 @@
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
 #include <bullet/types/homing_projectile_factory.h>
+#include "bullet/types/debris_factory.h"
 
 #include "quad_tree/quad_tree.h"
 
@@ -108,19 +109,17 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
-	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
-	this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->bulletSystem = std::make_shared<BulletSystem>(bounds);
 
-	auto projectileFactory = std::make_shared<ProjectileFactory>();
+	auto factory = std::make_shared<DebrisFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->debrisSystem, projectileFactory, randGenerator, 5.0f);
+	this->debrisGenerator = std::make_shared<RandomShotWeaponComponent>(this->bulletSystem, factory, randGenerator, 5.0f);
 }
 
 void Game::InitPlayer()
 {
-	auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas, this->playerBulletSystem, this->bounds);
+	auto playerBuilder = std::make_shared<PlayerBuilder>(this->textureAtlas, this->bulletSystem, this->bounds);
 	auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, this->worldSpeed);
 
 	this->playerHud = std::make_shared<PlayerHud>(this->bounds);
@@ -133,13 +132,13 @@ void Game::InitPlayer()
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); },
-			healthDamageColor, attenuation / 2, 0.0f, 20.0f, false, 0.0f, 7.0f),
+			healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::RIGHT, false, 0.0f, 7.0f),
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			healthDamageColor, attenuation, 0.0f, 50.0f, false, 0.0f, 0.3f),
+			healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f),
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			sheildDamageColor, attenuation, 0.0f, 50.0f, false, 0.0f, 0.3f));
+			sheildDamageColor, attenuation, 0.0f,  50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f));
 
 	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, playerDamageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
 
@@ -162,10 +161,10 @@ void Game::InitEnemySystem()
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); },
-			healthDamageColor, attenuation / 2, 0.0f, 20.0f, false, 0.0f, 0.7f),
+			healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::LEFT, false, 0.0f, 0.7f),
 		std::make_shared<BulletConfig>(nullptr,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			healthDamageColor, attenuation, 0.0f, 50.0f, false, 0.0f, 0.3f),
+			healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::LEFT, false, 0.0f, 0.3f),
 		nullptr);
 
 	this->enemySystem
@@ -174,35 +173,35 @@ void Game::InitEnemySystem()
 			EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 200.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
-				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->enemyBulletSystem, 3.0f),
+				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->bulletSystem, 3.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 20.0f, 0.0f))))
 
 		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 300.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
-				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(homingProjectileFactory), this->enemyBulletSystem, 3.0f),
+				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(homingProjectileFactory), this->bulletSystem, 3.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 40.0f, 0.0f))))
 
 		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 75.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
-				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 7.0f, 45.0f), this->enemyBulletSystem, 4.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 7.0f, 45.0f), this->bulletSystem, 4.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 60.0f, 0.0f))))
 
 		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 100.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
-				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 8.0f, 360.0f), this->enemyBulletSystem, 4.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 8.0f, 360.0f), this->bulletSystem, 4.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 30.0f, 0.0f))))
 
 		->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 50.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
-				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 50.0f, 110.0f), this->enemyBulletSystem, 15.0f),
+				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 50.0f, 110.0f), this->bulletSystem, 15.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 150.0f, 0.0f))));
 }
 
@@ -220,30 +219,25 @@ void Game::WindowEvents()
 
 void Game::Update()
 {
-	quadTree = std::make_shared<QuadTree<std::shared_ptr<Entity>>>(bounds, 4);
-
 	auto in = this->playerInput->SampleInput();
-
 	this->accumulator += this->clock->restart().asSeconds();
 
 	while (this->accumulator >= this->dt)
 	{
+		this->quadTree = std::make_shared<QuadTree<std::shared_ptr<Entity>>>(bounds, 4);
+
 		this->level->Update(worldSpeed, dt);
-		this->player->Update(quadTree, in, this->dt);
-		if (this->player->HasDied()) {
-			exit(0);
-		}
-
-		this->enemySystem->Update(quadTree, dt);
-
-		this->threadableWorkload
-			->AddTask([&]() { this->enemyBulletSystem->Update(quadTree, dt, worldSpeed); })
-			->AddTask([&]() { this->playerBulletSystem->Update(quadTree, dt, worldSpeed); })
-			->AddTask([&]() { this->debrisSystem->Update(nullptr, dt, worldSpeed); })
-			->Join();
+		this->player->Update(this->quadTree, in, this->dt);
+		this->enemySystem->Update(this->quadTree, dt);
+		this->bulletSystem->Update(this->quadTree, dt, worldSpeed);
 
 		this->fps->Update();
 		this->accumulator -= this->dt;
+	}
+
+	if (this->player->HasDied()) 
+	{
+		exit(0);
 	}
 }
 
@@ -257,9 +251,7 @@ void Game::Draw()
 	//Draw stuff that glows
 	this->glowRenderer->Clear(bgColor);
 	this->level->Draw(this->glowRenderer);
-	this->enemyBulletSystem->Draw(this->glowRenderer, interp);
-	this->playerBulletSystem->Draw(this->glowRenderer, interp);
-	this->debrisSystem->Draw(this->glowRenderer, interp);
+	this->bulletSystem->Draw(this->glowRenderer, interp);
 	this->glowRenderer->Draw(*this->window);
 
 	// Draw everything else
@@ -267,6 +259,8 @@ void Game::Draw()
 	this->enemySystem->Draw(*this->window, interp);
 	this->fps->Draw(*this->window);
 	this->playerHud->Draw(*this->window);
+
+	this->quadTree->Draw(*this->window);
 
 	this->window->display();
 }

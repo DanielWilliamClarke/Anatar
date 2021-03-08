@@ -5,7 +5,7 @@
 #include <math.h>
 #include <iostream>
 
-Bullet::Bullet(BulletTrajectory& trajectory, BulletConfig config)
+Bullet::Bullet(BulletTrajectory& trajectory, std::shared_ptr<BulletConfig> config)
 	: position(trajectory.position),
 	lastPosition(trajectory.position),
 	velocity(trajectory.velocity),
@@ -23,11 +23,6 @@ bool Bullet::isSpent() const
 	return spent;
 }
 
-BulletConfig Bullet::GetConfig() const
-{
-	return config;
-}
-
 sf::Vector2f Bullet::GetPosition() const
 {
 	return position;
@@ -40,10 +35,10 @@ sf::Vector2f Bullet::GetVelocity() const
 
 float Bullet::GetDamage() const
 {
-	return config.damage;
+	return config->damage;
 }
 
 std::shared_ptr<Entity> Bullet::GetOwner() const
 {
-	return config.owner;
+	return config->owner;
 }

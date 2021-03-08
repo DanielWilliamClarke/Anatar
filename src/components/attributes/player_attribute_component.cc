@@ -52,7 +52,7 @@ void PlayerAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoin
 	if (this->shields > damage)
 	{
 		this->shields -= damage;
-		damageEffects->generator->Fire(impactPoint, *damageEffects->shield);
+		damageEffects->generator->Fire(impactPoint, damageEffects->shield);
 	}
 	else
 	{
@@ -66,13 +66,13 @@ void PlayerAttributeComponent::TakeDamage(float damage, sf::Vector2f& impactPoin
 		if (this->health > throughDamange)
 		{
 			this->health -= throughDamange;
-			damageEffects->generator->Fire(impactPoint, *damageEffects->health);
+			damageEffects->generator->Fire(impactPoint, damageEffects->health);
 		}
 		else 
 		{
 			// Ensures health does not go below 0
 			this->health -= throughDamange - (throughDamange - this->health);
-			damageEffects->generator->Fire(impactPoint, *damageEffects->death);
+			damageEffects->generator->Fire(impactPoint, damageEffects->death);
 		}
 	}
 }
