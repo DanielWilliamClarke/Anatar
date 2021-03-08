@@ -45,8 +45,8 @@ then build
 - [x] Player enemy interactions
 - [x] Stage background for fun (base space stage in place)
 - [x] Skin player and enemies using previous assets before new ones are made
-- [ ] Spatial partitioning for better collision detection performance
-  - [ ] Player -> enemy collisions
+- [x] Spatial partitioning for better collision detection performance, WE ARE USING A QUAD TREE
+  - [x] Player -> enemy collisions
   - [ ] bullet -> bullet collisions? 
 - [ ] Game states - main menu, gameplay, pause, settings, highscores etc 
 - [ ] Improve player control scheme

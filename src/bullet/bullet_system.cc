@@ -44,6 +44,10 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> qua
 	for (auto& b : this->bullets)
 	{
 		b->Update(dt, worldSpeed);
+
+		//quadTree->Insert(
+		//	Point< std::shared_ptr<Entity>>(b->GetPosition(), b->GetOwner()));
+
 		auto collisions = b->DetectCollisions(quadTree);
 		if (collisions.size() && b->GetDamage() > 0.0f)
 		{
