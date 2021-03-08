@@ -11,7 +11,7 @@ EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0), maxEnemies(8)
 {}
 
-void EnemySystem::Update(float dt)
+void EnemySystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt)
 {
 	// Create enemies
 	this->accumulator += dt;
@@ -46,7 +46,7 @@ void EnemySystem::Update(float dt)
 	// Update all remaining enemies
 	for (auto& e : enemies)
 	{
-		e->Update(dt);
+		e->Update(quadTree, dt);
 	}
 }
 

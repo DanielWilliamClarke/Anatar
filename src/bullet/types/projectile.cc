@@ -5,6 +5,7 @@
 #include "util/i_glow_shader_renderer.h"
 #include "entity/entity.h"
 #include "util/i_ray_caster.h"
+#include "quad_tree/shapes.h"
 
 Projectile::Projectile(BulletTrajectory& trajectory, BulletConfig config)
 	: Bullet(trajectory, config),
@@ -54,22 +55,18 @@ void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float inter
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-std::vector<EntityCollision> Projectile::DetectCollisions(std::vector<std::shared_ptr<Entity>> targets)
+std::vector<EntityCollision> Projectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree)
 {
-	std::vector<std::shared_ptr<Entity>> culledTargets;
-	std::copy_if(targets.begin(), targets.end(), std::back_inserter(culledTargets),
-		[this](std::shared_ptr<Entity> entity) -> bool {
-			return entity->DetectCollisionWithRay(this->position, this->velocity)->intersects;
-		});
+	std::vector<Point<std::shared_ptr<Entity>>> targets;
+	auto query = RectangleQuery(this->round->getGlobalBounds());
+	quadTree->Query(&query, targets, [&](std::shared_ptr<Entity> target) -> bool {
+		return target->DetectCollision(this->position);
+	});
 
 	std::vector<EntityCollision> collisions;
-	auto closest = this->FindClosest(culledTargets);
-
-	// Even if the projectile is penetrating, it can only hit one target at a time
-	if (closest && closest->DetectCollision(this->position))
+	if (targets.size())
 	{
-		collisions.push_back(EntityCollision(closest, this->position));
-
+		collisions.push_back(EntityCollision(targets.front().data, this->position));
 		if (!config.penetrating) {
 			this->spent = true;
 		}

@@ -7,7 +7,7 @@ RectangleQuery::RectangleQuery(sf::FloatRect rect)
 	: rect(rect)
 {}
 
-bool RectangleQuery::Intersects(sf::FloatRect& range) const
+bool RectangleQuery::Intersects(sf::FloatRect range) const
 {
 	return range.intersects(this->rect);
 }
@@ -21,7 +21,7 @@ CircleQuery::CircleQuery(sf::Vector2f origin, float r)
 	: origin(origin), r(r), rSq(r* r)
 {}
 
-bool CircleQuery::Intersects(sf::FloatRect& range) const
+bool CircleQuery::Intersects(sf::FloatRect range) const
 {
 	auto xDist = abs(range.left - this->origin.x);
 	auto yDist = abs(range.top - this->origin.y);
@@ -46,7 +46,7 @@ RayQuery::RayQuery(std::shared_ptr<IRayCaster> rayCaster, sf::Vector2f origin, s
 	: rayCaster(rayCaster), origin(origin), direction(direction)
 {}
 
-bool RayQuery::Intersects(sf::FloatRect& range) const
+bool RayQuery::Intersects(sf::FloatRect range) const
 {
 	return this->rayCaster->RayBoxIntersects(origin, direction, range)->intersects;
 }

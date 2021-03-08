@@ -5,8 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 #include "bullet/bullet.h"
+#include "quad_tree/quad_tree.h"
 
 class IRayCaster;
+class Entity;
 
 class Beam : public Bullet
 {
@@ -16,7 +18,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
-	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) override;
+	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) override;
 
 	void Reignite();
 

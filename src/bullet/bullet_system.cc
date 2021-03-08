@@ -6,11 +6,15 @@
 #include "components/weapon/i_weapon_component.h"
 #include "components/hitbox/i_hitbox_component.h"
 
+#include "quad_tree/quad_tree.h"
+
 #include "util/container_utils.h"
 #include "util/i_threaded_workload.h"
 
-BulletSystem::BulletSystem(std::shared_ptr<IThreadedWorkload> threadableWorkload, sf::FloatRect bounds, int affinity)
-	: threadableWorkload(threadableWorkload), bounds(bounds), affinity(affinity)
+#include "entity/entity.h"
+
+BulletSystem::BulletSystem(sf::FloatRect bounds, int affinity)
+	: bounds(bounds), affinity(affinity)
 {}
 
 std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory> factory, BulletTrajectory& trajectory, BulletConfig& config)
@@ -21,11 +25,29 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> collisionTargets)
+void BulletSystem::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed)
 {
 	this->EraseBullets();
 
-	this->MultiThreadedUpdate(dt, worldSpeed, collisionTargets);
+	for (auto& b : bullets)
+	{
+		b->Update(dt, worldSpeed);
+
+		auto collisions = b->DetectCollisions(quadTree);
+		auto damage = b->GetDamage();
+		if (damage > 0.0f)
+		{
+			for (auto& c : collisions)
+			{
+				// update target
+				c.target->TakeDamage(damage, c.point);
+				if (b->GetOwner() && c.target->HasDied())
+				{
+					b->GetOwner()->RegisterKill(damage);
+				}
+			}
+		}
+	}
 }
 
 void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
@@ -40,50 +62,6 @@ void BulletSystem::AddBullet(std::shared_ptr<Bullet> bullet)
 {
 	std::lock_guard<std::mutex> lock(this->mutex);
 	this->bullets.push_back(bullet);
-}
-
-void BulletSystem::MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> targets)
-{
-	std::unique_lock<std::mutex> lock(this->mutex);
-	auto chunks = ArrayUtils::Chunk<
-		std::vector<std::shared_ptr<Bullet>>,
-		std::vector<std::vector<std::shared_ptr<Bullet>>>>
-		(this->bullets, 50);
-	lock.unlock();
-
-	for (auto& chunk : chunks)
-	{
-		this->threadableWorkload
-			->AddTask([&]() { this->UpdateBullets(chunk, targets, dt, worldSpeed); });
-	}
-	this->threadableWorkload->Join();
-}
-
-void BulletSystem::UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>> targets, float& dt, float& worldSpeed) const
-{
-	for (auto& b : bullets)
-	{
-		b->Update(dt, worldSpeed);
-
-		if (targets.size())
-		{
-			auto collisions = b->DetectCollisions(targets);
-
-			auto damage = b->GetDamage();
-			if (damage > 0.0f)
-			{
-				for (auto& c : collisions)
-				{
-					// update target
-					c.target->TakeDamage(damage, c.point);
-					if (b->GetOwner() && c.target->HasDied())
-					{
-						b->GetOwner()->RegisterKill(damage);
-					}
-				}
-			}
-		}
-	}
 }
 
 void BulletSystem::EraseBullets()

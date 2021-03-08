@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#include "quad_tree/quad_tree.h"
+
 class IEntityObjectBuilder;
 class IGlobalMovementComponent;
 class IAttributeComponent;
@@ -32,7 +34,7 @@ public:
 	void RemoveObject(std::string name);
 	std::shared_ptr<EntityObject> GetObject(std::string name) const;
 
-	virtual void Update(float dt) = 0;
+	virtual void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt) = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
 	virtual sf::Vector2f GetPosition() const;
 

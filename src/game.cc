@@ -75,8 +75,6 @@ void Game::InitWindow()
 	this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
 
 	this->threadableWorkload = std::make_shared<ThreadedWorkload>();
-
-	auto qt = std::make_unique<QuadTree<std::shared_ptr<Entity>>>(bounds, 4);
 }
 
 void Game::InitFps()
@@ -110,9 +108,9 @@ void Game::InitLevel()
 
 void Game::InitBulletSystem()
 {
-	this->enemyBulletSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::LEFT);
-	this->playerBulletSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::RIGHT);
-	this->debrisSystem = std::make_shared<BulletSystem>(std::make_shared<ThreadedWorkload>(), bounds, BulletSystem::LEFT);
+	this->enemyBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
+	this->playerBulletSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::RIGHT);
+	this->debrisSystem = std::make_shared<BulletSystem>(bounds, BulletSystem::LEFT);
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
@@ -222,6 +220,8 @@ void Game::WindowEvents()
 
 void Game::Update()
 {
+	quadTree = std::make_shared<QuadTree<std::shared_ptr<Entity>>>(bounds, 4);
+
 	auto in = this->playerInput->SampleInput();
 
 	this->accumulator += this->clock->restart().asSeconds();
@@ -229,18 +229,17 @@ void Game::Update()
 	while (this->accumulator >= this->dt)
 	{
 		this->level->Update(worldSpeed, dt);
-		this->player->Update(in, this->dt);
+		this->player->Update(quadTree, in, this->dt);
 		if (this->player->HasDied()) {
 			exit(0);
 		}
 
-		this->enemySystem->Update(dt);
-		auto enemyTargets = this->enemySystem->GetEnemies();
+		this->enemySystem->Update(quadTree, dt);
 
 		this->threadableWorkload
-			->AddTask([&]() { this->enemyBulletSystem->Update(dt, worldSpeed, this->playerTargets); })
-			->AddTask([&]() { this->playerBulletSystem->Update(dt, worldSpeed, enemyTargets); })
-			->AddTask([&]() { this->debrisSystem->Update(dt, worldSpeed, std::vector<std::shared_ptr<Entity>>{}); })
+			->AddTask([&]() { this->enemyBulletSystem->Update(quadTree, dt, worldSpeed); })
+			->AddTask([&]() { this->playerBulletSystem->Update(quadTree, dt, worldSpeed); })
+			->AddTask([&]() { this->debrisSystem->Update(nullptr, dt, worldSpeed); })
 			->Join();
 
 		this->fps->Update();

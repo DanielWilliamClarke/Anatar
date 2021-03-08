@@ -11,7 +11,7 @@ class HomingProjectile : public Projectile
 public:
 	HomingProjectile(BulletTrajectory& trajectory, BulletConfig config);
 	virtual ~HomingProjectile() = default;
-	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) override;
+	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) override;
 private:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 	float mass;

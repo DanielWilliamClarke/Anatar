@@ -21,7 +21,7 @@ Enemy::Enemy(
 	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject("enemy")->GetSprite()->getGlobalBounds());
 }
 
-void Enemy::Update(float dt) 
+void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -29,6 +29,9 @@ void Enemy::Update(float dt)
 	}
 
 	const auto position = this->globalMovementComponent->Integrate(dt);
+	quadTree->Insert(
+		Point<std::shared_ptr<Entity>>(position, shared_from_this()));
+
 	auto config = this->bulletConfigs.at("enemy");
 	this->UpdateObjects({
 		{ "enemy", EntityUpdate(position, IDLE, *config) },

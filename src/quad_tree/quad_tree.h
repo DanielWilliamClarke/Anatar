@@ -18,9 +18,9 @@ public:
 	QuadTree(sf::FloatRect boundry, unsigned int capacity);
 	virtual ~QuadTree() = default;
 
-	void Insert(Point<T>& point);
-	void Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)>& handler) const;
-	std::vector<Point<T>> Closest(Point<T>& point, unsigned int& count, std::function<bool(T)>& handler, float& maxDistance = std::numeric_limits<float>::infinity()) const;
+	bool Insert(Point<T>& point);
+	void Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const;
+	std::vector<Point<T>> Closest(Point<T>& point, unsigned int& count, std::function<bool(T)> handler, float& maxDistance = std::numeric_limits<float>::infinity()) const;
 
 private:
 
@@ -46,12 +46,13 @@ QuadTree<T>::QuadTree(sf::FloatRect boundry, unsigned int capacity)
 	: boundry(boundry),
 	capacity(capacity),
 	points({}),
-	nw(nullptr), ne(nullptr), se(nullptr), sw(nullptr)
+	nw(nullptr), ne(nullptr), se(nullptr), sw(nullptr),
+	isDivided(false)
 {
 }
 
 template <typename T>
-void QuadTree<T>::Insert(Point<T>& point)
+bool QuadTree<T>::Insert(Point<T>& point)
 {
 	if (!this->boundry.contains(point.point))
 	{
@@ -61,15 +62,16 @@ void QuadTree<T>::Insert(Point<T>& point)
 	if (this->points.size() < this->capacity)
 	{
 		this->points.push_back(point);
+		return true;
 	}
 
-	if (this->isDivided())
+	if (!this->isDivided)
 	{
 		this->Subdivide();
 	}
 
-	return (this.ne.Insert(point) || this.nw.Insert(point) ||
-		this.se.Insert(point) || this.sw.Insert(point));
+	return this->ne->Insert(point) || this->nw->Insert(point) ||
+		this->se->Insert(point) || this->sw->Insert(point);
 }
 
 template <typename T>
@@ -81,19 +83,19 @@ void QuadTree<T>::Subdivide()
 	auto h = this->boundry.height / 2;
 
 	this->ne = std::make_unique<QuadTree<T>>(
-		std::make_unique<Rectangle>(x + w, y - h, w, h), this->capacity);
+		sf::FloatRect(x + w, y - h, w, h), this->capacity);
 	this->nw = std::make_unique<QuadTree<T>>(
-		std::make_unique<Rectangle>(x - w, y - h, w, h), this->capacity);
+		sf::FloatRect(x - w, y - h, w, h), this->capacity);
 	this->se = std::make_unique<QuadTree<T>>(
-		std::make_unique<Rectangle>(x + w, y + h, w, h), this->capacity);
+		sf::FloatRect(x + w, y + h, w, h), this->capacity);
 	this->sw = std::make_unique<QuadTree<T>>(
-		std::make_unique<Rectangle>(x - w, y + h, w, h), this->capacity);
+		sf::FloatRect(x - w, y + h, w, h), this->capacity);
 
 	this->isDivided = true;
 }
 
 template <typename T>
-void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)>& handler) const
+void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::function<bool(T)> handler) const
 {
 	if (!range->Intersects(this->boundry))
 	{
@@ -102,7 +104,7 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 
 	for (auto& p : this->points)
 	{
-		if (handler(p))
+		if (handler(p.data))
 		{
 			found.push_back(p);
 		}
@@ -118,7 +120,7 @@ void QuadTree<T>::Query(ShapeQuery* range, std::vector<Point<T>>& found, std::fu
 }
 
 template <typename T>
-std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count, std::function<bool(T)>& handler, float& maxDistance) const
+std::vector<Point<T>> QuadTree<T>::Closest(Point<T>& point, unsigned int& count, std::function<bool(T)> handler, float& maxDistance) const
 {
 	// Handle 0 elements or no sub trees
 	auto length = this->Length();

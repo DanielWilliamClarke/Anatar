@@ -8,6 +8,7 @@
 #include <mutex>
 
 #include "i_bullet_system.h"
+#include "quad_tree/quad_tree.h"
 
 class Bullet;
 struct BulletConfig;
@@ -21,18 +22,16 @@ class BulletSystem : public IBulletSystem
 public:
 	enum affinities { LEFT = -1, RIGHT = 1 };
 
-	BulletSystem(std::shared_ptr<IThreadedWorkload> threadableWorkload, sf::FloatRect bounds, int affinity);
+	BulletSystem(sf::FloatRect bounds, int affinity);
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> targets);
+	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
 
 private:
 
 	void AddBullet(std::shared_ptr<Bullet> bullet);
-	void MultiThreadedUpdate(float dt, float worldSpeed, std::vector<std::shared_ptr<Entity>> targets);
-	void UpdateBullets(std::vector<std::shared_ptr<Bullet>>& bullets, std::vector<std::shared_ptr<Entity>> collisionTargets, float& dt, float& worldSpeed) const;
 	void EraseBullets();
 
 private:
@@ -40,7 +39,6 @@ private:
 	sf::FloatRect bounds;
 	int affinity;
 
-	std::shared_ptr<IThreadedWorkload> threadableWorkload;
 	std::mutex mutex;
 };
 

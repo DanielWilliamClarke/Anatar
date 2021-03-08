@@ -26,7 +26,7 @@ Player::Player(
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
 
-void Player::Update(Input& in, float dt)
+void Player::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree, Input& in, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -36,6 +36,9 @@ void Player::Update(Input& in, float dt)
 	const auto lastPosition = this->movementComponent->GetPosition();
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
+
+	quadTree->Insert(
+		Point<std::shared_ptr<Entity>>(position, shared_from_this()));
 
 	auto shipConfig = this->bulletConfigs.at("ship");
 	auto turrentConfig = this->bulletConfigs.at("turret");

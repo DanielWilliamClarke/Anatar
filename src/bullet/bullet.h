@@ -7,6 +7,8 @@
 #include <iostream>
 #include <list>
 
+#include "quad_tree/quad_tree.h"
+
 class IGlowShaderRenderer;
 class Entity;
 
@@ -66,7 +68,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
-	virtual std::vector<EntityCollision> DetectCollisions(std::vector<std::shared_ptr<Entity>> targets) = 0;
+	virtual std::vector<EntityCollision> DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>>> quadTree) = 0;
 
 	bool isSpent() const;
 	BulletConfig GetConfig() const;
