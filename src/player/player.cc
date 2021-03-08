@@ -37,8 +37,10 @@ void Player::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityColl
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	quadTree->Insert(
-		Point<std::shared_ptr<Entity>>(position, shared_from_this()));
+	auto bounds = this->GetObject("ship")->GetSprite()->getLocalBounds();
+	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
+	quadTree->Insert(Point<std::shared_ptr<Entity>>(position, shared_from_this()));
+	quadTree->Insert(Point<std::shared_ptr<Entity>>(extent, shared_from_this()));
 
 	auto shipConfig = this->bulletConfigs.at("ship");
 	auto turrentConfig = this->bulletConfigs.at("turret");

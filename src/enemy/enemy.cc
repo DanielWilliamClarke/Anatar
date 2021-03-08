@@ -29,8 +29,11 @@ void Enemy::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityColli
 	}
 
 	const auto position = this->globalMovementComponent->Integrate(dt);
-	quadTree->Insert(
-		Point<std::shared_ptr<Entity>>(position, shared_from_this()));
+
+	auto bounds = this->GetObject("enemy")->GetSprite()->getLocalBounds();
+	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
+	quadTree->Insert(Point<std::shared_ptr<Entity>>(position, shared_from_this()));
+	quadTree->Insert(Point<std::shared_ptr<Entity>>(extent, shared_from_this()));
 
 	auto config = this->bulletConfigs.at("enemy");
 	this->UpdateObjects({
@@ -48,7 +51,7 @@ void Enemy::InitBullets()
 {
 	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(shared_from_this(),
 		[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
-		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 10.0f, 3.0f);
+		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
 }
 
 sf::Vector2f Enemy::GetPosition() const

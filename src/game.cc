@@ -169,35 +169,35 @@ void Game::InitEnemySystem()
 
 	this->enemySystem
 
-		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(1.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildOribitalEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 200.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy1"), 6, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(projectileFactory), this->bulletSystem, 3.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 20.0f, 0.0f))))
 
-		->AddFactory(3.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(2.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 300.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy2"), 14, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<SingleShotWeaponComponentFactory>(homingProjectileFactory), this->bulletSystem, 3.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 40.0f, 0.0f))))
 
-		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(4.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 75.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy3"), 9, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 7.0f, 45.0f), this->bulletSystem, 4.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 60.0f, 0.0f))))
 
-		->AddFactory(8.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(6.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 100.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("enemy4"), 4, 0.1f, 1.0f),
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 8.0f, 360.0f), this->bulletSystem, 4.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 30.0f, 0.0f))))
 
-		->AddFactory(50.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(30.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
 				EnemyMotionConfig(bounds, worldSpeed, 50.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
