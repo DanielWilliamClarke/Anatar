@@ -11,7 +11,7 @@ HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& c
 	: Projectile(trajectory, config)
 {}
 
-std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree)
 {
 	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	auto query = CircleQuery(this->position, 2.5f);

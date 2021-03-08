@@ -18,7 +18,7 @@ public:
 	EnemySystem();
 	virtual ~EnemySystem() = default;
 
-	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, float dt);
+	void Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree, float dt);
 	void Draw(sf::RenderTarget& target, float interp) const;
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);

@@ -48,7 +48,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<GlowShaderRenderer> glowRenderer;
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;
-	std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree;
+	std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree;
 
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;

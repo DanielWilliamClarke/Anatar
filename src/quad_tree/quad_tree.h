@@ -19,7 +19,7 @@ public:
 	virtual ~QuadTree() = default;
 
 	bool Insert(Point<U>& point);
-	void Query(ShapeQuery* range, std::vector<C>& found, std::function<C(U)> handler) const;
+	void Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(U)> handler) const;
 	void Draw(sf::RenderTarget& target) const;
 
 private:
@@ -74,7 +74,7 @@ bool QuadTree<U, C>::Insert(Point<U>& point)
 }
 
 template <typename U, typename C>
-void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<C>& found, std::function<C(U)> handler) const
+void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(U)> handler) const
 {
 	if (!range->Intersects(this->boundry))
 	{

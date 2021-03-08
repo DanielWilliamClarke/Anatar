@@ -77,7 +77,7 @@ void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
 	}
 }
 
-std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;

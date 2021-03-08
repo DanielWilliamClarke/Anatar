@@ -26,7 +26,7 @@ Player::Player(
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
 
-void Player::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree, Input& in, float dt)
+void Player::Update(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree, Input& in, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{

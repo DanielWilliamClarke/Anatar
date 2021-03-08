@@ -55,7 +55,7 @@ void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float inter
 	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
-std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, std::shared_ptr<EntityCollision>>> quadTree)
+std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<std::shared_ptr<Entity>, EntityCollision>> quadTree)
 {
 	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());
