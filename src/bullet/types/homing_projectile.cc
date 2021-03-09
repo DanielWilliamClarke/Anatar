@@ -53,34 +53,6 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 	std::vector<std::shared_ptr<EntityCollision>> fineTuned;
 	if (collisions.size())
 	{
-		// find closest
-		std::sort(collisions.begin(), collisions.end(),
-			[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
-				auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
-				auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
-				return aDist < bDist;
-			});
-
-		// Potential modes identified
-		// Evadable
-		//this->velocity += normalisedDirection / (0.2f * magnitude);
-		// Accurate
-		//this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
-		// Search and destroy
-		//this->velocity = Dimensions::Normalise(this->velocity + (direction / (0.2f * magnitude)));
-
-		// Debug line for testing
-		this->line = {
-			sf::Vertex(collisions.front()->target->GetPosition()),
-			sf::Vertex(this->position)
-		};
-
-		// tend towards closest target
-		auto direction = collisions.front()->target->GetPosition() - this->position;
-		auto magnitude = Dimensions::Magnitude(direction);
-		auto normalisedDirection = Dimensions::Normalise(direction);
-		this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
-
 		// We want to check all for collisions just in case
 		for (auto& c : collisions)
 		{
@@ -90,8 +62,40 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 				if (!config.penetrating)
 				{
 					this->spent = true;
+					break;
 				}
 			}
+		}
+
+		if (!this->spent)
+		{
+			// find closest
+			std::sort(collisions.begin(), collisions.end(),
+				[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
+					auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
+					auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
+					return aDist < bDist;
+				});
+
+			// Potential modes identified
+			// Evadable
+			//this->velocity += normalisedDirection / (0.2f * magnitude);
+			// Accurate
+			//this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
+			// Search and destroy
+			//this->velocity = Dimensions::Normalise(this->velocity + (direction / (0.2f * magnitude)));
+
+			// Debug line for testing
+			this->line = {
+				sf::Vertex(collisions.front()->target->GetPosition()),
+				sf::Vertex(this->position)
+			};
+
+			// tend towards closest target
+			auto direction = collisions.front()->target->GetPosition() - this->position;
+			auto magnitude = Dimensions::Magnitude(direction);
+			auto normalisedDirection = Dimensions::Normalise(direction);
+			this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
 		}
 	}
 

@@ -62,8 +62,9 @@ void Game::InitWindow()
 {
 	this->window = std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(1280, 720),
+		//sf::VideoMode::getFullscreenModes()[0],
 		"Space Shooter",
-		sf::Style::Titlebar | sf::Style::Close);
+		sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close);
 
 	auto& view = this->window->getView();
 	sf::Vector2f viewCenter(view.getCenter());
