@@ -25,7 +25,7 @@ class BulletSystem;
 class RandomShotWeaponComponent;
 struct DamageEffects;
 
-typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class Game 
 {

@@ -39,8 +39,8 @@ void Player::Update(std::shared_ptr<CollisionQuadTree> quadTree, Input& in, floa
 
 	auto bounds = this->GetObject("ship")->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
-	quadTree->Insert(Point<std::shared_ptr<Entity>>(position, shared_from_this()));
-	quadTree->Insert(Point<std::shared_ptr<Entity>>(extent, shared_from_this()));
+	quadTree->Insert(Point<Entity>(position, shared_from_this()));
+	quadTree->Insert(Point<Entity>(extent, shared_from_this()));
 
 	auto shipConfig = this->bulletConfigs.at("ship");
 	auto turrentConfig = this->bulletConfigs.at("turret");

@@ -16,7 +16,7 @@ struct EntityCollision;
 class IGlowShaderRenderer;
 class IThreadedWorkload;
 
-typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class BulletSystem : public IBulletSystem
 {

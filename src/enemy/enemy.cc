@@ -32,8 +32,8 @@ void Enemy::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 
 	auto bounds = this->GetObject("enemy")->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
-	quadTree->Insert(Point<std::shared_ptr<Entity>>(position, shared_from_this()));
-	quadTree->Insert(Point<std::shared_ptr<Entity>>(extent, shared_from_this()));
+	quadTree->Insert(Point<Entity>(position, shared_from_this()));
+	quadTree->Insert(Point<Entity>(extent, shared_from_this()));
 
 	auto config = this->bulletConfigs.at("enemy");
 	this->UpdateObjects({

@@ -29,7 +29,7 @@ struct EntityCollision {
 };
 
 typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
-typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class Entity: public std::enable_shared_from_this<Entity>
 {

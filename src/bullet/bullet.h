@@ -13,7 +13,7 @@ class Entity;
 struct EntityCollision;
 class IGlowShaderRenderer;
 
-typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 

@@ -14,7 +14,15 @@ HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& c
 std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
 {
 	std::vector<std::shared_ptr<EntityCollision>> collisions;
-	auto query = CircleQuery(this->position, 2.5f);
+
+	auto distance = 10.0f;
+	auto query = RectangleQuery(sf::FloatRect(
+		this->position.x - distance,
+		this->position.y - distance,
+		this->position.x + distance,
+		this->position.y + distance
+		));
+
 	quadTree->Query(&query, collisions,
 		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
 			if (target != this->GetOwner() &&

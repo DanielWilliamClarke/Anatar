@@ -12,7 +12,7 @@ class Entity;
 struct EntityCollision;
 class IEnemyTypeFactory;
 
-typedef QuadTree<std::shared_ptr<Entity>, EntityCollision> CollisionQuadTree;
+typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
 {

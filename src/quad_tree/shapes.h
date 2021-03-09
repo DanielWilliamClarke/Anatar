@@ -4,12 +4,12 @@
 
 #include <SFML/Graphics.hpp>
 
-template <typename T>
+template <typename U>
 struct Point {
 	sf::Vector2f point;
-	T data;
+	std::shared_ptr<U> data;
 
-	Point(sf::Vector2f point, T data)
+	Point(sf::Vector2f point, std::shared_ptr<U> data)
 		: point(point), data(data)
 	{}
 };
@@ -34,20 +34,6 @@ public:
 
 private:
 	sf::FloatRect rect;
-};
-
-class CircleQuery : public ShapeQuery
-{
-public:
-	CircleQuery(sf::Vector2f origin, float r);
-	virtual ~CircleQuery() = default;
-
-	virtual bool Intersects(sf::FloatRect range) const override;
-
-private:
-	sf::Vector2f origin;
-	float r;
-	float rSq;
 };
 
 class IRayCaster;

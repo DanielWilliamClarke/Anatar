@@ -18,12 +18,11 @@ public:
 	QuadTree(sf::FloatRect boundry, unsigned int capacity);
 	virtual ~QuadTree() = default;
 
-	bool Insert(Point<U>& point);
-	void Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(U)> handler) const;
+	bool Insert(Point<U> point);
+	void Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(std::shared_ptr<U>)> handler) const;
 	void Draw(sf::RenderTarget& target) const;
 
 private:
-
 	void Subdivide();
 
 private:
@@ -51,7 +50,7 @@ QuadTree<U, C>::QuadTree(sf::FloatRect boundry, unsigned int capacity)
 }
 
 template <typename U, typename C>
-bool QuadTree<U, C>::Insert(Point<U>& point)
+bool QuadTree<U, C>::Insert(Point<U> point)
 {
 	if (!this->boundry.contains(point.point))
 	{
@@ -74,7 +73,7 @@ bool QuadTree<U, C>::Insert(Point<U>& point)
 }
 
 template <typename U, typename C>
-void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(U)> handler) const
+void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(std::shared_ptr<U>)> handler) const
 {
 	if (!range->Intersects(this->boundry))
 	{
@@ -111,10 +110,8 @@ void QuadTree<U, C>::Draw(sf::RenderTarget& target) const
 	}
 
 	auto rectangle = sf::RectangleShape();
-	rectangle.setPosition(
-		sf::Vector2f(this->boundry.left, this->boundry.top));
-	rectangle.setSize(
-		sf::Vector2f(this->boundry.width, this->boundry.height));
+	rectangle.setPosition(sf::Vector2f(this->boundry.left, this->boundry.top));
+	rectangle.setSize(sf::Vector2f(this->boundry.width, this->boundry.height));
 	rectangle.setFillColor(sf::Color::Transparent);
 	rectangle.setOutlineColor(sf::Color::White);
 	rectangle.setOutlineThickness(-1.0f);
@@ -126,18 +123,13 @@ void QuadTree<U, C>::Subdivide()
 {
 	auto w = this->boundry.width / 2;
 	auto h = this->boundry.height / 2;
-
 	auto x = this->boundry.left + w;
 	auto y = this->boundry.top + h;
 
-	this->ne = std::make_unique<QuadTree<U, C>>(
-		sf::FloatRect(x, y - h, w, h), this->capacity);
-	this->nw = std::make_unique<QuadTree<U, C>>(
-		sf::FloatRect(x - w, y - h, w, h), this->capacity);
-	this->se = std::make_unique<QuadTree<U, C>>(
-		sf::FloatRect(x, y, w, h), this->capacity);
-	this->sw = std::make_unique<QuadTree<U, C>>(
-		sf::FloatRect(x - w, y, w, h), this->capacity);
+	this->ne = std::make_unique<QuadTree<U, C>>(sf::FloatRect(x, y - h, w, h), this->capacity);
+	this->nw = std::make_unique<QuadTree<U, C>>(sf::FloatRect(x - w, y - h, w, h), this->capacity);
+	this->se = std::make_unique<QuadTree<U, C>>(sf::FloatRect(x, y, w, h), this->capacity);
+	this->sw = std::make_unique<QuadTree<U, C>>(sf::FloatRect(x - w, y, w, h), this->capacity);
 
 	this->isDivided = true;
 }
