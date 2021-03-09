@@ -1,5 +1,7 @@
 #include "projectile.h"
 
+#include <array>
+
 #include "util/math_utils.h"
 
 #include "renderer/i_renderer.h"
@@ -53,6 +55,12 @@ void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->GetTarget().draw(*round);
 	renderer->AddGlow(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
+
+	auto line = std::array<sf::Vertex, 2>{
+		sf::Vertex(this->position),
+		sf::Vertex(this->position + (this->velocity * 15.0f))
+	};
+	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 }
 
 std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
