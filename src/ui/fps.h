@@ -4,13 +4,15 @@
 
 #include <SFML/Graphics.hpp>
 
+class IRenderer;
+
 class Fps
 {
 public:
   Fps();
   virtual ~Fps() = default;
   void Update();
-  void Draw(sf::RenderTarget &window);
+  void Draw(std::shared_ptr<IRenderer> renderer);
 
 private:
   // Clocks

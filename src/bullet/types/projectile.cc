@@ -2,7 +2,7 @@
 
 #include "util/math_utils.h"
 
-#include "util/i_glow_shader_renderer.h"
+#include "renderer/i_renderer.h"
 #include "entity/entity.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
@@ -48,11 +48,11 @@ void Projectile::Update(float dt, float worldSpeed)
 	}
 }
 
-void Projectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
+void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 {
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
-	renderer->ExposeTarget().draw(*round);
-	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
+	renderer->GetTarget().draw(*round);
+	renderer->AddGlow(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 }
 
 std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)

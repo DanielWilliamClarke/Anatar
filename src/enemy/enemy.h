@@ -8,6 +8,8 @@
 #include "entity/entity.h"
 #include "util/i_random_number_source.h"
 
+class IRenderer;
+
 class Enemy : public Entity
 {
 public:
@@ -20,7 +22,7 @@ public:
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) override;
-	virtual void Draw(sf::RenderTarget& target, float interp) const override;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
 	virtual bool IsInside(sf::FloatRect& area) const override;
 

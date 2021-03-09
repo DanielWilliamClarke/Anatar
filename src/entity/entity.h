@@ -9,6 +9,8 @@
 
 #include "quad_tree/quad_tree.h"
 
+class IRenderer;
+
 class IEntityObjectBuilder;
 class IGlobalMovementComponent;
 class IAttributeComponent;
@@ -47,7 +49,7 @@ public:
 	std::shared_ptr<EntityObject> GetObject(std::string name) const;
 
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) = 0;
-	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
 	virtual bool IsInside(sf::FloatRect& area) const = 0;
 	virtual sf::Vector2f GetPosition() const = 0;
 
@@ -63,7 +65,7 @@ public:
 
 protected:
 	void UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const;
-	void DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const;
+	void DrawObjects(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
 
 	EntityManifest objects;
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder;

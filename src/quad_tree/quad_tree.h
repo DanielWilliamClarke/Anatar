@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "util/math_utils.h"
+#include "renderer/i_renderer.h"
 
 #include "shapes.h"
 
@@ -20,7 +21,7 @@ public:
 
 	bool Insert(Point<U> point);
 	void Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& found, std::function<std::shared_ptr<C>(std::shared_ptr<U>)> handler) const;
-	void Draw(sf::RenderTarget& target) const;
+	void Draw(std::shared_ptr<IRenderer> renderer) const;
 
 private:
 	void Subdivide();
@@ -99,14 +100,14 @@ void QuadTree<U, C>::Query(ShapeQuery* range, std::vector<std::shared_ptr<C>>& f
 }
 
 template <typename U, typename C>
-void QuadTree<U, C>::Draw(sf::RenderTarget& target) const
+void QuadTree<U, C>::Draw(std::shared_ptr<IRenderer> renderer) const
 {
 	if (this->isDivided)
 	{
-		this->nw->Draw(target);
-		this->ne->Draw(target);
-		this->sw->Draw(target);
-		this->se->Draw(target);
+		this->nw->Draw(renderer);
+		this->ne->Draw(renderer);
+		this->sw->Draw(renderer);
+		this->se->Draw(renderer);
 	}
 
 	auto rectangle = sf::RectangleShape();
@@ -115,7 +116,8 @@ void QuadTree<U, C>::Draw(sf::RenderTarget& target) const
 	rectangle.setFillColor(sf::Color::Transparent);
 	rectangle.setOutlineColor(sf::Color::White);
 	rectangle.setOutlineThickness(-1.0f);
-	target.draw(rectangle);
+
+	renderer->GetDebugTarget().draw(rectangle);
 }
 
 template <typename U, typename C>

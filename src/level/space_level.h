@@ -7,7 +7,7 @@
 
 #include "util/i_random_number_source.h"
 
-class IGlowShaderRenderer;
+class IRenderer;
 class IThreadedWorkload;
 
 typedef std::vector<std::unique_ptr<sf::CircleShape>>::const_iterator StarIter;
@@ -19,7 +19,7 @@ public:
 	virtual ~SpaceLevel() = default;
 
 	void Update(float worldSpeed, float dt);
-	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const;
+	void Draw(std::shared_ptr<IRenderer> renderer) const;
 
 private:
 

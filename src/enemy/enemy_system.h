@@ -8,6 +8,7 @@
 
 #include "quad_tree/quad_tree.h"
 
+class IRenderer;
 class Entity;
 struct EntityCollision;
 class IEnemyTypeFactory;
@@ -21,7 +22,7 @@ public:
 	virtual ~EnemySystem() = default;
 
 	void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt);
-	void Draw(sf::RenderTarget& target, float interp) const;
+	void Draw(std::shared_ptr<IRenderer> renderer, float interp) const;
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
 

@@ -69,7 +69,7 @@ void BulletSystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt,
 		});
 }
 
-void BulletSystem::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
+void BulletSystem::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 {
 	for (auto& b : this->bullets)
 	{

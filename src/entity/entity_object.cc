@@ -5,6 +5,8 @@
 #include "components/movement/i_local_movement_component.h"
 #include "components/weapon/i_weapon_component.h"
 
+#include "renderer/i_renderer.h"
+
 EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,
 	std::shared_ptr<IHitboxComponent> hitboxComponent,
@@ -64,14 +66,15 @@ void EntityObject::Update(EntityUpdate update, float dt) const
 	}
 }
 
-void EntityObject::Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const
+void EntityObject::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
 {
 	this->sprite->setPosition(this->movementComponent->Interpolate(interPosition));
-	target.draw(*this->sprite);
+	renderer->GetTarget().draw(*this->sprite);
+
 	if (this->hitboxComponent->IsRequired())
 	{
 		this->hitboxComponent->Update();
-		this->hitboxComponent->Draw(target);
+		this->hitboxComponent->Draw(renderer);
 	}
 }
 

@@ -56,10 +56,10 @@ void Player::Update(std::shared_ptr<CollisionQuadTree> quadTree, Input& in, floa
 	this->attributeComponent->Update(dt);
 }
 
-void Player::Draw(sf::RenderTarget& target, float interp) const
+void Player::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 {
 	const auto interpPosition = this->movementComponent->Interpolate(interp);
-	this->DrawObjects(target, interpPosition);
+	this->DrawObjects(renderer, interpPosition);
 }
 
 const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const

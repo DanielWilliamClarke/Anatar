@@ -12,7 +12,7 @@ class HomingProjectile : public Projectile
 public:
 	HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config);
 	virtual ~HomingProjectile() = default;
-	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
 	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) override;
 
 private:

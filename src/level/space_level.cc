@@ -2,7 +2,7 @@
 
 #include <thread>
 
-#include "util/i_glow_shader_renderer.h"
+#include "renderer/i_renderer.h"
 #include "util/i_threaded_workload.h"
 
 SpaceLevel::SpaceLevel(std::shared_ptr<IThreadedWorkload> threadableWorkload, std::shared_ptr<IRandomNumberSource<int>> randSource, sf::Vector2f viewSize)
@@ -39,14 +39,14 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 	this->threadableWorkload->Join();
 }
 
-void SpaceLevel::Draw(std::shared_ptr<IGlowShaderRenderer> renderer) const
+void SpaceLevel::Draw(std::shared_ptr<IRenderer> renderer) const
 {
 	for (auto& s : stars)
 	{
-		renderer->ExposeTarget().draw(*s);
+		renderer->GetTarget().draw(*s);
 		if (s->getRadius() >= 1.5f)
 		{
-			renderer->AddGlowAtPosition(s->getPosition(), s->getFillColor(), 500.0f);
+			renderer->AddGlow(s->getPosition(), s->getFillColor(), 500.0f);
 		}
 	}
 }

@@ -8,7 +8,8 @@
 #include "ui/player_hud.h"
 
 #include "util/texture_atlas.h"
-#include "util/glow_shader_renderer.h"
+#include "renderer/glow_shader_renderer.h"
+#include "renderer/composite_renderer.h"
 
 #include "entity/Entity.h"
 #include "player/player_builder.h"
@@ -74,7 +75,8 @@ void Game::InitWindow()
 		viewSize.x,
 		viewSize.y);
 
-	this->glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
+	auto glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
+	this->renderer = std::make_shared<CompositeRenderer>(glowRenderer, viewSize);
 
 	this->threadableWorkload = std::make_shared<ThreadedWorkload>();
 }
@@ -248,21 +250,17 @@ void Game::Draw()
 
 	auto bgColor = sf::Color(10, 0, 10);
 	this->window->clear(bgColor);
+	this->renderer->Clear();
 
-	//Draw stuff that glows
-	this->glowRenderer->Clear(bgColor);
-	this->level->Draw(this->glowRenderer);
-	this->bulletSystem->Draw(this->glowRenderer, interp);
-	this->glowRenderer->Draw(*this->window);
+	this->level->Draw(this->renderer);
+	this->bulletSystem->Draw(this->renderer, interp);
+	this->player->Draw(this->renderer, interp);
+	this->enemySystem->Draw(this->renderer, interp);
+	this->fps->Draw(this->renderer);
+	this->playerHud->Draw(this->renderer);
+	this->quadTree->Draw(this->renderer);
 
-	// Draw everything else
-	this->player->Draw(*this->window, interp);
-	this->enemySystem->Draw(*this->window, interp);
-	this->fps->Draw(*this->window);
-	this->playerHud->Draw(*this->window);
-
-	this->quadTree->Draw(*this->window);
-
+	this->renderer->Draw(*this->window);
 	this->window->display();
 }
 

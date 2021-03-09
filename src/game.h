@@ -11,7 +11,7 @@
 
 class Fps;
 class TextureAtlas;
-class GlowShaderRenderer;
+class IRenderer;
 class IThreadedWorkload;
 
 class SpaceLevel;
@@ -48,7 +48,7 @@ private:
 	void Draw();
 
 	std::shared_ptr<sf::RenderWindow> window;
-	std::shared_ptr<GlowShaderRenderer> glowRenderer;
+	std::shared_ptr<IRenderer> renderer;
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;
 	std::shared_ptr<CollisionQuadTree> quadTree;
 

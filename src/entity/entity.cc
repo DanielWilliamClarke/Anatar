@@ -44,11 +44,11 @@ void Entity::UpdateObjects(std::map<std::string, EntityUpdate> update, float dt)
 	}
 }
 
-void Entity::DrawObjects(sf::RenderTarget& target, sf::Vector2f interPosition) const
+void Entity::DrawObjects(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
 {
 	for (auto& obj : this->objects)
 	{
-		obj.second->Draw(target, interPosition);
+		obj.second->Draw(renderer, interPosition);
 	}
 }
 

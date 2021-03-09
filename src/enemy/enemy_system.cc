@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "renderer/i_renderer.h"
 #include "enemy.h"
 #include "i_enemy_type_factory.h"
 #include "entity/entity_object.h"
@@ -50,11 +51,11 @@ void EnemySystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 	}
 }
 
-void EnemySystem::Draw(sf::RenderTarget& target, float interp) const
+void EnemySystem::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 {
 	for (auto& e : enemies)
 	{
-		e->Draw(target, interp);
+		e->Draw(renderer, interp);
 	}
 }
 

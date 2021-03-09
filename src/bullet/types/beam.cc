@@ -3,7 +3,7 @@
 #include "util/math_utils.h"
 
 #include "entity/entity.h"
-#include "util/i_glow_shader_renderer.h"
+#include "renderer/i_renderer.h"
 #include "util/i_ray_caster.h"
 
 Beam::Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
@@ -66,14 +66,14 @@ void Beam::Update(float dt, float worldSpeed)
 	}
 }
 
-void Beam::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
+void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 {
    	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
-	renderer->ExposeTarget().draw(*round);
-	renderer->AddGlowAtPosition(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
+	renderer->GetTarget().draw(*round);
+	renderer->AddGlow(this->round->getPosition(), this->round->getFillColor(), config.glowAttenuation);
 
 	if (collisionPosition) {
-		renderer->AddGlowAtPosition(*collisionPosition, this->round->getFillColor(), config.glowAttenuation);
+		renderer->AddGlow(*collisionPosition, this->round->getFillColor(), config.glowAttenuation);
 	}
 }
 

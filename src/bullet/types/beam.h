@@ -17,7 +17,7 @@ public:
 	virtual ~Beam() = default;
 
 	virtual void Update(float dt, float worldSpeed) override;
-	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) override;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
 	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) override;
 
 	void Reignite();

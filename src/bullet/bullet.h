@@ -11,7 +11,7 @@
 
 class Entity;
 struct EntityCollision;
-class IGlowShaderRenderer;
+class IRenderer;
 
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
@@ -75,7 +75,7 @@ public:
 	virtual ~Bullet() = default;
 
 	virtual void Update(float dt, float worldSpeed) = 0;
-	virtual void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp) = 0;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) = 0;
 	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) = 0;
 
 	bool isSpent() const;

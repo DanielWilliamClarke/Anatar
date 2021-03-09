@@ -13,7 +13,7 @@ public:
 	virtual ~PlayerHud() = default;
 
 	virtual void Update(float health, float maxHealth, float shields, float maxShields, float score) override;
-	virtual void Draw(sf::RenderTarget& target) const override;
+	virtual void Draw(std::shared_ptr<IRenderer> renderer) const override;
 
 private:
 

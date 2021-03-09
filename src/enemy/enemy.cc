@@ -41,10 +41,10 @@ void Enemy::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 	}, dt);
 }
 
-void Enemy::Draw(sf::RenderTarget& target, float interp) const
+void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 {
 	const auto interpPosition = this->globalMovementComponent->Interpolate(interp);
-	this->DrawObjects(target, interpPosition);
+	this->DrawObjects(renderer, interpPosition);
 }
 
 void Enemy::InitBullets()

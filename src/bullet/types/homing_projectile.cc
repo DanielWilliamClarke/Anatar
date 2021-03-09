@@ -2,7 +2,7 @@
 
 #include "util/math_utils.h"
 
-#include "util/i_glow_shader_renderer.h"
+#include "renderer/i_renderer.h"
 #include "entity/entity.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
@@ -11,9 +11,9 @@ HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& c
 	: Projectile(trajectory, config)
 {}
 
-void HomingProjectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp)
+void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 {
-	renderer->ExposeTarget().draw(line.data(), 2, sf::Lines);
+	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 
 	auto rectangle = sf::RectangleShape();
 	rectangle.setPosition(sf::Vector2f(this->zone.left, this->zone.top));
@@ -21,7 +21,7 @@ void HomingProjectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float
 	rectangle.setFillColor(sf::Color::Transparent);
 	rectangle.setOutlineColor(sf::Color::Magenta);
 	rectangle.setOutlineThickness(-1.0f);
-	renderer->ExposeTarget().draw(rectangle);
+	renderer->GetDebugTarget().draw(rectangle);
 
 	Projectile::Draw(renderer, interp);
 }
@@ -29,19 +29,19 @@ void HomingProjectile::Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float
 std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
 {
 	auto distance = 200.0f;
-	zone = sf::FloatRect(
+	this->zone = sf::FloatRect(
 		this->position.x - (distance / 2),
 		this->position.y - (distance / 2),
 		distance,
 		distance);
-	auto query = RectangleQuery(zone);
+	auto query = RectangleQuery(this->zone);
 
 	std::vector<std::shared_ptr<EntityCollision>> collisions;
 	quadTree->Query(&query, collisions,
 		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
 			if (target != this->GetOwner() &&
 				target->GetTag() != this->GetOwner()->GetTag() &&
-				target->IsInside(zone))
+				target->IsInside(this->zone))
 			{
 				// only want entities that are inside the zone 
 				return std::make_shared<EntityCollision>(target, this->position);

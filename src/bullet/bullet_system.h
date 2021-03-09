@@ -13,7 +13,7 @@ struct BulletConfig;
 struct BulletTrajectory;
 class Entity;
 struct EntityCollision;
-class IGlowShaderRenderer;
+class IRenderer;
 class IThreadedWorkload;
 
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
@@ -27,7 +27,7 @@ public:
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
 	void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt, float worldSpeed);
-	void Draw(std::shared_ptr<IGlowShaderRenderer> renderer, float interp);
+	void Draw(std::shared_ptr<IRenderer> renderer, float interp);
 
 private:
 

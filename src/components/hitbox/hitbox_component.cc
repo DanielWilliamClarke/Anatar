@@ -1,6 +1,7 @@
 #include "hitbox_component.h"
 
 #include "util/i_ray_caster.h"
+#include "renderer/i_renderer.h"
 
 HitboxComponent::HitboxComponent(std::shared_ptr<IRayCaster> rayCaster, sf::Color colour)
 	: rayCaster(rayCaster), offsetX(0), offsetY(0), required(false)
@@ -27,9 +28,9 @@ void HitboxComponent::Update()
 	this->hitbox.setPosition(position.x + this->offsetX, position.y + this->offsetY);
 }
 
-void HitboxComponent::Draw(sf::RenderTarget& target)
+void HitboxComponent::Draw(std::shared_ptr<IRenderer> renderer)
 {
-	target.draw(this->hitbox);
+	renderer->GetDebugTarget().draw(this->hitbox);
 }
 
 bool HitboxComponent::Intersects(const sf::FloatRect& hitbox)

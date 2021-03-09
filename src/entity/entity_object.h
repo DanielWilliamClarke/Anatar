@@ -6,6 +6,7 @@
 
 #include "entity_update.h"
 
+class IRenderer;
 class IAnimationComponent;
 class IHitboxComponent;
 class ILocalMovementComponent;
@@ -33,7 +34,7 @@ public:
 	std::shared_ptr<sf::Sprite> GetSprite() const;
 
 	void Update(EntityUpdate position, float dt) const;
-	void Draw(sf::RenderTarget& target, sf::Vector2f interPosition) const;
+	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
 
 	bool DetectCollision(sf::Vector2f& position) const;
 	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;

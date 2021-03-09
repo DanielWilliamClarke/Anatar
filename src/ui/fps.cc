@@ -1,5 +1,7 @@
 #include "fps.h"
 
+#include "renderer/i_renderer.h"
+
 Fps::Fps()
 {
   font.loadFromFile("./assets/EightBitDragon-anqx.ttf");
@@ -27,7 +29,7 @@ void Fps::Update()
   frames++;
 }
 
-void Fps::Draw(sf::RenderTarget &window)
+void Fps::Draw(std::shared_ptr<IRenderer> renderer)
 {
   if (clockDraw.getElapsedTime().asSeconds() >= 1.0f)
   {
@@ -37,6 +39,6 @@ void Fps::Draw(sf::RenderTarget &window)
   }
   draws++;
 
-  window.draw(fps);
-  window.draw(dps);
+  renderer->GetDebugTarget().draw(fps);
+  renderer->GetDebugTarget().draw(dps);
 }

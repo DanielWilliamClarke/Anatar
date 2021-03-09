@@ -1,5 +1,7 @@
 #include "player_hud.h"
 
+#include "renderer/i_renderer.h"
+
 PlayerHud::PlayerHud(sf::FloatRect bounds)
 	: bounds(bounds), margin(10.f)
 {
@@ -57,13 +59,12 @@ void PlayerHud::Update(float health, float maxHealth, float shields, float maxSh
 	scoreText.setPosition(bounds.width - scoreBounds.width - margin, textHeight);
 }
 
-void PlayerHud::Draw(sf::RenderTarget& target) const
+void PlayerHud::Draw(std::shared_ptr<IRenderer> renderer) const
 {
-	target.draw(playerText);
-	target.draw(scoreText);
-
-	target.draw(healthBar);
-	target.draw(shieldBar);
+	renderer->GetTarget().draw(playerText);
+	renderer->GetTarget().draw(scoreText);
+	renderer->GetTarget().draw(healthBar);
+	renderer->GetTarget().draw(shieldBar);
 }
 
 sf::Color PlayerHud::BlendColor(sf::Color start, sf::Color end, float percentage) const
