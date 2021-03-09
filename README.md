@@ -48,7 +48,7 @@ then build
 - [x] Spatial partitioning for better collision detection performance, WE ARE USING A QUAD TREE
   - [x] Player -> enemy collisions
   - [ ] bullet -> bullet collisions? 
-- [ ] implemented debug renderer that can be turned on with key press
+- [x] implement debug renderer that can be turned on with key press
 - [ ] Game states - main menu, gameplay, pause, settings, highscores etc 
 - [ ] Buff / Debuff / Power up / Helper system 
   - [ ] player to collide with power ups and entity object is attached to the player
