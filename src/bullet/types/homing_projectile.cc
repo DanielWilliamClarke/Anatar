@@ -51,14 +51,18 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 		auto normalisedDirection = Dimensions::Normalise(direction);
 		this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));
 
-		if ((*closest)->target->DetectCollision(this->position))
+		for (auto& c : collisions)
 		{
-			fineTuned.push_back(std::make_shared<EntityCollision>((*closest)->target, this->position));
-			if (!config.penetrating)
+			if (c->target->DetectCollision(this->position))
 			{
-				this->spent = true;
+				fineTuned.push_back(std::make_shared<EntityCollision>(c->target, this->position));
+				if (!config.penetrating)
+				{
+					this->spent = true;
+				}
 			}
 		}
+
 	}
 
 	return fineTuned;
