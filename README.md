@@ -49,6 +49,8 @@ then build
   - [x] Player -> enemy collisions
   - [ ] bullet -> bullet collisions? 
 - [ ] Game states - main menu, gameplay, pause, settings, highscores etc 
+- [ ] Buff / Debuff / Power up / Helper system 
+  - [ ] player to collide with power ups and entity object is attached to the player
 - [ ] Improve player control scheme
   - [ ] Demo mode (AI controlled player)
   - [ ] Weapon selection
