@@ -68,9 +68,10 @@ void EntityObject::Draw(sf::RenderTarget& target, sf::Vector2f interPosition) co
 {
 	this->sprite->setPosition(this->movementComponent->Interpolate(interPosition));
 	target.draw(*this->sprite);
-	if (this->hitboxComponent->IsRequired()) {
+	if (this->hitboxComponent->IsRequired())
+	{
 		this->hitboxComponent->Update();
-		//this->hitboxComponent->Draw(target);
+		this->hitboxComponent->Draw(target);
 	}
 }
 
