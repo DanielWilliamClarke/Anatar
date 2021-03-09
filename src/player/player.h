@@ -25,6 +25,7 @@ public:
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, Input& in, float dt);
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
+	virtual bool IsInside(sf::FloatRect& area) const override;
 
 protected:
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) override {};

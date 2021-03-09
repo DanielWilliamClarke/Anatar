@@ -112,3 +112,9 @@ sf::Vector2f Player::GetPosition() const
 	position.x += bounds.width;
 	return position;
 }
+
+bool Player::IsInside(sf::FloatRect& area) const
+{
+	return area.intersects(
+		this->GetObject("ship")->GetSprite()->getGlobalBounds());
+}

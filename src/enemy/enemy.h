@@ -21,7 +21,8 @@ public:
 	virtual ~Enemy() = default;
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) override;
 	virtual void Draw(sf::RenderTarget& target, float interp) const override;
-	virtual sf::Vector2f GetPosition() const;
+	virtual sf::Vector2f GetPosition() const override;
+	virtual bool IsInside(sf::FloatRect& area) const override;
 
 private:
 	void InitBullets();

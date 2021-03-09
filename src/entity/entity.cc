@@ -95,11 +95,6 @@ void Entity::RegisterKill(float score)
 	this->attributeComponent->RegisterKill(score);
 }
 
-sf::Vector2f Entity::GetPosition() const
-{
-	return this->globalMovementComponent->GetPosition();
-}
-
 std::string Entity::GetTag() const
 {
 	return tag;

@@ -56,12 +56,11 @@ void Enemy::InitBullets()
 
 sf::Vector2f Enemy::GetPosition() const
 {
-	auto enemy = this->GetObject("enemy")->GetSprite();
-	auto bounds = enemy->getLocalBounds();
-	auto position = enemy->getPosition();
+	return this->GetObject("enemy")->GetSprite()->getPosition();
+}
 
-	position.x += bounds.width / 2;
-	position.y += bounds.height / 2;
-
-	return position;
+bool Enemy::IsInside(sf::FloatRect& area) const
+{
+	return area.intersects(
+		this->GetObject("enemy")->GetSprite()->getGlobalBounds());
 }

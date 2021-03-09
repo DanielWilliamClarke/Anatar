@@ -48,7 +48,9 @@ public:
 
 	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) = 0;
 	virtual void Draw(sf::RenderTarget& target, float interp) const = 0;
-	virtual sf::Vector2f GetPosition() const;
+	virtual bool IsInside(sf::FloatRect& area) const = 0;
+	virtual sf::Vector2f GetPosition() const = 0;
+
 
 	bool DetectCollision(sf::Vector2f& position) const;
 	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
