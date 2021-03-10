@@ -8,6 +8,7 @@
 #include "ui/player_hud.h"
 
 #include "util/texture_atlas.h"
+#include "util/ray_caster.h"
 #include "renderer/glow_shader_renderer.h"
 #include "renderer/composite_renderer.h"
 
@@ -32,10 +33,12 @@
 #include "bullet/bullet_system.h"
 #include "bullet/bullet.h"
 #include "bullet/types/projectile_factory.h"
+#include "bullet/types/beam_factory.h"
 
 #include "components/weapon/burst/random_shot_weapon_component.h"
 #include "components/weapon/burst/burst_shot_weapon_component_factory.h"
 #include "components/weapon/single/single_shot_weapon_component_factory.h"
+#include "components/weapon/beam/radial_beam_weapon_component_factory.h"
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
@@ -43,6 +46,7 @@
 #include "bullet/types/debris_factory.h"
 
 #include "quad_tree/quad_tree.h"
+
 
 Game::Game()
 	: clock(std::make_shared<sf::Clock>()),
@@ -61,11 +65,15 @@ Game::Game()
 
 void Game::InitWindow()
 {
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
 	this->window = std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(1280, 720),
 		//sf::VideoMode::getFullscreenModes()[0],
 		"Space Shooter",
-		sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close);
+		sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close,
+		settings);
 
 	auto& view = this->window->getView();
 	sf::Vector2f viewCenter(view.getCenter());
@@ -156,6 +164,7 @@ void Game::InitEnemySystem()
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto homingProjectileFactory = std::make_shared<HomingProjectileFactory>();
+	auto beamFactory = std::make_shared<BeamFactory>(std::make_shared<RayCaster>(), this->bounds, 0.1f);
 
 	auto healthDamageColor = sf::Color(248, 99, 0, 255);
 	auto attenuation = 50.0f;
@@ -200,11 +209,11 @@ void Game::InitEnemySystem()
 				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 8.0f, 360.0f), this->bulletSystem, 4.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 30.0f, 0.0f))))
 
-		->AddFactory(30.0f, std::make_shared<EnemyTypeFactory>(
+		->AddFactory(15.0f, std::make_shared<EnemyTypeFactory>(
 			EnemyConfig(EnemyTypeFactory::BuildLinearEnemy,
-				EnemyMotionConfig(bounds, worldSpeed, 50.0f),
+				EnemyMotionConfig(bounds, worldSpeed, 75.0f),
 				EnemyAnimationConfig(this->textureAtlas->GetTexture("boss1"), 12, 0.5f, 2.0f),
-				EnemyWeaponConfig(std::make_shared<BurstShotWeaponComponentFactory>(projectileFactory, 50.0f, 110.0f), this->bulletSystem, 15.0f),
+				EnemyWeaponConfig(std::make_shared<RadialBeamWeaponComponentFactory>(beamFactory, 0.5f, 10.0f, 3.0f), this->bulletSystem, 10.0f),
 				EnemyAttributeConfig(enemyDamageEffects, 150.0f, 0.0f))));
 }
 

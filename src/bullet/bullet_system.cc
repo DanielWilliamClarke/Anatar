@@ -88,7 +88,7 @@ void BulletSystem::EraseBullets()
 		std::remove_if(
 			this->bullets.begin(), this->bullets.end(),
 			[this](std::shared_ptr<Bullet>& b) -> bool {
-				return b->isSpent() || !this->bounds.contains(b->GetPosition());
+				return b->isSpent();
 			}),
 		this->bullets.end());
 }

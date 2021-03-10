@@ -12,6 +12,7 @@
 #include "components/weapon/player/player_weapon_component.h"
 #include "components/weapon/inert_weapon_component.h"
 #include "components/weapon/beam/single_beam_weapon_component.h"
+#include "components/weapon/beam/radial_beam_weapon_component.h"
 #include "entity/entity_object.h"
 
 #include "bullet/types/projectile_factory.h"
@@ -50,7 +51,7 @@ void PlayerBuilder::BuildShip()
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
 
 	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
-	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 3.0f, 1.0f);
+	auto weaponComponent = std::make_shared<RadialBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f, 5.0f, 2.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 
@@ -138,7 +139,7 @@ void PlayerBuilder::BuildTurret()
 	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(offset);
 	auto projectileFactory = std::make_shared<HomingProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 2.0f, 0.0f, 5.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 2.0f, 0.0f, 10.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 	auto turret = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
 	auto sprite = turret->GetSprite();

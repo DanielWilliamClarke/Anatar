@@ -10,7 +10,7 @@
 RadialBeamWeaponComponent::RadialBeamWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float duration, float coolDown, float arcAngle, float numBeams)
 	: bulletSystem(bulletSystem),
 	factory(factory),
-	arcAngle(AngleConversion::ToRadians(arcAngle)),
+	arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
 	duration(duration),
 	coolDown(coolDown),
 	numBeams(numBeams),
@@ -22,9 +22,15 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 {
 	if (!beams.size())
 	{
+		auto angleBetween = 0.0f;
+		if (numBeams > 1)
+		{
+			angleBetween = arcAngle / (numBeams - 1);
+		}
+
 		// burst center point is (360 - theta) / 2
 		float theta = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
-		for (float i = 0; i < numBeams; i++)
+		for (auto i = 0; i < numBeams; i++)
 		{
 			sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
@@ -33,7 +39,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 				this->bulletSystem->FireBullet(factory, traj, config));
 
 			beams.push_back(beam);
-			theta += arcAngle / numBeams;
+			theta += angleBetween;
 		}
 	}
 

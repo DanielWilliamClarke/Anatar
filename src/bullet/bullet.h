@@ -43,7 +43,7 @@ struct BulletConfig
 		AFFINITY affinity,
 		bool penetrating, 
 		float damage, 
-		float lifeTime = 0.0f)
+		float lifeTime = 20.0f)
 		: owner(owner), 
 		shapeBuilder(shapeBuilder),
 		color(color),

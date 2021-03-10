@@ -18,7 +18,7 @@ void EnemySystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 	this->accumulator += dt;
 	for (auto& f : factories)
 	{
-		if (std::fmod(this->accumulator, f.first) < dt && this->enemies.size() <= maxEnemies)
+		if (std::fmod(this->accumulator, f.first) < dt && this->enemies.size() < maxEnemies)
 		{
 			for (auto& fe : f.second)
 			{

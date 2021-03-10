@@ -9,7 +9,7 @@
 BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float numBullets, float delay, float arcAngle, float offsetAngle)
 	: bulletSystem(bulletSystem),
 	factory(factory),
-	arcAngle(AngleConversion::ToRadians(arcAngle)),
+	arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
 	offsetAngle(AngleConversion::ToRadians(offsetAngle)),
 	delay(delay),
 	numBullets(numBullets),
@@ -23,14 +23,20 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 	{
 		this->accumulator = 0;
 
+		auto angleBetween = 0.0f;
+		if (numBullets > 1) 
+		{
+			angleBetween = arcAngle / (numBullets - 1);
+		}
+			
 		// burst center point is (360 - theta) / 2
-		float theta = ((((float)M_PI * 2.0f) - arcAngle) / 2.0f) + offsetAngle;
-		for (float i = 0; i < numBullets; i++)
+		float theta = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
+		for (auto i = 0; i < numBullets; i++) 
 		{
 			sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
 			this->bulletSystem->FireBullet(factory, traj, config);
-			theta += arcAngle / numBullets;
+			theta += angleBetween;
 		}
 	}
 }
