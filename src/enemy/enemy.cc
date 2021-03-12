@@ -5,6 +5,7 @@
 
 #include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"
+#include "quad_tree/quad_tree.h"
 
 #include "components/movement/i_global_movement_component.h"
 #include "bullet/bullet.h"
@@ -51,7 +52,7 @@ void Enemy::InitBullets()
 {
 	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(shared_from_this(),
 		[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
-		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 1.0f);
+		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
 }
 
 sf::Vector2f Enemy::GetPosition() const

@@ -6,9 +6,11 @@
 #include <memory>
 
 #include "entity/entity.h"
-#include "util/i_random_number_source.h"
 
 class IRenderer;
+
+template<typename U, typename C>
+class QuadTree;
 
 class Enemy : public Entity
 {

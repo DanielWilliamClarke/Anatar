@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "util/math_utils.h"
+#include "quad_tree/quad_tree.h"
 
 #include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"

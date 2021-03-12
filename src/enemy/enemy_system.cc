@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "renderer/i_renderer.h"
+#include "quad_tree/quad_tree.h"
 #include "enemy.h"
 #include "i_enemy_type_factory.h"
 #include "entity/entity_object.h"

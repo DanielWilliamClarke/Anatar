@@ -9,6 +9,7 @@
 #include "components/attributes/i_attribute_component.h"
 #include "util/i_ray_caster.h"
 #include "util/math_utils.h"
+#include "quad_tree/quad_tree.h"
 
 Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,

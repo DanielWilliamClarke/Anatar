@@ -6,12 +6,13 @@
 #include <list>
 #include <map>
 
-#include "quad_tree/quad_tree.h"
-
 class IRenderer;
 class Entity;
 struct EntityCollision;
 class IEnemyTypeFactory;
+
+template<typename U, typename C>
+class QuadTree;
 
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 

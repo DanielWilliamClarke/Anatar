@@ -7,12 +7,13 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "quad_tree/quad_tree.h"
-
 class Fps;
 class TextureAtlas;
 class IRenderer;
 class IThreadedWorkload;
+
+template<typename U, typename C>
+class QuadTree;
 
 class SpaceLevel;
 class Entity;

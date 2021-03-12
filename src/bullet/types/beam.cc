@@ -5,6 +5,7 @@
 #include "entity/entity.h"
 #include "renderer/i_renderer.h"
 #include "util/i_ray_caster.h"
+#include "quad_tree/quad_tree.h"
 
 Beam::Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
 	: Bullet(trajectory, config),

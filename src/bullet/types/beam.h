@@ -5,10 +5,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "bullet/bullet.h"
-#include "quad_tree/quad_tree.h"
 
 class IRayCaster;
 class Entity;
+
+template<typename U, typename C>
+class QuadTree;
 
 class Beam : public Bullet
 {

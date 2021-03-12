@@ -13,6 +13,9 @@ class IPlayerMovementComponent;
 class IPlayerAttributeComponent;
 struct Input;
 
+template<typename U, typename C>
+class QuadTree;
+
 class Player : public Entity
 {
 public:

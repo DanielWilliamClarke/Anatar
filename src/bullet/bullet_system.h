@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "i_bullet_system.h"
-#include "quad_tree/quad_tree.h"
 
 class Bullet;
 struct BulletConfig;
@@ -15,6 +14,9 @@ class Entity;
 struct EntityCollision;
 class IRenderer;
 class IThreadedWorkload;
+
+template<typename U, typename C>
+class QuadTree;
 
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 

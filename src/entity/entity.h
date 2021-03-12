@@ -7,8 +7,6 @@
 #include <memory>
 #include <vector>
 
-#include "quad_tree/quad_tree.h"
-
 class IRenderer;
 
 class IEntityObjectBuilder;
@@ -20,6 +18,9 @@ struct EntityUpdate;
 struct BulletConfig;
 struct RayIntersection;
 
+template<typename U, typename C>
+class QuadTree;
+
 class Entity;
 struct EntityCollision {
 	std::shared_ptr<Entity> target;
@@ -30,8 +31,8 @@ struct EntityCollision {
 	{}
 };
 
-typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
+typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
 
 class Entity: public std::enable_shared_from_this<Entity>
 {

@@ -6,6 +6,7 @@
 #include "entity/entity.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
+#include "quad_tree/quad_tree.h"
 
 HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Projectile(trajectory, config)

@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "projectile.h"
+#include "quad_tree/quad_tree.h"
 
 class Debris : public Projectile
 {

@@ -47,7 +47,6 @@
 
 #include "quad_tree/quad_tree.h"
 
-
 Game::Game()
 	: clock(std::make_shared<sf::Clock>()),
 	dt(1.0f / 60.0f),

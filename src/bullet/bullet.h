@@ -7,11 +7,12 @@
 #include <iostream>
 #include <list>
 
-#include "quad_tree/quad_tree.h"
-
 class Entity;
 struct EntityCollision;
 class IRenderer;
+
+template<typename U, typename C>
+class QuadTree;
 
 typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
