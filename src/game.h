@@ -12,7 +12,8 @@ class TextureAtlas;
 class IRenderer;
 class IThreadedWorkload;
 
-template<typename U, typename C>
+struct Collision;
+template<typename C>
 class QuadTree;
 
 class SpaceLevel;
@@ -25,8 +26,6 @@ class EnemySystem;
 class BulletSystem;
 class RandomShotWeaponComponent;
 struct DamageEffects;
-
-typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class Game 
 {
@@ -51,7 +50,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<IRenderer> renderer;
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;
-	std::shared_ptr<CollisionQuadTree> quadTree;
+	std::shared_ptr<QuadTree<Collision>> quadTree;
 
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;

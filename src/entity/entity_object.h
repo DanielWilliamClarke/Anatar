@@ -23,7 +23,7 @@ public:
 		std::shared_ptr<ILocalMovementComponent> movementComponent,
 		std::shared_ptr<IWeaponComponent> weaponComponent);
 
-	virtual ~EntityObject() = default;
+	virtual ~EntityObject();
 	
 	void SetTexture(std::shared_ptr<sf::Texture> texture) const;
 	void InitAnimationComponent(std::shared_ptr<sf::Texture> texture);

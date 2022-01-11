@@ -19,22 +19,22 @@ Entity::Entity(
 	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), tag(tag)
 {}
 
-void Entity::AddObject(std::string name, std::shared_ptr<EntityObject> object)
+void Entity::AddObject(ObjectID id, std::shared_ptr<EntityObject> object)
 {
-	this->objects[name] = object;
+	this->objects[id] = object;
 }
 
-void Entity::RemoveObject(std::string name)
+void Entity::RemoveObject(ObjectID id)
 {
-	this->objects.erase(name);
+	this->objects.erase(id);
 }
 
-std::shared_ptr<EntityObject> Entity::GetObject(std::string name) const
+std::shared_ptr<EntityObject> Entity::GetObject(ObjectID id) const
 {
-	return this->objects.at(name);
+	return this->objects.at(id);
 }
 
-void Entity::UpdateObjects(std::map<std::string, EntityUpdate> update, float dt) const
+void Entity::UpdateObjects(std::map<ObjectID, EntityUpdate> update, float dt) const
 {
 	for (auto& up : update)
 	{

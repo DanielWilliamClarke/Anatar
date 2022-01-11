@@ -13,7 +13,7 @@ EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0), maxEnemies(50)
 {}
 
-void EnemySystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
+void EnemySystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
 {
 	// Create enemies
 	this->accumulator += dt;
@@ -38,7 +38,7 @@ void EnemySystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 		std::remove_if(
 			enemies.begin(), enemies.end(),
 			[=](std::shared_ptr<Entity> e) -> bool {
-				auto enemySprite = e->GetObject("enemy")->GetSprite();
+				auto enemySprite = e->GetObject(EnemyObjects::ENEMY)->GetSprite();
 				auto enemyBounds = enemySprite->getGlobalBounds();
 				auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
 				return enemyX <= 0 || e->HasDied();

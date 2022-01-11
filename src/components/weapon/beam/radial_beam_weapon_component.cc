@@ -71,3 +71,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		this->accumulator = 0;
 	}
 }
+
+void RadialBeamWeaponComponent::Cease() {
+	std::for_each(beams.begin(), beams.end(), [=](std::shared_ptr<Beam>& b) { b->Cease(); });
+}

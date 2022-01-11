@@ -5,14 +5,14 @@
 #include "util/math_utils.h"
 
 #include "renderer/i_renderer.h"
-#include "entity/entity.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
 #include "quad_tree/quad_tree.h"
+#include "bullet/collision.h"
 
 Projectile::Projectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Bullet(trajectory, config),
-	round(config.shapeBuilder())
+	round(config.callbacks.shapeBuilder())
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();
@@ -64,17 +64,16 @@ void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 }
 
-std::vector<std::shared_ptr<EntityCollision>> Projectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
+std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
 {
-	std::vector<std::shared_ptr<EntityCollision>> collisions;
+	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());
+
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
-			if (target != this->GetOwner() &&
-				target->GetTag() != this->GetOwner()->GetTag() &&
-				target->DetectCollision(this->position))
+		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
+			if (point->tag != this->GetTag() && point->collisionTest(this->position, this->velocity, false))
 			{
-				return std::make_shared<EntityCollision>(target, this->position);
+				return std::make_shared<Collision>(this->shared_from_this(), point);
 			}
 			return nullptr;
 		});

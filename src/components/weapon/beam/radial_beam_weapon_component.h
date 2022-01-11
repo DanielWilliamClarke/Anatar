@@ -17,6 +17,7 @@ public:
 	virtual ~RadialBeamWeaponComponent() = default;
 
 	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
+	virtual void Cease() override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

@@ -13,9 +13,9 @@ public:
 	RadialBeamWeaponComponentFactory(std::shared_ptr<IBulletFactory> factory, float duration, float arcAngle, float numBeams)
 		: factory(factory),
 		duration(duration),
-		coolDown(coolDown),
 		arcAngle(arcAngle),
-		numBeams(numBeams)
+		numBeams(numBeams),
+		coolDown(0)
 	{}
 
 	virtual ~RadialBeamWeaponComponentFactory() = default;

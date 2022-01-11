@@ -2,10 +2,10 @@
 
 #include "util/math_utils.h"
 
-#include "entity/entity.h"
 #include "renderer/i_renderer.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/quad_tree.h"
+#include "bullet/collision.h"
 
 Beam::Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate)
 	: Bullet(trajectory, config),
@@ -26,7 +26,8 @@ Beam::Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<I
 void Beam::Update(float dt, float worldSpeed)
 {
 	this->lastPosition = this->position;
-	this->position = this->config.owner->GetPosition();
+	this->position = this->config.callbacks.ownerPositionSampler();
+
 	this->round->setPosition(this->position);
 
 	auto beamEnd = collisionPosition ?
@@ -35,7 +36,7 @@ void Beam::Update(float dt, float worldSpeed)
 
 	this->round->setSize(
 		sf::Vector2f(
-			Dimensions::DistanceBetween(this->config.owner->GetPosition(), beamEnd),
+			Dimensions::DistanceBetween(this->position, beamEnd),
 			this->round->getSize().y));
 
 	config.damage = 0;
@@ -78,33 +79,28 @@ void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	}
 }
 
-std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
+std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;
 
-	std::vector<std::shared_ptr<EntityCollision>> collisions;
+	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RayQuery(rayCaster, this->position, this->velocity);
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
-			if (target != this->GetOwner() &&
-				target->GetTag() != this->GetOwner()->GetTag())
+		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
+			if (point->tag != this->GetTag() && point->collisionTest(this->position, this->velocity, true))
 			{
-				auto check = target->DetectCollisionWithRay(this->position, this->velocity);
-				if (check->intersects)
-				{
-					return std::make_shared<EntityCollision>(target, check->point);
-				}
-			}
+				return std::make_shared<Collision>(this->shared_from_this(), point);
+			}		
 			return nullptr;
 		});
 
 	if (collisions.size() > 1)
 	{
 		std::sort(collisions.begin(), collisions.end(),
-			[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
-				auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
-				auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
+			[this](std::shared_ptr<Collision> a, std::shared_ptr<Collision> b) -> bool {
+				auto aDist = Dimensions::ManhattanDistance(this->position, a->target->position);
+				auto bDist = Dimensions::ManhattanDistance(this->position, b->target->position);
 				return aDist < bDist;
 			});
 	}
@@ -112,7 +108,7 @@ std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared
 	// Set collision point to hit the first entity if the beam cant penetrate
 	if (!config.penetrating && collisions.size())
 	{
-		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front()->point);
+		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front()->target->position);
 		collisions = { collisions.front() };
 	}
 
@@ -122,4 +118,9 @@ std::vector<std::shared_ptr<EntityCollision>> Beam::DetectCollisions(std::shared
 void Beam::Reignite()
 {
 	this->accumulator = 0;
+}
+
+void Beam::Cease()
+{
+	this->spent = true;
 }

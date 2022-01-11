@@ -5,7 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 #include "projectile.h"
-#include "quad_tree/quad_tree.h"
+
+struct Collision;
+template<typename C>
+class QuadTree;
 
 class Debris : public Projectile
 {
@@ -16,7 +19,7 @@ public:
 
 	virtual ~Debris() = default;
 
-	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) override { return {}; }
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) override { return {}; }
 };
 
 #endif // DEBRIS_H

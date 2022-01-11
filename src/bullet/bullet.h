@@ -7,21 +7,34 @@
 #include <iostream>
 #include <list>
 
-class Entity;
-struct EntityCollision;
+struct Collision;
 class IRenderer;
 
-template<typename U, typename C>
+template<typename C>
 class QuadTree;
-
-typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 
+struct BulletCallbacks {
+
+	std::function<void(bool, float)> collisionResolver;
+	std::function<sf::Vector2f(void)> ownerPositionSampler;
+	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
+
+	BulletCallbacks(
+		std::function<void(bool, float)> collisionResolver,
+		std::function<sf::Vector2f(void)> ownerPositionSampler,
+		std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder)
+		: collisionResolver(collisionResolver),
+		ownerPositionSampler(ownerPositionSampler),
+		shapeBuilder(shapeBuilder)
+	{}
+};
+
 struct BulletConfig
 {
-	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
-	std::shared_ptr<Entity> owner;
+	BulletCallbacks callbacks;
+	std::string tag;
 
 	sf::Color color;
 	float glowAttenuation;
@@ -35,8 +48,8 @@ struct BulletConfig
 	float lifeTime;
 
 	BulletConfig(
-		std::shared_ptr<Entity> owner,
-		std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder,
+		BulletCallbacks callbacks,
+		std::string tag,
 		sf::Color color, 
 		float glowAttenuation,
 		float rotation, 
@@ -45,8 +58,8 @@ struct BulletConfig
 		bool penetrating, 
 		float damage, 
 		float lifeTime = 20.0f)
-		: owner(owner), 
-		shapeBuilder(shapeBuilder),
+		: callbacks(callbacks),
+		tag(tag),
 		color(color),
 		glowAttenuation(glowAttenuation),
 		speed(speed),
@@ -69,7 +82,7 @@ struct BulletTrajectory
 	{}
 };
 
-class Bullet
+class Bullet : public std::enable_shared_from_this<Bullet>
 {
 public:
 	Bullet(BulletTrajectory& trajectory, BulletConfig& config);
@@ -77,13 +90,15 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) = 0;
-	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) = 0;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) = 0;
 
 	bool isSpent() const;
 	sf::Vector2f GetPosition() const;
 	sf::Vector2f GetVelocity() const;
 	float GetDamage() const;
-	std::shared_ptr<Entity> GetOwner() const;
+	std::string GetTag() const;
+	std::function<void(bool, float)> GetCollisionResolver() const;
+
 
 protected:
 	BulletConfig config;

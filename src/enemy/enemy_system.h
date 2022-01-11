@@ -8,13 +8,12 @@
 
 class IRenderer;
 class Entity;
-struct EntityCollision;
+
 class IEnemyTypeFactory;
 
-template<typename U, typename C>
+struct Collision;
+template<typename C>
 class QuadTree;
-
-typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
 {
@@ -22,13 +21,11 @@ public:
 	EnemySystem();
 	virtual ~EnemySystem() = default;
 
-	void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt);
+	void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt);
 	void Draw(std::shared_ptr<IRenderer> renderer, float interp) const;
 
 	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
-
 	std::vector<std::shared_ptr<Entity>>& GetEnemies();
-
 private:
 	std::vector<std::shared_ptr<Entity>> enemies;
 	std::map<float, std::vector<std::shared_ptr<IEnemyTypeFactory>>> factories;

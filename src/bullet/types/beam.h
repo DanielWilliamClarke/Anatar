@@ -7,9 +7,9 @@
 #include "bullet/bullet.h"
 
 class IRayCaster;
-class Entity;
 
-template<typename U, typename C>
+struct Collision;
+template<typename C>
 class QuadTree;
 
 class Beam : public Bullet
@@ -20,9 +20,10 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) override;
 
 	void Reignite();
+	void Cease();
 
 protected:
 	std::shared_ptr<IRayCaster> rayCaster;

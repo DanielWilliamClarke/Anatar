@@ -138,17 +138,23 @@ void Game::InitPlayer()
 	auto sheildDamageColor = sf::Color(75, 108, 183, 255);
 	auto attenuation = 50.0f;
 
+	auto resolver = [](bool kill, float damage) {};
+	auto sampler = []() -> sf::Vector2f { return sf::Vector2f(); };
+
 	auto playerDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
-		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); },
-			healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::RIGHT, false, 0.0f, 7.0f),
-		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f),
-		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			sheildDamageColor, attenuation, 0.0f,  50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f));
+		std::make_shared<BulletConfig>(
+			BulletCallbacks(resolver, sampler,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
+			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::RIGHT, false, 0.0f, 7.0f),
+		std::make_shared<BulletConfig>(
+			BulletCallbacks(resolver, sampler,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f),
+		std::make_shared<BulletConfig>(
+			BulletCallbacks(resolver, sampler,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			"debris", sheildDamageColor, attenuation, 0.0f,  50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f));
 
 	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, playerDamageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
 
@@ -168,14 +174,19 @@ void Game::InitEnemySystem()
 	auto healthDamageColor = sf::Color(248, 99, 0, 255);
 	auto attenuation = 50.0f;
 
+	auto resolver = [](bool kill, float damage) {};
+	auto sampler = []() -> sf::Vector2f { return sf::Vector2f(); };
+
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
-		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); },
-			healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::LEFT, false, 0.0f, 0.7f),
-		std::make_shared<BulletConfig>(nullptr,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); },
-			healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::LEFT, false, 0.0f, 0.3f),
+		std::make_shared<BulletConfig>(
+			BulletCallbacks(resolver, sampler,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
+			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::LEFT, false, 0.0f, 0.7f),
+		std::make_shared<BulletConfig>(
+			BulletCallbacks(resolver, sampler,
+			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::LEFT, false, 0.0f, 0.3f),
 		nullptr);
 
 	this->enemySystem
@@ -235,7 +246,7 @@ void Game::Update()
 
 	while (this->accumulator >= this->dt)
 	{
-		this->quadTree = std::make_shared<CollisionQuadTree>(bounds, 4);
+		this->quadTree = std::make_shared<QuadTree<Collision>>(bounds, 4);
 
 		this->level->Update(worldSpeed, dt);
 		this->player->Update(this->quadTree, in, this->dt);

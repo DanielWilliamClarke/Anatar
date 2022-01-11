@@ -38,7 +38,11 @@ float Bullet::GetDamage() const
 	return config.damage;
 }
 
-std::shared_ptr<Entity> Bullet::GetOwner() const
+std::string Bullet::GetTag() const
 {
-	return config.owner;
+	return config.tag;
+}
+
+std::function<void(bool, float)> Bullet::GetCollisionResolver() const {
+	return config.callbacks.collisionResolver;
 }

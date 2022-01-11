@@ -13,7 +13,7 @@ public:
 	HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config);
 	virtual ~HomingProjectile() = default;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<EntityCollision>> DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) override;
 
 private:
 	std::array<sf::Vertex, 2> line;

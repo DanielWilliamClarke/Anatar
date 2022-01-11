@@ -76,7 +76,7 @@ void PlayerBuilder::BuildShip()
 	ship->AddAnimation(this->MOVING_UP, 0.2f, 0, 1, 2, 1, frameSize.x, frameSize.y);
 	ship->AddAnimation(this->MOVING_DOWN, 0.2f, 0, 0, 2, 0, frameSize.x, frameSize.y);
 
-	manifest["ship"] = ship;
+	manifest[PlayerObjects::SHIP] = ship;
 }
 
 void PlayerBuilder::BuildExhaust()
@@ -92,7 +92,7 @@ void PlayerBuilder::BuildExhaust()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
+	auto shipSpriteOrigin = manifest.at(PlayerObjects::SHIP)->GetSprite()->getOrigin();
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Green);
@@ -113,7 +113,7 @@ void PlayerBuilder::BuildExhaust()
 
 	exhaust->AddAnimation(this->IDLE, 0.1f, 0, 0, 1, 0, frameSize.x, frameSize.y);
 
-	manifest["exhaust"] = exhaust;
+	manifest[PlayerObjects::EXHAUST] = exhaust;
 }
 
 void PlayerBuilder::BuildTurret()
@@ -129,7 +129,7 @@ void PlayerBuilder::BuildTurret()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSprite = manifest.at("ship")->GetSprite();
+	auto shipSprite = manifest.at(PlayerObjects::SHIP)->GetSprite();
 	auto bounds = shipSprite->getLocalBounds();
 	auto offset = shipSprite->getOrigin();
 	offset.x += bounds.width;
@@ -161,7 +161,7 @@ void PlayerBuilder::BuildTurret()
 
 	turret->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
 
-	manifest["turret"] = turret;
+	manifest[PlayerObjects::TURRET] = turret;
 }
 
 void PlayerBuilder::BuildGlowie()
@@ -177,7 +177,7 @@ void PlayerBuilder::BuildGlowie()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSpriteOrigin = manifest.at("ship")->GetSprite()->getOrigin();
+	auto shipSpriteOrigin = manifest.at(PlayerObjects::SHIP)->GetSprite()->getOrigin();
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
 	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Blue);
@@ -205,5 +205,5 @@ void PlayerBuilder::BuildGlowie()
 
 	glowie->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
 
-	manifest["glowie"] = glowie;
+	manifest[PlayerObjects::GLOWIE] = glowie;
 }

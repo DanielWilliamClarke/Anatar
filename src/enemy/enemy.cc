@@ -6,6 +6,7 @@
 #include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"
 #include "quad_tree/quad_tree.h"
+#include "util/i_ray_caster.h"
 
 #include "components/movement/i_global_movement_component.h"
 #include "bullet/bullet.h"
@@ -18,11 +19,11 @@ Enemy::Enemy(
 	: Entity{ nullptr, globalMovementComponent, attributeComponent, "enemy" }
 {
 	this->objects = manifest;
-	this->GetObject("enemy")->GetSprite()->setPosition(initialPosition);
-	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject("enemy")->GetSprite()->getGlobalBounds());
+	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
+	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
 }
 
-void Enemy::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
+void Enemy::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -30,15 +31,28 @@ void Enemy::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt)
 	}
 
 	const auto position = this->globalMovementComponent->Integrate(dt);
-
-	auto bounds = this->GetObject("enemy")->GetSprite()->getLocalBounds();
+	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
-	quadTree->Insert(Point<Entity>(position, shared_from_this()));
-	quadTree->Insert(Point<Entity>(extent, shared_from_this()));
 
-	auto config = this->bulletConfigs.at("enemy");
+	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> bool {
+		if (ray) {
+			return this->DetectCollisionWithRay(position, velocity)->intersects;
+		} else {
+			return this->DetectCollision(position);
+		}
+	};
+	auto isInsideZone = [this](sf::FloatRect& area) -> bool { return this->IsInside(area); };
+	auto collisionHandler = [this](float damage, sf::Vector2f position) { 
+		this->TakeDamage(damage, position);
+		return this->HasDied();
+	};
+
+	quadTree->Insert(std::make_shared<Point>(position, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
+	quadTree->Insert(std::make_shared<Point>(extent, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
+
+	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
 	this->UpdateObjects({
-		{ "enemy", EntityUpdate(position, IDLE, *config) },
+		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config) },
 	}, dt);
 }
 
@@ -50,18 +64,22 @@ void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 
 void Enemy::InitBullets()
 {
-	this->bulletConfigs["enemy"] = std::make_shared<BulletConfig>(shared_from_this(),
-		[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); },
+	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
+		BulletCallbacks(
+			[=](bool kill, float damage) {},
+			[this]() -> sf::Vector2f { return this->GetPosition(); },
+			[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
+		this->GetTag(),
 		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
 }
 
 sf::Vector2f Enemy::GetPosition() const
 {
-	return this->GetObject("enemy")->GetSprite()->getPosition();
+	return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition();
 }
 
 bool Enemy::IsInside(sf::FloatRect& area) const
 {
 	return area.intersects(
-		this->GetObject("enemy")->GetSprite()->getGlobalBounds());
+		this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
 }

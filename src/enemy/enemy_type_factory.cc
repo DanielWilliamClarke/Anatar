@@ -95,7 +95,7 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 
 	ship->AddAnimation(0, config.animationConfig.frameDuration, 0, 0, config.animationConfig.frames - 1, 0, (int)spriteFrameSize.x, (int)spriteFrameSize.y);
 
-	EntityManifest manifest;
-	manifest["enemy"] = ship;
-	return manifest;
+	return EntityManifest{
+		{EnemyObjects::ENEMY, ship}
+	};
 }

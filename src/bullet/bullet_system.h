@@ -10,25 +10,20 @@
 class Bullet;
 struct BulletConfig;
 struct BulletTrajectory;
-class Entity;
-struct EntityCollision;
 class IRenderer;
-class IThreadedWorkload;
 
-template<typename U, typename C>
+struct Collision;
+template<typename C>
 class QuadTree;
-
-typedef QuadTree<Entity, EntityCollision> CollisionQuadTree;
 
 class BulletSystem : public IBulletSystem
 {
 public:
-
 	BulletSystem(sf::FloatRect bounds);
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt, float worldSpeed);
+	void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IRenderer> renderer, float interp);
 
 private:

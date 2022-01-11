@@ -8,7 +8,8 @@
 
 class EntityObject;
 
-typedef std::map<std::string, std::shared_ptr<EntityObject>> EntityManifest;
+using ObjectID = unsigned int;
+using EntityManifest = std::map<ObjectID, std::shared_ptr<EntityObject>>;
 
 class IEntityObjectBuilder
 {

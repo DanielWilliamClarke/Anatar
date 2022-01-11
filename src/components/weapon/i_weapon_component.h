@@ -13,6 +13,7 @@ public:
 	virtual ~IWeaponComponent() = default;
 
 	virtual void Fire(sf::Vector2f position, BulletConfig& config) = 0;
+	virtual void Cease() {};
 };
 
 #endif //I_WEAPON_COMPONENT_H

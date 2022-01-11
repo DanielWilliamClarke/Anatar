@@ -9,8 +9,11 @@
 
 class IRenderer;
 
-template<typename U, typename C>
+struct Collision;
+template<typename C>
 class QuadTree;
+
+enum EnemyObjects : ObjectID { ENEMY };
 
 class Enemy : public Entity
 {
@@ -23,7 +26,7 @@ public:
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
-	virtual void Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt) override;
+	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
 	virtual bool IsInside(sf::FloatRect& area) const override;

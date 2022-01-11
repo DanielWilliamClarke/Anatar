@@ -20,6 +20,11 @@ EntityObject::EntityObject(
 {
 }
 
+EntityObject::~EntityObject() 
+{
+	this->weaponComponent->Cease();
+}
+
 void EntityObject::SetTexture(std::shared_ptr<sf::Texture> texture) const
 {
 	this->sprite->setTexture(*texture);

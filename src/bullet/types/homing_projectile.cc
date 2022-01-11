@@ -3,10 +3,10 @@
 #include "util/math_utils.h"
 
 #include "renderer/i_renderer.h"
-#include "entity/entity.h"
 #include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
 #include "quad_tree/quad_tree.h"
+#include "bullet/collision.h"
 
 HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Projectile(trajectory, config)
@@ -27,7 +27,7 @@ void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	Projectile::Draw(renderer, interp);
 }
 
-std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions(std::shared_ptr<CollisionQuadTree> quadTree)
+std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
 {
 	auto distance = 200.0f;
 	this->zone = sf::FloatRect(
@@ -37,29 +37,26 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 		distance);
 	auto query = RectangleQuery(this->zone);
 
-	std::vector<std::shared_ptr<EntityCollision>> collisions;
+	std::vector<std::shared_ptr<Collision>> collisions;
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Entity> target) -> std::shared_ptr<EntityCollision> {
-			if (target != this->GetOwner() &&
-				target->GetTag() != this->GetOwner()->GetTag() &&
-				target->IsInside(this->zone))
+		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
+			if (point->tag != this->GetTag() && point->isInsideZone(this->zone))
 			{
-				// only want entities that are inside the zone 
-				return std::make_shared<EntityCollision>(target, this->position);
+				return std::make_shared<Collision>(this->shared_from_this(), point);
 			}
 			return nullptr;
 		});
 
 	this->line = {};
-	std::vector<std::shared_ptr<EntityCollision>> fineTuned;
+	std::vector<std::shared_ptr<Collision>> fineTuned;
 	if (collisions.size())
 	{
 		// We want to check all for collisions just in case
 		for (auto& c : collisions)
 		{
-			if (c->target->DetectCollision(this->position))
+			if (c->target->collisionTest(this->position, this->velocity, false))
 			{
-				fineTuned.push_back(std::make_shared<EntityCollision>(c->target, this->position));
+				fineTuned.push_back(c);
 				if (!config.penetrating)
 				{
 					this->spent = true;
@@ -72,9 +69,9 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 		{
 			// find closest
 			std::sort(collisions.begin(), collisions.end(),
-				[this](std::shared_ptr<EntityCollision> a, std::shared_ptr<EntityCollision> b) -> bool {
-					auto aDist = Dimensions::ManhattanDistance(this->position, a->point);
-					auto bDist = Dimensions::ManhattanDistance(this->position, b->point);
+				[this](std::shared_ptr<Collision> a, std::shared_ptr<Collision> b) -> bool {
+					auto aDist = Dimensions::ManhattanDistance(this->position, a->target->position);
+					auto bDist = Dimensions::ManhattanDistance(this->position, b->target->position);
 					return aDist < bDist;
 				});
 
@@ -88,12 +85,12 @@ std::vector<std::shared_ptr<EntityCollision>> HomingProjectile::DetectCollisions
 
 			// Debug line for testing
 			this->line = {
-				sf::Vertex(collisions.front()->target->GetPosition()),
+				sf::Vertex(collisions.front()->target->position),
 				sf::Vertex(this->position)
 			};
 
 			// tend towards closest target
-			auto direction = collisions.front()->target->GetPosition() - this->position;
+			auto direction = collisions.front()->target->position - this->position;
 			auto magnitude = Dimensions::Magnitude(direction);
 			auto normalisedDirection = Dimensions::Normalise(direction);
 			this->velocity = Dimensions::Normalise(this->velocity + (normalisedDirection / (0.2f * magnitude)));

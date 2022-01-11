@@ -5,7 +5,7 @@
 #include "types/projectile.h"
 
 #include "i_bullet_factory.h"
-#include "entity/entity.h"
+
 #include "components/weapon/i_weapon_component.h"
 #include "components/hitbox/i_hitbox_component.h"
 
@@ -13,15 +13,7 @@
 #include "util/container_utils.h"
 #include "util/i_threaded_workload.h"
 
-struct UnresolvedCollisions
-{
-	std::shared_ptr<Bullet> bullet;
-	std::vector<std::shared_ptr<EntityCollision>> collisions;
-
-	UnresolvedCollisions(std::shared_ptr<Bullet> b, std::vector<std::shared_ptr<EntityCollision>> c)
-		: bullet(b), collisions(c)
-	{}
-};
+#include "bullet/collision.h"
 
 BulletSystem::BulletSystem(sf::FloatRect bounds)
 	: bounds(bounds)
@@ -34,38 +26,31 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(std::shared_ptr<CollisionQuadTree> quadTree, float dt, float worldSpeed)
+void BulletSystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt, float worldSpeed)
 {
 	this->EraseBullets();
 
 	// Determine collisions to resolve
-	std::vector<UnresolvedCollisions> unresolved;
+	std::vector<std::shared_ptr<Collision>> unresolved;
 	for (auto& b : this->bullets)
 	{
 		b->Update(dt, worldSpeed);
 
-		//quadTree->Insert(
-		//	Point< std::shared_ptr<Entity>>(b->GetPosition(), b->GetOwner()));
-
 		auto collisions = b->DetectCollisions(quadTree);
 		if (collisions.size() && b->GetDamage() > 0.0f)
 		{
-			unresolved.push_back(UnresolvedCollisions(b, collisions));
+			unresolved.reserve(std::max(unresolved.capacity(), unresolved.size() + collisions.size()));
+			unresolved.insert(unresolved.end(), collisions.begin(), collisions.end());
 		}
 	}
 
 	// Resolve each collision
 	std::for_each(unresolved.begin(), unresolved.end(),
-		[&](UnresolvedCollisions& u) {
-			auto damage = u.bullet->GetDamage();
-			for (auto& collision : u.collisions)
-			{
-				collision->target->TakeDamage(damage, collision->point);
-				if (u.bullet->GetOwner() && collision->target->HasDied())
-				{
-					u.bullet->GetOwner()->RegisterKill(damage);
-				}
-			}
+		[&](std::shared_ptr<Collision> c) {
+			auto damage = c->bullet->GetDamage();
+			c->bullet->GetCollisionResolver()(
+				c->target->collisionResolver(damage, c->bullet->GetPosition()),
+				damage);
 		});
 }
 
