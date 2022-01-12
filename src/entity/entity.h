@@ -13,6 +13,7 @@ class IRenderer;
 class IEntityObjectBuilder;
 class IGlobalMovementComponent;
 class IAttributeComponent;
+class ICollisionDetectionComponent;
 
 class EntityObject;
 struct EntityUpdate;
@@ -34,6 +35,7 @@ public:
 		std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
+		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 		std::string tag);
 	virtual ~Entity() = default;
 
@@ -43,11 +45,9 @@ public:
 
 	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
-	virtual bool IsInside(sf::FloatRect& area) const = 0;
 	virtual sf::Vector2f GetPosition() const = 0;
 
-	bool DetectCollision(sf::Vector2f& position) const;
-	std::shared_ptr<RayIntersection> DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const;
+	std::shared_ptr<sf::Vector2f> DetectCollision(const sf::Vector2f& origin, const bool ray = false, const sf::Vector2f& direction = sf::Vector2f()) const;
 
 	void TakeDamage(float damage, sf::Vector2f& impactPoint);
 	void RegisterKill(float score);
@@ -63,6 +63,7 @@ protected:
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder;
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
 	std::shared_ptr<IAttributeComponent> attributeComponent;
+	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent;
 
 	std::map<ObjectID, std::shared_ptr<BulletConfig>> bulletConfigs;
 	std::string tag;

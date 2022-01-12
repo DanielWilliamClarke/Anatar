@@ -71,9 +71,12 @@ std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(std::shared
 
 	quadTree->Query(&query, collisions,
 		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
-			if (point->tag != this->GetTag() && point->collisionTest(this->position, this->velocity, false))
+			if (point->tag != this->GetTag())
 			{
-				return std::make_shared<Collision>(this->shared_from_this(), point);
+				auto collision = point->collisionTest(this->position, this->velocity, false);
+				if (collision) {
+					return std::make_shared<Collision>(this->shared_from_this(), point, *collision);
+				}
 			}
 			return nullptr;
 		});

@@ -12,6 +12,7 @@
 #include "player_input.h"
 #include "components/movement/i_player_movement_component.h"
 #include "components/attributes/i_player_attribute_component.h"
+#include "components/collision_detection/i_collision_detection_component.h"
 #include "bullet/bullet.h"
 
 #include "util/i_ray_caster.h"
@@ -19,8 +20,9 @@
 Player::Player(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
-	std::shared_ptr<IPlayerAttributeComponent> attributeComponent)
-	: Entity{ entityBuilder, globalMovementComponent, attributeComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
+	std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
+	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent)
+	: Entity{ entityBuilder, globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
 {
 	this->objects = this->entityBuilder->Build();
 
@@ -43,16 +45,14 @@ void Player::Update(std::shared_ptr<QuadTree<Collision>> quadTree, Input& in, fl
 	auto bounds = this->GetObject(SHIP)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> bool {
-		if (ray) {
-			return this->DetectCollisionWithRay(position, velocity)->intersects;
-		}
-		else {
-			return this->DetectCollision(position);
-		}
-	};
+	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->
+		std::shared_ptr<sf::Vector2f> { 
+			return this->DetectCollision(position, ray, velocity);
+		};
 
-	auto isInsideZone = [this](sf::FloatRect& area) -> bool { return this->IsInside(area); };
+	auto isInsideZone = [this](sf::FloatRect& area) ->
+		bool { return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(SHIP)->GetHitbox()); };
+
 	auto collisionHandler = [this](float damage, sf::Vector2f position) -> bool { 
 		this->TakeDamage(damage, position);
 		return this->HasDied();
@@ -147,10 +147,4 @@ sf::Vector2f Player::GetPosition() const
 	auto position = ship->getPosition();
 	position.x += bounds.width;
 	return position;
-}
-
-bool Player::IsInside(sf::FloatRect& area) const
-{
-	return area.intersects(
-		this->GetObject(SHIP)->GetSprite()->getGlobalBounds());
 }

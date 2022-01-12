@@ -25,27 +25,6 @@ EntityObject::~EntityObject()
 	this->weaponComponent->Cease();
 }
 
-void EntityObject::SetTexture(std::shared_ptr<sf::Texture> texture) const
-{
-	this->sprite->setTexture(*texture);
-}
-
-void EntityObject::InitAnimationComponent(std::shared_ptr<sf::Texture> textureSheet)
-{
-	this->animationComponent->SetAssets(this->sprite, textureSheet);
-}
-
-void EntityObject::InitHitboxComponent(float offsetX, float offsetY, float width, float height)
-{
-	this->hitboxComponent->SetSprite(this->sprite, offsetX, offsetY, width, height);
-}
-
-void EntityObject::AddAnimation(const int key, float frameDuration,
-	int startFrameX, int startFrameY, int framesX, int framesY, int width, int height)
-{
-	this->animationComponent->AddAnimation(key, frameDuration, startFrameX, startFrameY, framesX, framesY, width, height);
-}
-
 void EntityObject::PlayAnimation(const int direction, const bool loop) const
 {
 	this->animationComponent->Play(direction, loop);
@@ -66,29 +45,18 @@ void EntityObject::Update(EntityUpdate update, float dt) const
 	}
 
 	this->animationComponent->Play(update.direction, update.loop);
-	if (this->hitboxComponent->IsRequired()) {
-		this->hitboxComponent->Update();
-	}
+	this->hitboxComponent->Update(this->sprite->getPosition());
 }
 
 void EntityObject::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
 {
 	this->sprite->setPosition(this->movementComponent->Interpolate(interPosition));
 	renderer->GetTarget().draw(*this->sprite);
-
-	if (this->hitboxComponent->IsRequired())
-	{
-		this->hitboxComponent->Update();
-		this->hitboxComponent->Draw(renderer);
-	}
+	this->hitboxComponent->Update(this->sprite->getPosition());
+	this->hitboxComponent->Draw(renderer);
 }
 
-bool EntityObject::DetectCollision(sf::Vector2f& position) const
+sf::FloatRect EntityObject::GetHitbox() const
 {
-	return this->hitboxComponent->Contains(position);
-}
-
-std::shared_ptr<RayIntersection> EntityObject::DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
-{
-	return this->hitboxComponent->IntersectsWithRay(origin, direction);
+	return this->hitboxComponent->GetHitbox();
 }

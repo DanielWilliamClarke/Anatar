@@ -49,7 +49,7 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float d
 		[&](std::shared_ptr<Collision> c) {
 			auto damage = c->bullet->GetDamage();
 			c->bullet->GetCollisionResolver()(
-				c->target->collisionResolver(damage, c->bullet->GetPosition()),
+				c->target->collisionResolver(damage, c->collisionPosition),
 				damage);
 		});
 }

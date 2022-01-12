@@ -42,6 +42,8 @@
 
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
+#include <components\collision_detection\collision_detection_component.h>
+
 #include <bullet/types/homing_projectile_factory.h>
 #include "bullet/types/debris_factory.h"
 
@@ -158,7 +160,10 @@ void Game::InitPlayer()
 
 	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(this->playerHud, playerDamageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
 
-	this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent);
+	auto rayCaster = std::make_shared<RayCaster>();
+	auto collectionDetectionComponent = std::make_shared<CollisionDetectionComponent>(rayCaster);
+
+	this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent, collectionDetectionComponent);
 	this->playerTargets.push_back(this->player);
 	this->playerInput = std::make_shared<PlayerInput>();
 }

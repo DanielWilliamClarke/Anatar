@@ -9,14 +9,17 @@
 #include "util/i_ray_caster.h"
 
 #include "components/movement/i_global_movement_component.h"
+#include "components/collision_detection/i_collision_detection_component.h"
+
 #include "bullet/bullet.h"
 
 Enemy::Enemy(
 	EntityManifest manifest,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
+	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 	sf::Vector2f initialPosition)
-	: Entity{ nullptr, globalMovementComponent, attributeComponent, "enemy" }
+	: Entity{ nullptr, globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
 {
 	this->objects = manifest;
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
@@ -34,14 +37,11 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
 	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> bool {
-		if (ray) {
-			return this->DetectCollisionWithRay(position, velocity)->intersects;
-		} else {
-			return this->DetectCollision(position);
-		}
-	};
-	auto isInsideZone = [this](sf::FloatRect& area) -> bool { return this->IsInside(area); };
+	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->
+		std::shared_ptr<sf::Vector2f>{ return this->DetectCollision(position, ray, velocity); };
+	auto isInsideZone = [this](sf::FloatRect& area) -> 
+		bool { return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox()); };
+
 	auto collisionHandler = [this](float damage, sf::Vector2f position) { 
 		this->TakeDamage(damage, position);
 		return this->HasDied();
@@ -76,10 +76,4 @@ void Enemy::InitBullets()
 sf::Vector2f Enemy::GetPosition() const
 {
 	return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition();
-}
-
-bool Enemy::IsInside(sf::FloatRect& area) const
-{
-	return area.intersects(
-		this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
 }

@@ -88,9 +88,12 @@ std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<Q
 	auto query = RayQuery(rayCaster, this->position, this->velocity);
 	quadTree->Query(&query, collisions,
 		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
-			if (point->tag != this->GetTag() && point->collisionTest(this->position, this->velocity, true))
+			if (point->tag != this->GetTag())
 			{
-				return std::make_shared<Collision>(this->shared_from_this(), point);
+				auto collision = point->collisionTest(this->position, this->velocity, true);
+				if (collision) {
+					return std::make_shared<Collision>(this->shared_from_this(), point, *collision);
+				}
 			}		
 			return nullptr;
 		});
@@ -99,8 +102,8 @@ std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<Q
 	{
 		std::sort(collisions.begin(), collisions.end(),
 			[this](std::shared_ptr<Collision> a, std::shared_ptr<Collision> b) -> bool {
-				auto aDist = Dimensions::ManhattanDistance(this->position, a->target->position);
-				auto bDist = Dimensions::ManhattanDistance(this->position, b->target->position);
+				auto aDist = Dimensions::ManhattanDistance(this->position, a->collisionPosition);
+				auto bDist = Dimensions::ManhattanDistance(this->position, b->collisionPosition);
 				return aDist < bDist;
 			});
 	}
@@ -108,7 +111,7 @@ std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<Q
 	// Set collision point to hit the first entity if the beam cant penetrate
 	if (!config.penetrating && collisions.size())
 	{
-		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front()->target->position);
+		collisionPosition = std::make_shared<sf::Vector2f>(collisions.front()->collisionPosition);
 		collisions = { collisions.front() };
 	}
 

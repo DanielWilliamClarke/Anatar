@@ -13,6 +13,7 @@
 #include "components/movement/enemy_movement_component.h"
 #include "components/attributes/health_attribute_component.h"
 #include "components/weapon/i_weapon_component_factory.h"
+#include <components\collision_detection\collision_detection_component.h>
 #include "bullet/bullet.h"
 
 #include "entity/entity_object.h"
@@ -26,6 +27,8 @@ std::shared_ptr<Entity> EnemyTypeFactory::Create()
 {
     auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
 	auto attributeComponent = std::make_shared<HealthAttributeComponent>(config.attributeConfig.damageEffects, config.attributeConfig.health);
+	auto rayCaster = std::make_shared<RayCaster>();
+	auto collectionDetectionComponent = std::make_shared<CollisionDetectionComponent>(rayCaster);
 
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
@@ -33,7 +36,8 @@ std::shared_ptr<Entity> EnemyTypeFactory::Create()
 	auto position = sf::Vector2f(
 		config.motionConfig.bounds.width,
 		(float)randGenerator->Generate((int)config.motionConfig.bounds.top, (int)config.motionConfig.bounds.height - textureSize.y));
-    return std::make_shared<Enemy>(config.builder(config), movementComponent, attributeComponent, position);
+
+    return std::make_shared<Enemy>(config.builder(config), movementComponent, attributeComponent, collectionDetectionComponent, position);
 }
 
 EntityManifest EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)
@@ -70,13 +74,9 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 		(float)textureSize.y);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto rayCaster = std::make_shared<RayCaster>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(rayCaster, sf::Color::Red);
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
 	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
 	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
-
-	ship->SetTexture(config.animationConfig.texture);
-	ship->InitAnimationComponent(config.animationConfig.texture);
 
 	auto sprite = ship->GetSprite();
 	sprite->setOrigin(sf::Vector2f(
@@ -86,14 +86,18 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 		config.animationConfig.scale,
 		config.animationConfig.scale));
 
+	sprite->setTexture(*config.animationConfig.texture);
+
+	animationComponent->SetAssets(sprite, config.animationConfig.texture);
+	animationComponent->AddAnimation(movementStates::IDLE, config.animationConfig.frameDuration, 0, 0, config.animationConfig.frames - 1, 0, (int)spriteFrameSize.x, (int)spriteFrameSize.y);
+
 	auto spriteBounds = sprite->getLocalBounds();
-	ship->InitHitboxComponent(
+	hitboxComponent->SetSprite(
+		sprite->getPosition(),
 		spriteBounds.left - spriteFrameSize.x / 2,
 		spriteBounds.top - spriteFrameSize.y / 2,
 		spriteFrameSize.x,
 		spriteFrameSize.y);
-
-	ship->AddAnimation(0, config.animationConfig.frameDuration, 0, 0, config.animationConfig.frames - 1, 0, (int)spriteFrameSize.x, (int)spriteFrameSize.y);
 
 	return EntityManifest{
 		{EnemyObjects::ENEMY, ship}

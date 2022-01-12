@@ -54,8 +54,10 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::
 		// We want to check all for collisions just in case
 		for (auto& c : collisions)
 		{
-			if (c->target->collisionTest(this->position, this->velocity, false))
+			auto collision = c->target->collisionTest(this->position, this->velocity, false);
+			if (collision)
 			{
+				c->collisionPosition = *collision;
 				fineTuned.push_back(c);
 				if (!config.penetrating)
 				{

@@ -7,6 +7,7 @@
 #include "entity_update.h"
 #include "components/movement/i_global_movement_component.h"
 #include "components/attributes/i_attribute_component.h"
+#include "components/collision_detection/i_collision_detection_component.h"
 #include "util/i_ray_caster.h"
 #include "util/math_utils.h"
 #include "quad_tree/quad_tree.h"
@@ -15,8 +16,9 @@ Entity::Entity(
 	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
+	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 	std::string tag)
-	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), tag(tag)
+	: entityBuilder(entityBuilder), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), collisionDetectionComponent(collisionDetectionComponent), tag(tag)
 {}
 
 void Entity::AddObject(ObjectID id, std::shared_ptr<EntityObject> object)
@@ -53,33 +55,18 @@ void Entity::DrawObjects(std::shared_ptr<IRenderer> renderer, sf::Vector2f inter
 	}
 }
 
-bool Entity::DetectCollision(sf::Vector2f& position) const
+std::shared_ptr<sf::Vector2f> Entity::DetectCollision(const sf::Vector2f& origin, const bool ray, const sf::Vector2f& direction) const
 {
 	for (auto& o : objects)
 	{
-		if (o.second->DetectCollision(position))
-		{
-			return true;
+		auto collision = this->collisionDetectionComponent->DetectCollision(o.second->GetHitbox(), origin, ray, direction);
+		if (collision) {
+			return collision; 
 		}
 	}
 
-	return false;
+	return nullptr;
 }
-
-std::shared_ptr<RayIntersection> Entity::DetectCollisionWithRay(const sf::Vector2f& origin, const sf::Vector2f& direction) const
-{
-	for (auto& o : objects)
-	{
-		auto intersection = o.second->DetectCollisionWithRay(origin, direction);
-		if (intersection->intersects)
-		{
-			return intersection;
-		}
-	}
-
-	return std::make_shared< RayIntersection>(false);
-}
-
 
 void Entity::TakeDamage(float damage, sf::Vector2f& impactPoint)
 {

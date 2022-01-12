@@ -24,12 +24,12 @@ public:
 		EntityManifest manifest,
 		std::shared_ptr<IGlobalMovementComponent> movementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
+		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
 	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
-	virtual bool IsInside(sf::FloatRect& area) const override;
 
 private:
 	void InitBullets();

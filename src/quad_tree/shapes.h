@@ -8,14 +8,14 @@
 struct Point {
 	sf::Vector2f position;
 	std::string tag;
-	std::function<bool(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest;
+	std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest;
 	std::function<bool(sf::FloatRect&)> isInsideZone;
 	std::function<bool(float, sf::Vector2f)> collisionResolver;
 
 	Point(
 		sf::Vector2f position,
 		std::string tag,
-		std::function<bool(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest,
+		std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest,
 		std::function<bool(sf::FloatRect&)> isInsideZone,
 		std::function<bool(float, sf::Vector2f)> collisionResolver)
 		: position(position), tag(tag), collisionTest(collisionTest), isInsideZone(isInsideZone), collisionResolver(collisionResolver)
