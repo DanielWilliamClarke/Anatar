@@ -44,8 +44,8 @@ public:
 	std::string GetTag() const;
 
 protected:
-	void UpdateObjects(std::map<T, EntityUpdate> update, float dt) const;
-	void DrawObjects(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
+	void Update(std::map<T, EntityUpdate> update, float dt) const;
+	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
 
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
 	std::shared_ptr<IAttributeComponent> attributeComponent;
@@ -85,7 +85,7 @@ std::shared_ptr<EntityObject> Entity<T>::GetObject(T id) const
 }
 
 template <typename T>
-void Entity<T>::UpdateObjects(std::map<T, EntityUpdate> update, float dt) const
+void Entity<T>::Update(std::map<T, EntityUpdate> update, float dt) const
 {
 	for (auto& up : update)
 	{
@@ -97,7 +97,7 @@ void Entity<T>::UpdateObjects(std::map<T, EntityUpdate> update, float dt) const
 }
 
 template <typename T>
-void Entity<T>::DrawObjects(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
+void Entity<T>::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
 {
 	for (auto& obj : this->objects)
 	{

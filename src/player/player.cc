@@ -67,7 +67,7 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 	auto turrentConfig = this->bulletConfigs.at(PlayerObjects::TURRET);
 	auto glowieConfig = this->bulletConfigs.at(PlayerObjects::GLOWIE);
 
-	this->UpdateObjects({
+	Entity::Update({
 		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in.fire, false) },
 		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
 		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
@@ -79,8 +79,7 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 
 void Player::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 {
-	const auto interpPosition = this->movementComponent->Interpolate(interp);
-	this->DrawObjects(renderer, interpPosition);
+	Entity::Draw(renderer, this->movementComponent->Interpolate(interp));
 }
 
 const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const

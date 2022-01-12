@@ -55,7 +55,7 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quad
 	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), this->mediators));
 
 	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
-	this->UpdateObjects({
+	Entity::Update({
 		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config) },
 	}, dt);
 }
@@ -63,7 +63,7 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quad
 void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 {
 	const auto interpPosition = this->globalMovementComponent->Interpolate(interp);
-	this->DrawObjects(renderer, interpPosition);
+	Entity::Draw(renderer, interpPosition);
 }
 
 void Enemy::InitBullets()
