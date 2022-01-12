@@ -40,8 +40,8 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quad
 
 	auto mediators = std::make_shared<CollisionMediators>(
 		[this](float damage, sf::Vector2f position) {
-			this->TakeDamage(damage, position);
-			return this->HasDied();
+			this->attributeComponent->TakeDamage(damage, position);
+			return this->attributeComponent->IsDead();
 		},
 		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->std::shared_ptr<sf::Vector2f> { 
 			return this->DetectCollision(position, ray, velocity);
@@ -70,13 +70,8 @@ void Enemy::InitBullets()
 	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
 		BulletMediators(
 			[=](bool kill, float damage) {},
-			[this]() -> sf::Vector2f { return this->GetPosition(); },
+			[this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); },
 			[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
 		this->GetTag(),
 		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
-}
-
-sf::Vector2f Enemy::GetPosition() const
-{
-	return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition();
 }

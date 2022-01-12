@@ -37,12 +37,8 @@ public:
 
 	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
-	virtual sf::Vector2f GetPosition() const = 0;
 
 	std::shared_ptr<sf::Vector2f> DetectCollision(const sf::Vector2f& origin, const bool ray = false, const sf::Vector2f& direction = sf::Vector2f()) const;
-
-	void TakeDamage(float damage, sf::Vector2f& impactPoint);
-	void RegisterKill(float score);
 	bool HasDied() const;
 
 	std::string GetTag() const;
@@ -124,21 +120,9 @@ std::shared_ptr<sf::Vector2f> Entity<T>::DetectCollision(const sf::Vector2f& ori
 }
 
 template <typename T>
-void Entity<T>::TakeDamage(float damage, sf::Vector2f& impactPoint)
-{
-	this->attributeComponent->TakeDamage(damage, impactPoint);
-}
-
-template <typename T>
 bool Entity<T>::HasDied() const
 {
 	return this->attributeComponent->IsDead();
-}
-
-template <typename T>
-void Entity<T>::RegisterKill(float score)
-{
-	this->attributeComponent->RegisterKill(score);
 }
 
 template <typename T>

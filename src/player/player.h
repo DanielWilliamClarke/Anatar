@@ -37,7 +37,6 @@ public:
 	virtual ~Player() = default;
 	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt);
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
-	virtual sf::Vector2f GetPosition() const override;
 
 protected:
 	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) override {};

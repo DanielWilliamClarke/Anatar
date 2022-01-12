@@ -49,8 +49,8 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 
 	auto mediators = std::make_shared<CollisionMediators>(
 		[this](float damage, sf::Vector2f position) -> bool {
-			this->TakeDamage(damage, position);
-			return this->HasDied();
+			this->attributeComponent->TakeDamage(damage, position);
+			return this->attributeComponent->IsDead();
 		},
 		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
 			return this->DetectCollision(position, ray, velocity);
@@ -112,10 +112,16 @@ void Player::InitBullets()
 {
 	auto collisionResolver = [this](bool kill, float damage) {
 		if (kill) {
-			this->RegisterKill(damage);
+			this->attributeComponent->RegisterKill(damage);
 		}
 	};
-	auto positionSampler = [this]() -> sf::Vector2f { return this->GetPosition(); };
+	auto positionSampler = [this]() -> sf::Vector2f {
+		auto ship = this->GetObject(PlayerObjects::SHIP)->GetSprite();
+		auto bounds = ship->getLocalBounds();
+		auto position = ship->getPosition();
+		position.x += bounds.width;
+		return position;
+	};
 
 	this->bulletConfigs[PlayerObjects::SHIP] = std::make_shared<BulletConfig>(
 		BulletMediators(
@@ -140,13 +146,4 @@ void Player::InitBullets()
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
 		this->GetTag(),
 		sf::Color::Green, 75.0f, 5.0f, 400.0f, AFFINITY::RIGHT, false, 25.0f, 3.0f);
-}
-
-sf::Vector2f Player::GetPosition() const
-{
-	auto ship = this->GetObject(PlayerObjects::SHIP)->GetSprite();
-	auto bounds = ship->getLocalBounds();
-	auto position = ship->getPosition();
-	position.x += bounds.width;
-	return position;
 }
