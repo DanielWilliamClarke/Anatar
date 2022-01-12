@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <functional>
 
 class ICollisionDetectionComponent
 {

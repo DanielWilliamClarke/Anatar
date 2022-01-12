@@ -8,9 +8,11 @@
 #include <list>
 
 struct Collision;
+struct CollisionMediators;
+
 class IRenderer;
 
-template<typename C>
+template<typename C, typename P>
 class QuadTree;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
@@ -90,7 +92,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) = 0;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) = 0;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) = 0;
 
 	bool isSpent() const;
 	sf::Vector2f GetPosition() const;

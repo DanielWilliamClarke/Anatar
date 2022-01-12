@@ -8,12 +8,13 @@
 #include "i_enemy_type_factory.h"
 #include "entity/entity_object.h"
 #include "entity/entity.h"
+#include "bullet/collision.h"
 
 EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0), maxEnemies(50)
 {}
 
-void EnemySystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
+void EnemySystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt)
 {
 	// Create enemies
 	this->accumulator += dt;

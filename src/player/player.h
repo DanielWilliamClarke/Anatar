@@ -14,7 +14,9 @@ class IPlayerAttributeComponent;
 struct Input;
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 enum PlayerObjects : ObjectID { SHIP, EXHAUST, TURRET, GLOWIE };
@@ -30,12 +32,12 @@ public:
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent);
 	virtual ~Player() = default;
-	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, Input& in, float dt);
+	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt);
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
 
 protected:
-	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) override {};
+	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) override {};
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
 	void InitBullets();
 

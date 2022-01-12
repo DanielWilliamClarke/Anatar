@@ -5,20 +5,17 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 
+template<typename P>
 struct Point {
 	sf::Vector2f position;
 	std::string tag;
-	std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest;
-	std::function<bool(sf::FloatRect&)> isInsideZone;
-	std::function<bool(float, sf::Vector2f)> collisionResolver;
+	std::shared_ptr<P> payload;
 
 	Point(
 		sf::Vector2f position,
 		std::string tag,
-		std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> collisionTest,
-		std::function<bool(sf::FloatRect&)> isInsideZone,
-		std::function<bool(float, sf::Vector2f)> collisionResolver)
-		: position(position), tag(tag), collisionTest(collisionTest), isInsideZone(isInsideZone), collisionResolver(collisionResolver)
+		std::shared_ptr<P> payload)
+		: position(position), tag(tag), payload(payload)
 	{}
 };
 

@@ -64,16 +64,16 @@ void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 }
 
-std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
+std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
 {
 	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());
 
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
+		[this](std::shared_ptr<Point<CollisionMediators>> point) -> std::shared_ptr<Collision> {
 			if (point->tag != this->GetTag())
 			{
-				auto collision = point->collisionTest(this->position, this->velocity, false);
+				auto collision = point->payload->pointTest(this->position, this->velocity, false);
 				if (collision) {
 					return std::make_shared<Collision>(this->shared_from_this(), point, *collision);
 				}

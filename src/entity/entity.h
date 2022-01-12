@@ -20,7 +20,9 @@ struct EntityUpdate;
 struct BulletConfig;
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 using ObjectID = unsigned int;
@@ -42,7 +44,7 @@ public:
 	void RemoveObject(ObjectID id);
 	std::shared_ptr<EntityObject> GetObject(ObjectID id) const;
 
-	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) = 0;
+	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
 	virtual sf::Vector2f GetPosition() const = 0;
 

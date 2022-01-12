@@ -13,6 +13,8 @@
 #include "components/movement/i_player_movement_component.h"
 #include "components/attributes/i_player_attribute_component.h"
 #include "components/collision_detection/i_collision_detection_component.h"
+
+#include "bullet/collision.h"
 #include "bullet/bullet.h"
 
 #include "util/i_ray_caster.h"
@@ -31,7 +33,7 @@ Player::Player(
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
 
-void Player::Update(std::shared_ptr<QuadTree<Collision>> quadTree, Input& in, float dt)
+void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -45,21 +47,21 @@ void Player::Update(std::shared_ptr<QuadTree<Collision>> quadTree, Input& in, fl
 	auto bounds = this->GetObject(SHIP)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->
-		std::shared_ptr<sf::Vector2f> { 
+	auto mediators = std::make_shared<CollisionMediators>(
+		[this](float damage, sf::Vector2f position) -> bool {
+			this->TakeDamage(damage, position);
+			return this->HasDied();
+		},
+		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
 			return this->DetectCollision(position, ray, velocity);
-		};
+		},
+		[this](sf::FloatRect& area) -> bool { 
+			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(SHIP)->GetHitbox());
+		}
+	);
 
-	auto isInsideZone = [this](sf::FloatRect& area) ->
-		bool { return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(SHIP)->GetHitbox()); };
-
-	auto collisionHandler = [this](float damage, sf::Vector2f position) -> bool { 
-		this->TakeDamage(damage, position);
-		return this->HasDied();
-	};
-
-	quadTree->Insert(std::make_shared<Point>(position, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
-	quadTree->Insert(std::make_shared<Point>(extent, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), mediators));
 
 	auto shipConfig = this->bulletConfigs.at(SHIP);
 	auto turrentConfig = this->bulletConfigs.at(TURRET);

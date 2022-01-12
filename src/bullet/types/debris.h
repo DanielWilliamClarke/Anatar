@@ -7,7 +7,9 @@
 #include "projectile.h"
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 class Debris : public Projectile
@@ -19,7 +21,7 @@ public:
 
 	virtual ~Debris() = default;
 
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) override { return {}; }
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override { return {}; }
 };
 
 #endif // DEBRIS_H

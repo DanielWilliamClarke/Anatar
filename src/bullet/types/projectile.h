@@ -7,7 +7,9 @@
 #include "bullet/bullet.h"
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 class Projectile : public Bullet
@@ -18,7 +20,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override;
 
 protected:
 

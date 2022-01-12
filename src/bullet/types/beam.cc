@@ -79,7 +79,7 @@ void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	}
 }
 
-std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
+std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;
@@ -87,10 +87,10 @@ std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<Q
 	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RayQuery(rayCaster, this->position, this->velocity);
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
+		[this](std::shared_ptr<Point<CollisionMediators>> point) -> std::shared_ptr<Collision> {
 			if (point->tag != this->GetTag())
 			{
-				auto collision = point->collisionTest(this->position, this->velocity, true);
+				auto collision = point->payload->pointTest(this->position, this->velocity, true);
 				if (collision) {
 					return std::make_shared<Collision>(this->shared_from_this(), point, *collision);
 				}

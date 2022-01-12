@@ -11,6 +11,7 @@
 #include "components/movement/i_global_movement_component.h"
 #include "components/collision_detection/i_collision_detection_component.h"
 
+#include "bullet/collision.h"
 #include "bullet/bullet.h"
 
 Enemy::Enemy(
@@ -26,7 +27,7 @@ Enemy::Enemy(
 	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
 }
 
-void Enemy::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
+void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -37,18 +38,20 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt)
 	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto collisionTest = [this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->
-		std::shared_ptr<sf::Vector2f>{ return this->DetectCollision(position, ray, velocity); };
-	auto isInsideZone = [this](sf::FloatRect& area) -> 
-		bool { return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox()); };
+	auto mediators = std::make_shared<CollisionMediators>(
+		[this](float damage, sf::Vector2f position) {
+			this->TakeDamage(damage, position);
+			return this->HasDied();
+		},
+		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->std::shared_ptr<sf::Vector2f> { 
+			return this->DetectCollision(position, ray, velocity);
+		},
+		[this](sf::FloatRect& area) -> bool { 
+			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox());
+		});
 
-	auto collisionHandler = [this](float damage, sf::Vector2f position) { 
-		this->TakeDamage(damage, position);
-		return this->HasDied();
-	};
-
-	quadTree->Insert(std::make_shared<Point>(position, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
-	quadTree->Insert(std::make_shared<Point>(extent, this->GetTag(), collisionTest, isInsideZone, collisionHandler));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), mediators));
 
 	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
 	this->UpdateObjects({

@@ -26,7 +26,7 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt, float worldSpeed)
+void BulletSystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt, float worldSpeed)
 {
 	this->EraseBullets();
 
@@ -49,7 +49,7 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<Collision>> quadTree, float d
 		[&](std::shared_ptr<Collision> c) {
 			auto damage = c->bullet->GetDamage();
 			c->bullet->GetCollisionResolver()(
-				c->target->collisionResolver(damage, c->collisionPosition),
+				c->target->payload->resolver(damage, c->collisionPosition),
 				damage);
 		});
 }

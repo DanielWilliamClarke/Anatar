@@ -13,7 +13,9 @@ struct BulletTrajectory;
 class IRenderer;
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 class BulletSystem : public IBulletSystem
@@ -23,7 +25,7 @@ public:
 	virtual ~BulletSystem() = default;
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt, float worldSpeed);
+	void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt, float worldSpeed);
 	void Draw(std::shared_ptr<IRenderer> renderer, float interp);
 
 private:

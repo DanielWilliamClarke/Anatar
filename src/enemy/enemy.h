@@ -10,7 +10,8 @@
 class IRenderer;
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+template<typename C, typename P>
 class QuadTree;
 
 enum EnemyObjects : ObjectID { ENEMY };
@@ -27,7 +28,7 @@ public:
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
-	virtual void Update(std::shared_ptr<QuadTree<Collision>> quadTree, float dt) override;
+	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 	virtual sf::Vector2f GetPosition() const override;
 

@@ -13,7 +13,9 @@ class IRenderer;
 class IThreadedWorkload;
 
 struct Collision;
-template<typename C>
+struct CollisionMediators;
+
+template<typename C, typename P>
 class QuadTree;
 
 class SpaceLevel;
@@ -50,7 +52,7 @@ private:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<IRenderer> renderer;
 	std::shared_ptr<IThreadedWorkload> threadableWorkload;
-	std::shared_ptr<QuadTree<Collision>> quadTree;
+	std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree;
 
 	std::shared_ptr<Fps> fps;
 	std::shared_ptr<TextureAtlas> textureAtlas;

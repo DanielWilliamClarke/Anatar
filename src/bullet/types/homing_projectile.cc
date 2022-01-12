@@ -27,7 +27,7 @@ void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	Projectile::Draw(renderer, interp);
 }
 
-std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<Collision>> quadTree)
+std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
 {
 	auto distance = 200.0f;
 	this->zone = sf::FloatRect(
@@ -39,8 +39,8 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::
 
 	std::vector<std::shared_ptr<Collision>> collisions;
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Point> point) -> std::shared_ptr<Collision> {
-			if (point->tag != this->GetTag() && point->isInsideZone(this->zone))
+		[this](std::shared_ptr<Point<CollisionMediators>> point) -> std::shared_ptr<Collision> {
+			if (point->tag != this->GetTag() && point->payload->zoneTest(this->zone))
 			{
 				return std::make_shared<Collision>(this->shared_from_this(), point);
 			}
@@ -54,7 +54,7 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::
 		// We want to check all for collisions just in case
 		for (auto& c : collisions)
 		{
-			auto collision = c->target->collisionTest(this->position, this->velocity, false);
+			auto collision = c->target->payload->pointTest(this->position, this->velocity, false);
 			if (collision)
 			{
 				c->collisionPosition = *collision;
