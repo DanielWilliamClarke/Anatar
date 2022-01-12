@@ -38,7 +38,7 @@ void EnemySystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>
 	enemies.erase(
 		std::remove_if(
 			enemies.begin(), enemies.end(),
-			[=](std::shared_ptr<Entity> e) -> bool {
+			[=](std::shared_ptr<Entity<EnemyObjects>> e) -> bool {
 				auto enemySprite = e->GetObject(EnemyObjects::ENEMY)->GetSprite();
 				auto enemyBounds = enemySprite->getGlobalBounds();
 				auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
@@ -61,7 +61,7 @@ void EnemySystem::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 	}
 }
 
-std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory)
+std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory<EnemyObjects>> factory)
 {
 	this->factories[spawnInterval].push_back(factory);
 	if (spawnInterval > this->maxInterval) {
@@ -70,7 +70,7 @@ std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::s
 	return shared_from_this();
 }
 
-std::vector<std::shared_ptr<Entity>>& EnemySystem::GetEnemies()
+std::vector<std::shared_ptr<Entity<EnemyObjects>>>& EnemySystem::GetEnemies()
 {
 	return enemies;
 }

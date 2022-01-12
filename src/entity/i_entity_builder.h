@@ -8,15 +8,16 @@
 
 class EntityObject;
 
-using ObjectID = unsigned int;
-using EntityManifest = std::map<ObjectID, std::shared_ptr<EntityObject>>;
+template<typename T>
+using EntityManifest = std::map<T, std::shared_ptr<EntityObject>>;
 
+template<typename T>
 class IEntityObjectBuilder
 {
 public:
 	IEntityObjectBuilder() = default;
 	virtual ~IEntityObjectBuilder() = default;
-	virtual EntityManifest Build() = 0;
+	virtual EntityManifest<T> Build() = 0;
 };
 
 #endif //I_ENTITY_BUILDER_H

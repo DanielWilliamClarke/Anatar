@@ -12,15 +12,6 @@ class TextureAtlas;
 class IRenderer;
 class IThreadedWorkload;
 
-struct Collision;
-struct CollisionMediators;
-
-template<typename C, typename P>
-class QuadTree;
-
-class SpaceLevel;
-class Entity;
-struct EntityCollision;
 class Player;
 class PlayerHud;
 class PlayerInput;
@@ -28,6 +19,14 @@ class EnemySystem;
 class BulletSystem;
 class RandomShotWeaponComponent;
 struct DamageEffects;
+class SpaceLevel;
+
+struct Collision;
+struct CollisionMediators;
+
+template<typename C, typename P>
+class QuadTree;
+
 
 class Game 
 {
@@ -37,7 +36,6 @@ public:
 	void Run();
 
 private:
-
 	void InitWindow();
 	void InitFps();
 	void InitTextureAtlas();
@@ -61,7 +59,6 @@ private:
 	std::shared_ptr<Player> player;
 	std::shared_ptr<PlayerHud> playerHud;
 	std::shared_ptr<PlayerInput> playerInput;
-	std::vector<std::shared_ptr<Entity>> playerTargets;
 
 	std::shared_ptr<EnemySystem> enemySystem;
 	std::shared_ptr<RandomShotWeaponComponent> debrisGenerator;
@@ -71,7 +68,6 @@ private:
 	std::shared_ptr<sf::Clock> clock;
 
 	sf::FloatRect bounds;
-
 
 	float dt;
 	float accumulator;

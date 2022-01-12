@@ -25,7 +25,7 @@ PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::s
 	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds), rayCaster(std::make_shared<RayCaster>())
 {}
 
-EntityManifest PlayerBuilder::Build()
+std::map<PlayerObjects, std::shared_ptr<EntityObject>> PlayerBuilder::Build()
 {
 	this->BuildShip();
 	this->BuildExhaust();

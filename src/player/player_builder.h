@@ -12,19 +12,19 @@ class ITextureAtlas;
 class IBulletSystem;
 class RayCaster;
 
-class PlayerBuilder : public IEntityObjectBuilder, public Player
+class PlayerBuilder : public IEntityObjectBuilder<PlayerObjects>, public Player
 {
 public:
 	PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds);
 	virtual ~PlayerBuilder() = default;
-	virtual EntityManifest Build() override;
+	virtual EntityManifest<PlayerObjects> Build() override;
 private:
 	void BuildShip();
 	void BuildExhaust();
 	void BuildTurret();
 	void BuildGlowie();
 
-	EntityManifest manifest;
+	EntityManifest<PlayerObjects> manifest;
 
 	std::shared_ptr<RayCaster> rayCaster;
 	std::shared_ptr<ITextureAtlas> textureAtlas;

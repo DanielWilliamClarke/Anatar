@@ -23,7 +23,7 @@ EnemyTypeFactory::EnemyTypeFactory(EnemyConfig config)
 	: config(config)
 {}
 
-std::shared_ptr<Entity> EnemyTypeFactory::Create()
+std::shared_ptr<Entity<EnemyObjects>> EnemyTypeFactory::Create()
 {
     auto movementComponent = std::make_shared<EnemyMovementComponent>(config.motionConfig.bounds, config.motionConfig.enemySpeed, config.motionConfig.worldSpeed);
 	auto attributeComponent = std::make_shared<HealthAttributeComponent>(config.attributeConfig.damageEffects, config.attributeConfig.health);
@@ -40,7 +40,7 @@ std::shared_ptr<Entity> EnemyTypeFactory::Create()
     return std::make_shared<Enemy>(config.builder(config), movementComponent, attributeComponent, collectionDetectionComponent, position);
 }
 
-EntityManifest EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)
+EntityManifest<EnemyObjects> EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)
 {
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto spriteFrameSize = sf::Vector2f(
@@ -53,7 +53,7 @@ EntityManifest EnemyTypeFactory::BuildLinearEnemy(EnemyConfig config)
 	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OffSetMovementComponent>(spriteOrigin));
 }
 
-EntityManifest EnemyTypeFactory::BuildOribitalEnemy(EnemyConfig config)
+EntityManifest<EnemyObjects> EnemyTypeFactory::BuildOribitalEnemy(EnemyConfig config)
 {
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto spriteFrameSize = sf::Vector2f(
@@ -66,7 +66,7 @@ EntityManifest EnemyTypeFactory::BuildOribitalEnemy(EnemyConfig config)
 	return EnemyTypeFactory::BuildEnemy(config, std::make_shared<OrbitalMovementComponent>(spriteOrigin, 250.0f, 50.0f));
 }
 
-EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent)
+EntityManifest<EnemyObjects> EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent)
 {
 	auto textureSize = config.animationConfig.texture->getSize();
 	auto spriteFrameSize = sf::Vector2f(
@@ -99,7 +99,7 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 		spriteFrameSize.x,
 		spriteFrameSize.y);
 
-	return EntityManifest{
+	return EntityManifest<EnemyObjects>{
 		{EnemyObjects::ENEMY, ship}
 	};
 }

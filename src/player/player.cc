@@ -20,15 +20,15 @@
 #include "util/i_ray_caster.h"
 
 Player::Player(
-	std::shared_ptr<IEntityObjectBuilder> entityBuilder,
+	std::shared_ptr<IEntityObjectBuilder<PlayerObjects>> entityBuilder,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent)
-	: Entity{ entityBuilder, globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
+	: Entity<PlayerObjects>{ globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
 {
-	this->objects = this->entityBuilder->Build();
+	this->objects = entityBuilder->Build();
 
-	auto shipSprite = this->GetObject(SHIP)->GetSprite();
+	auto shipSprite = this->GetObject(PlayerObjects::SHIP)->GetSprite();
 	shipSprite->setPosition(this->movementComponent->GetCenter());
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
 }
@@ -44,7 +44,7 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 	const auto position = this->movementComponent->Integrate(in, dt);
 	const auto direction = this->CalculateDirection(position, lastPosition);
 
-	auto bounds = this->GetObject(SHIP)->GetSprite()->getLocalBounds();
+	auto bounds = this->GetObject(PlayerObjects::SHIP)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
 	auto mediators = std::make_shared<CollisionMediators>(
@@ -56,22 +56,22 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 			return this->DetectCollision(position, ray, velocity);
 		},
 		[this](sf::FloatRect& area) -> bool { 
-			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(SHIP)->GetHitbox());
+			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
 		}
 	);
 
 	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), mediators));
 	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), mediators));
 
-	auto shipConfig = this->bulletConfigs.at(SHIP);
-	auto turrentConfig = this->bulletConfigs.at(TURRET);
-	auto glowieConfig = this->bulletConfigs.at(GLOWIE);
+	auto shipConfig = this->bulletConfigs.at(PlayerObjects::SHIP);
+	auto turrentConfig = this->bulletConfigs.at(PlayerObjects::TURRET);
+	auto glowieConfig = this->bulletConfigs.at(PlayerObjects::GLOWIE);
 
 	this->UpdateObjects({
-		{ SHIP, EntityUpdate(position, direction, *shipConfig, in.fire, false) },
-		{ EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
-		{ TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
-		{ GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in.fire) }
+		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in.fire, false) },
+		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
+		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
+		{ PlayerObjects::GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in.fire) }
 	}, dt);
 
 	this->attributeComponent->Update(dt);
@@ -117,7 +117,7 @@ void Player::InitBullets()
 	};
 	auto positionSampler = [this]() -> sf::Vector2f { return this->GetPosition(); };
 
-	this->bulletConfigs[SHIP] = std::make_shared<BulletConfig>(
+	this->bulletConfigs[PlayerObjects::SHIP] = std::make_shared<BulletConfig>(
 		BulletMediators(
 			collisionResolver,
 			positionSampler,
@@ -125,7 +125,7 @@ void Player::InitBullets()
 		this->GetTag(), 
 		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, AFFINITY::RIGHT, false, 15.0f, 0.5f);
 
-	this->bulletConfigs[TURRET] = std::make_shared<BulletConfig>(
+	this->bulletConfigs[PlayerObjects::TURRET] = std::make_shared<BulletConfig>(
 		BulletMediators(
 			collisionResolver,
 			positionSampler,
@@ -133,7 +133,7 @@ void Player::InitBullets()
 		this->GetTag(),
 		sf::Color::Yellow, 90.0f, 1.0f, 400.0f, AFFINITY::RIGHT, false, 5.0f);
 
-	this->bulletConfigs[GLOWIE] = std::make_shared<BulletConfig>(
+	this->bulletConfigs[PlayerObjects::GLOWIE] = std::make_shared<BulletConfig>(
 		BulletMediators(
 			collisionResolver,
 			positionSampler,

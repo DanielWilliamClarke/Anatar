@@ -15,12 +15,12 @@
 #include "bullet/bullet.h"
 
 Enemy::Enemy(
-	EntityManifest manifest,
+	std::map<EnemyObjects, std::shared_ptr<EntityObject>> manifest,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 	sf::Vector2f initialPosition)
-	: Entity{ nullptr, globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
+	: Entity<EnemyObjects>{ globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
 {
 	this->objects = manifest;
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);

@@ -15,6 +15,9 @@ class IWeaponComponentFactory;
 class ILocalMovementComponent;
 struct DamageEffects;
 
+template<typename T>
+using EntityManifest = std::map<T, std::shared_ptr<EntityObject>>;
+
 struct EnemyWeaponConfig
 {
 	std::shared_ptr<IWeaponComponentFactory> weaponComponentFactory;
@@ -62,18 +65,18 @@ struct EnemyAttributeConfig
 
 struct EnemyConfig
 {
-	std::function<EntityManifest(EnemyConfig)> builder;
+	std::function<EntityManifest<EnemyObjects>(EnemyConfig)> builder;
 	EnemyMotionConfig motionConfig;
 	EnemyAnimationConfig animationConfig;
 	EnemyWeaponConfig weaponConfig;
 	EnemyAttributeConfig attributeConfig;
 
-	EnemyConfig(std::function<EntityManifest(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, EnemyWeaponConfig weaponConfig, EnemyAttributeConfig attributeConfig)
+	EnemyConfig(std::function<EntityManifest<EnemyObjects>(EnemyConfig)> builder, EnemyMotionConfig motionConfig, EnemyAnimationConfig animationConfig, EnemyWeaponConfig weaponConfig, EnemyAttributeConfig attributeConfig)
 		: builder(builder), motionConfig(motionConfig), animationConfig(animationConfig), weaponConfig(weaponConfig), attributeConfig(attributeConfig)
 	{}
 };
 
-class EnemyTypeFactory : public IEnemyTypeFactory, public Enemy
+class EnemyTypeFactory : public IEnemyTypeFactory<EnemyObjects>, public Enemy
 {
 public:
 	EnemyTypeFactory(EnemyConfig config);
@@ -81,12 +84,12 @@ public:
 	virtual std::shared_ptr<Entity> Create() override;
 
 	// Builder methods
-	static EntityManifest BuildLinearEnemy(EnemyConfig config);
-	static EntityManifest BuildOribitalEnemy(EnemyConfig config);
+	static EntityManifest<EnemyObjects> BuildLinearEnemy(EnemyConfig config);
+	static EntityManifest<EnemyObjects> BuildOribitalEnemy(EnemyConfig config);
 
 private:
 
-	static EntityManifest BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent);
+	static EntityManifest<EnemyObjects> BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent);
 	EnemyConfig config;
 };
 

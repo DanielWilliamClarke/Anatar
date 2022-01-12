@@ -6,16 +6,18 @@
 #include <list>
 #include <map>
 
-class IRenderer;
-class Entity;
+#include "enemy/enemy.h"
 
+template <typename T>
 class IEnemyTypeFactory;
+
+template<typename C, typename P>
+class QuadTree;
 
 struct Collision;
 struct CollisionMediators;
 
-template<typename C, typename P>
-class QuadTree;
+class IRenderer;
 
 class EnemySystem: public std::enable_shared_from_this<EnemySystem>
 {
@@ -26,11 +28,11 @@ public:
 	void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt);
 	void Draw(std::shared_ptr<IRenderer> renderer, float interp) const;
 
-	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory> factory);
-	std::vector<std::shared_ptr<Entity>>& GetEnemies();
+	virtual std::shared_ptr<EnemySystem> AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory<EnemyObjects>> factory);
+	std::vector<std::shared_ptr<Entity<EnemyObjects>>>& GetEnemies();
 private:
-	std::vector<std::shared_ptr<Entity>> enemies;
-	std::map<float, std::vector<std::shared_ptr<IEnemyTypeFactory>>> factories;
+	std::vector<std::shared_ptr<Entity<EnemyObjects>>> enemies;
+	std::map<float, std::vector<std::shared_ptr<IEnemyTypeFactory<EnemyObjects>>>> factories;
 
 	float accumulator;
 	float maxInterval;

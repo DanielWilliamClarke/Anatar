@@ -164,7 +164,6 @@ void Game::InitPlayer()
 	auto collectionDetectionComponent = std::make_shared<CollisionDetectionComponent>(rayCaster);
 
 	this->player = std::make_shared<Player>(playerBuilder, movementComponent, attributeComponent, collectionDetectionComponent);
-	this->playerTargets.push_back(this->player);
 	this->playerInput = std::make_shared<PlayerInput>();
 }
 
