@@ -22,14 +22,20 @@ struct BulletMediators {
 	std::function<sf::Vector2f(void)> positionSampler;
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
 
-	BulletMediators(
-		std::function<void(bool, float)> resolver,
-		std::function<sf::Vector2f(void)> positionSampler,
-		std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder)
-		: resolver(resolver),
-		positionSampler(positionSampler),
-		shapeBuilder(shapeBuilder)
-	{}
+	BulletMediators Inject(std::function<void(bool, float)> r) {
+		this->resolver = r;
+		return *this;
+	}
+
+	BulletMediators Inject(std::function<sf::Vector2f(void)> p) {
+		this->positionSampler = p;
+		return *this;
+	}
+
+	BulletMediators Inject(std::function<std::shared_ptr<sf::Shape>(void)> s) {
+		this->shapeBuilder = s;
+		return *this;
+	}
 };
 
 struct BulletConfig

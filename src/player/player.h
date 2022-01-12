@@ -45,6 +45,8 @@ protected:
 
 	std::shared_ptr<IPlayerMovementComponent> movementComponent;
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent;
+
+	std::shared_ptr<CollisionMediators> mediators;
 };
 
 #endif //PLAYER_H

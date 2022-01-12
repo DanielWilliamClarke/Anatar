@@ -25,6 +25,19 @@ Enemy::Enemy(
 	this->objects = manifest;
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
 	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
+
+	this->mediators = std::make_shared<CollisionMediators>(
+		CollisionMediators()
+			.Inject([this](float damage, sf::Vector2f position) -> bool {
+				this->attributeComponent->TakeDamage(damage, position);
+				return this->attributeComponent->IsDead();
+			})
+			.Inject([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
+				return this->DetectCollision(position, ray, velocity);
+			})
+			.Inject([this](sf::FloatRect& area) -> bool {
+				return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox());
+			}));
 }
 
 void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt)
@@ -38,20 +51,8 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quad
 	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto mediators = std::make_shared<CollisionMediators>(
-		[this](float damage, sf::Vector2f position) {
-			this->attributeComponent->TakeDamage(damage, position);
-			return this->attributeComponent->IsDead();
-		},
-		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) ->std::shared_ptr<sf::Vector2f> { 
-			return this->DetectCollision(position, ray, velocity);
-		},
-		[this](sf::FloatRect& area) -> bool { 
-			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox());
-		});
-
-	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), mediators));
-	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), this->mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), this->mediators));
 
 	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
 	this->UpdateObjects({
@@ -68,10 +69,10 @@ void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 void Enemy::InitBullets()
 {
 	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
-		BulletMediators(
-			[=](bool kill, float damage) {},
-			[this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); },
-			[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
+		BulletMediators()
+			.Inject([=](bool kill, float damage) {})
+			.Inject([this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); })
+			.Inject([=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
 		this->GetTag(),
 		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
 }

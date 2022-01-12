@@ -32,6 +32,8 @@ public:
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
 private:
 	void InitBullets();
+
+	std::shared_ptr<CollisionMediators> mediators;
 };
 
 #endif //ENEMY_H

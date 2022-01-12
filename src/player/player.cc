@@ -31,6 +31,19 @@ Player::Player(
 	auto shipSprite = this->GetObject(PlayerObjects::SHIP)->GetSprite();
 	shipSprite->setPosition(this->movementComponent->GetCenter());
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());
+
+	this->mediators = std::make_shared<CollisionMediators>(
+		CollisionMediators()
+			.Inject([this](float damage, sf::Vector2f position) -> bool {
+				this->attributeComponent->TakeDamage(damage, position);
+				return this->attributeComponent->IsDead();
+			})
+			.Inject([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
+				return this->DetectCollision(position, ray, velocity);
+			})
+			.Inject([this](sf::FloatRect& area) -> bool {
+				return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
+			}));
 }
 
 void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt)
@@ -47,21 +60,8 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 	auto bounds = this->GetObject(PlayerObjects::SHIP)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
 
-	auto mediators = std::make_shared<CollisionMediators>(
-		[this](float damage, sf::Vector2f position) -> bool {
-			this->attributeComponent->TakeDamage(damage, position);
-			return this->attributeComponent->IsDead();
-		},
-		[this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
-			return this->DetectCollision(position, ray, velocity);
-		},
-		[this](sf::FloatRect& area) -> bool { 
-			return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
-		}
-	);
-
-	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), mediators));
-	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(position, this->GetTag(), this->mediators));
+	quadTree->Insert(std::make_shared<Point<CollisionMediators>>(extent, this->GetTag(), this->mediators));
 
 	auto shipConfig = this->bulletConfigs.at(PlayerObjects::SHIP);
 	auto turrentConfig = this->bulletConfigs.at(PlayerObjects::TURRET);
@@ -110,40 +110,32 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 
 void Player::InitBullets()
 {
-	auto collisionResolver = [this](bool kill, float damage) {
-		if (kill) {
-			this->attributeComponent->RegisterKill(damage);
-		}
-	};
-	auto positionSampler = [this]() -> sf::Vector2f {
-		auto ship = this->GetObject(PlayerObjects::SHIP)->GetSprite();
-		auto bounds = ship->getLocalBounds();
-		auto position = ship->getPosition();
-		position.x += bounds.width;
-		return position;
-	};
+	auto mediators = BulletMediators()
+		.Inject([this](bool kill, float damage) {
+			if (kill) {
+				this->attributeComponent->RegisterKill(damage);
+			}
+		})
+		.Inject([this]() -> sf::Vector2f {
+			auto ship = this->GetObject(PlayerObjects::SHIP)->GetSprite();
+			auto bounds = ship->getLocalBounds();
+			auto position = ship->getPosition();
+			position.x += bounds.width;
+			return position;
+		});
 
 	this->bulletConfigs[PlayerObjects::SHIP] = std::make_shared<BulletConfig>(
-		BulletMediators(
-			collisionResolver,
-			positionSampler,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
+		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
 		this->GetTag(), 
 		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, AFFINITY::RIGHT, false, 15.0f, 0.5f);
 
 	this->bulletConfigs[PlayerObjects::TURRET] = std::make_shared<BulletConfig>(
-		BulletMediators(
-			collisionResolver,
-			positionSampler,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
+		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
 		this->GetTag(),
 		sf::Color::Yellow, 90.0f, 1.0f, 400.0f, AFFINITY::RIGHT, false, 5.0f);
 
 	this->bulletConfigs[PlayerObjects::GLOWIE] = std::make_shared<BulletConfig>(
-		BulletMediators(
-			collisionResolver,
-			positionSampler,
-			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
+		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
 		this->GetTag(),
 		sf::Color::Green, 75.0f, 5.0f, 400.0f, AFFINITY::RIGHT, false, 25.0f, 3.0f);
 }

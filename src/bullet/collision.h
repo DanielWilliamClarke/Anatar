@@ -14,12 +14,20 @@ struct CollisionMediators {
 	std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> pointTest;
 	std::function<bool(sf::FloatRect&)> zoneTest;
 
-	CollisionMediators(
-		std::function<bool(float, sf::Vector2f)> resolver,
-		std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> pointTest,
-		std::function<bool(sf::FloatRect&)> zoneTest)
-		: resolver(resolver), pointTest(pointTest), zoneTest(zoneTest)
-	{}
+	CollisionMediators Inject(std::function<bool(float, sf::Vector2f)> r) {
+		this->resolver = r;
+		return *this;
+	}
+
+	CollisionMediators Inject(std::function<std::shared_ptr<sf::Vector2f>(sf::Vector2f, sf::Vector2f, bool ray)> pt) {
+		this->pointTest = pt;
+		return *this;
+	}
+
+	CollisionMediators Inject(std::function<bool(sf::FloatRect&)> zt) {
+		this->zoneTest = zt;
+		return *this;
+	}
 };
 
 struct Collision {
