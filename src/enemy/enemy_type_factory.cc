@@ -92,7 +92,7 @@ EntityManifest EnemyTypeFactory::BuildEnemy(EnemyConfig config, std::shared_ptr<
 	animationComponent->AddAnimation(movementStates::IDLE, config.animationConfig.frameDuration, 0, 0, config.animationConfig.frames - 1, 0, (int)spriteFrameSize.x, (int)spriteFrameSize.y);
 
 	auto spriteBounds = sprite->getLocalBounds();
-	hitboxComponent->SetSprite(
+	hitboxComponent->Set(
 		sprite->getPosition(),
 		spriteBounds.left - spriteFrameSize.x / 2,
 		spriteBounds.top - spriteFrameSize.y / 2,

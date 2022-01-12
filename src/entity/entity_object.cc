@@ -58,5 +58,5 @@ void EntityObject::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interP
 
 sf::FloatRect EntityObject::GetHitbox() const
 {
-	return this->hitboxComponent->GetHitbox();
+	return this->hitboxComponent->Get();
 }

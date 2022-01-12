@@ -18,7 +18,6 @@ class ICollisionDetectionComponent;
 class EntityObject;
 struct EntityUpdate;
 struct BulletConfig;
-struct RayIntersection;
 
 struct Collision;
 template<typename C>

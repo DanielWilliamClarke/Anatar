@@ -14,10 +14,11 @@ public:
 	HitboxComponent(sf::Color colour);
 	virtual ~HitboxComponent() = default;
 
-	virtual void SetSprite(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override;
 	virtual void Update(sf::Vector2f position) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer) override;
-	virtual sf::FloatRect GetHitbox() const;
+
+	virtual void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override;
+	virtual sf::FloatRect Get() const;
 private:
 	sf::RectangleShape hitbox;
 	float offsetX;

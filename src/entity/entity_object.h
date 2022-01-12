@@ -11,7 +11,6 @@ class IAnimationComponent;
 class IHitboxComponent;
 class ILocalMovementComponent;
 class IWeaponComponent;
-struct RayIntersection;
 
 class EntityObject
 {
@@ -24,7 +23,6 @@ public:
 
 	virtual ~EntityObject();
 	
-	void AddAnimation(const int key, float frameDuration, int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
 	void PlayAnimation(const int direction, const bool loop) const;
 	std::shared_ptr<sf::Sprite> GetSprite() const;
 

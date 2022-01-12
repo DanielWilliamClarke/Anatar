@@ -72,7 +72,7 @@ void PlayerBuilder::BuildShip()
 	animationComponent->AddAnimation(this->MOVING_DOWN, 0.2f, 0, 0, 2, 0, frameSize.x, frameSize.y);
 
 	auto spriteBounds = sprite->getLocalBounds();
-	hitboxComponent->SetSprite(
+	hitboxComponent->Set(
 		sprite->getPosition(),
 		spriteBounds.left - spriteFrameSize.x / 2 - 8,
 		spriteBounds.top - spriteFrameSize.y / 2,
