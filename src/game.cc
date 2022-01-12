@@ -146,15 +146,15 @@ void Game::InitPlayer()
 	auto playerDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(
-			BulletCallbacks(resolver, sampler,
+			BulletMediators(resolver, sampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
 			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::RIGHT, false, 0.0f, 7.0f),
 		std::make_shared<BulletConfig>(
-			BulletCallbacks(resolver, sampler,
+			BulletMediators(resolver, sampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f),
 		std::make_shared<BulletConfig>(
-			BulletCallbacks(resolver, sampler,
+			BulletMediators(resolver, sampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", sheildDamageColor, attenuation, 0.0f,  50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f));
 
@@ -185,11 +185,11 @@ void Game::InitEnemySystem()
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
 		this->debrisGenerator,
 		std::make_shared<BulletConfig>(
-			BulletCallbacks(resolver, sampler,
+			BulletMediators(resolver, sampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
 			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::LEFT, false, 0.0f, 0.7f),
 		std::make_shared<BulletConfig>(
-			BulletCallbacks(resolver, sampler,
+			BulletMediators(resolver, sampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::LEFT, false, 0.0f, 0.3f),
 		nullptr);

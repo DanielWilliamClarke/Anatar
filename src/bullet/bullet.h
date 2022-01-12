@@ -17,25 +17,24 @@ class QuadTree;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 
-struct BulletCallbacks {
-
-	std::function<void(bool, float)> collisionResolver;
-	std::function<sf::Vector2f(void)> ownerPositionSampler;
+struct BulletMediators {
+	std::function<void(bool, float)> resolver;
+	std::function<sf::Vector2f(void)> positionSampler;
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
 
-	BulletCallbacks(
-		std::function<void(bool, float)> collisionResolver,
-		std::function<sf::Vector2f(void)> ownerPositionSampler,
+	BulletMediators(
+		std::function<void(bool, float)> resolver,
+		std::function<sf::Vector2f(void)> positionSampler,
 		std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder)
-		: collisionResolver(collisionResolver),
-		ownerPositionSampler(ownerPositionSampler),
+		: resolver(resolver),
+		positionSampler(positionSampler),
 		shapeBuilder(shapeBuilder)
 	{}
 };
 
 struct BulletConfig
 {
-	BulletCallbacks callbacks;
+	BulletMediators mediators;
 	std::string tag;
 
 	sf::Color color;
@@ -50,7 +49,7 @@ struct BulletConfig
 	float lifeTime;
 
 	BulletConfig(
-		BulletCallbacks callbacks,
+		BulletMediators mediators,
 		std::string tag,
 		sf::Color color, 
 		float glowAttenuation,
@@ -60,7 +59,7 @@ struct BulletConfig
 		bool penetrating, 
 		float damage, 
 		float lifeTime = 20.0f)
-		: callbacks(callbacks),
+		: mediators(mediators),
 		tag(tag),
 		color(color),
 		glowAttenuation(glowAttenuation),

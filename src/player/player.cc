@@ -118,7 +118,7 @@ void Player::InitBullets()
 	auto positionSampler = [this]() -> sf::Vector2f { return this->GetPosition(); };
 
 	this->bulletConfigs[SHIP] = std::make_shared<BulletConfig>(
-		BulletCallbacks(
+		BulletMediators(
 			collisionResolver,
 			positionSampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
@@ -126,7 +126,7 @@ void Player::InitBullets()
 		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, AFFINITY::RIGHT, false, 15.0f, 0.5f);
 
 	this->bulletConfigs[TURRET] = std::make_shared<BulletConfig>(
-		BulletCallbacks(
+		BulletMediators(
 			collisionResolver,
 			positionSampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
@@ -134,7 +134,7 @@ void Player::InitBullets()
 		sf::Color::Yellow, 90.0f, 1.0f, 400.0f, AFFINITY::RIGHT, false, 5.0f);
 
 	this->bulletConfigs[GLOWIE] = std::make_shared<BulletConfig>(
-		BulletCallbacks(
+		BulletMediators(
 			collisionResolver,
 			positionSampler,
 			[=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),

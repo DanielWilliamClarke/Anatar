@@ -26,7 +26,7 @@ Beam::Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<I
 void Beam::Update(float dt, float worldSpeed)
 {
 	this->lastPosition = this->position;
-	this->position = this->config.callbacks.ownerPositionSampler();
+	this->position = this->config.mediators.positionSampler();
 
 	this->round->setPosition(this->position);
 

@@ -44,5 +44,5 @@ std::string Bullet::GetTag() const
 }
 
 std::function<void(bool, float)> Bullet::GetCollisionResolver() const {
-	return config.callbacks.collisionResolver;
+	return config.mediators.resolver;
 }

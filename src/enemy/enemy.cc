@@ -68,7 +68,7 @@ void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 void Enemy::InitBullets()
 {
 	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
-		BulletCallbacks(
+		BulletMediators(
 			[=](bool kill, float damage) {},
 			[this]() -> sf::Vector2f { return this->GetPosition(); },
 			[=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),

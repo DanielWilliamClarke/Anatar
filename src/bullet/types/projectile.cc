@@ -12,7 +12,7 @@
 
 Projectile::Projectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Bullet(trajectory, config),
-	round(config.callbacks.shapeBuilder())
+	round(config.mediators.shapeBuilder())
 {
 	this->round->setFillColor(config.color);
 	auto bounds = this->round->getLocalBounds();
