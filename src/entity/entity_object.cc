@@ -25,16 +25,6 @@ EntityObject::~EntityObject()
 	this->weaponComponent->Cease();
 }
 
-void EntityObject::PlayAnimation(const int direction, const bool loop) const
-{
-	this->animationComponent->Play(direction, loop);
-}
-
-std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const 
-{
-	return this->sprite;
-}
-
 void EntityObject::Update(EntityUpdate update, float dt) const
 {
 	this->sprite->setPosition(this->movementComponent->Integrate(update.position, dt));
@@ -54,6 +44,11 @@ void EntityObject::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interP
 	renderer->GetTarget().draw(*this->sprite);
 	this->hitboxComponent->Update(this->sprite->getPosition());
 	this->hitboxComponent->Draw(renderer);
+}
+
+std::shared_ptr<sf::Sprite> EntityObject::GetSprite() const
+{
+	return this->sprite;
 }
 
 sf::FloatRect EntityObject::GetHitbox() const

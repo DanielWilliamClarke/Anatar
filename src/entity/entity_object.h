@@ -20,15 +20,12 @@ public:
 		std::shared_ptr<IHitboxComponent> hitboxComponent,
 		std::shared_ptr<ILocalMovementComponent> movementComponent,
 		std::shared_ptr<IWeaponComponent> weaponComponent);
-
 	virtual ~EntityObject();
 	
-	void PlayAnimation(const int direction, const bool loop) const;
-	std::shared_ptr<sf::Sprite> GetSprite() const;
-
 	void Update(EntityUpdate position, float dt) const;
 	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
 
+	std::shared_ptr<sf::Sprite> GetSprite() const;
 	sf::FloatRect GetHitbox() const;
 
 private:
