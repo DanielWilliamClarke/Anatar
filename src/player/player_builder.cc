@@ -103,7 +103,7 @@ std::shared_ptr<EntityObject> PlayerBuilder::BuildExhaust(std::shared_ptr<sf::Sp
 	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
 
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(sf::Vector2f(-10.0, shipSprite->getOrigin().y + 2));
-#
+
 	auto weaponComponent = std::make_shared<InertWeaponComponent>();
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
