@@ -11,6 +11,7 @@ class IRenderer;
 
 struct Collision;
 struct CollisionMediators;
+
 template<typename C, typename P>
 class QuadTree;
 

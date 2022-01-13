@@ -3,7 +3,6 @@
 
 #include "enemy.h"
 
-#include "entity/i_entity_builder.h"
 #include "entity/entity_object.h"
 #include "quad_tree/quad_tree.h"
 #include "util/i_ray_caster.h"
@@ -15,14 +14,13 @@
 #include "bullet/bullet.h"
 
 Enemy::Enemy(
-	std::map<EnemyObjects, std::shared_ptr<EntityObject>> manifest,
+	std::map<EnemyObjects, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 	sf::Vector2f initialPosition)
-	: Entity<EnemyObjects>{ globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
+	: Entity<EnemyObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
 {
-	this->objects = manifest;
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
 	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
 

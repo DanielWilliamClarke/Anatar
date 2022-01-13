@@ -25,64 +25,59 @@ PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::s
 	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds), rayCaster(std::make_shared<RayCaster>())
 {}
 
-std::map<PlayerObjects, std::shared_ptr<EntityObject>> PlayerBuilder::Build()
-{
-	this->BuildShip();
-	this->BuildExhaust();
-	this->BuildTurret();
-	this->BuildGlowie();
-	return manifest;
-}
-
-void PlayerBuilder::BuildShip()
+EntityManifest<PlayerObjects> PlayerBuilder::Build()
 {
 	auto texture = textureAtlas->GetTexture("playerShip");
-
 	auto spriteScale = 2.0f;
 	auto textureSize = texture->getSize();
-	auto spriteFrameSize = sf::Vector2f(
-		(float)textureSize.x / 3,
-		(float)textureSize.y / 2);
-	auto spriteOrigin = sf::Vector2f(
-		spriteFrameSize.x / 2,
-		spriteFrameSize.y / 2);
+	auto spriteFrameSize = sf::Vector2f((float)textureSize.x / 3, (float)textureSize.y / 2);
+	auto origin = sf::Vector2f((float)spriteFrameSize.x / 2, (float)spriteFrameSize.y / 2);
+
+	auto sprite = std::make_shared<sf::Sprite>();
+	sprite->setOrigin(origin);
+	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
+	sprite->setTexture(*texture);
+
+	return {
+		{ PlayerObjects::SHIP, this->BuildShip(sprite) },
+		{ PlayerObjects::EXHAUST, this->BuildExhaust(sprite) },
+		{ PlayerObjects::TURRET, this->BuildTurret(sprite) },
+		{ PlayerObjects::GLOWIE, this->BuildGlowie(sprite) },
+	};
+}
+
+std::shared_ptr<EntityObject> PlayerBuilder::BuildShip(std::shared_ptr<sf::Sprite> shipSprite)
+{
+	auto texture = textureAtlas->GetTexture("playerShip");
+	auto textureSize = texture->getSize();
+	auto spriteFrameSize = sf::Vector2f((float)textureSize.x / 3, (float)textureSize.y / 2);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
-	auto movementComponent = std::make_shared<OffSetMovementComponent>(spriteOrigin);
-
-	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
-	auto weaponComponent = std::make_shared<RadialBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f, 5.0f, 2.0f);
-	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
-	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
-
-	auto sprite = ship->GetSprite();
-
-	sprite->setOrigin(spriteOrigin);
-	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
-
-	sprite->setTexture(*texture);
-	animationComponent->SetAssets(sprite, texture);
-
-	auto frameSize = sf::Vector2i(
-		(int)spriteFrameSize.x,
-		(int)spriteFrameSize.y);
+	animationComponent->SetAssets(shipSprite, texture);
+	auto frameSize = sf::Vector2i((int)spriteFrameSize.x, (int)spriteFrameSize.y);
 	animationComponent->AddAnimation(this->IDLE, 0.2f, 0, 0, 0, 0, frameSize.x, frameSize.y);
 	animationComponent->AddAnimation(this->MOVING_UP, 0.2f, 0, 1, 2, 1, frameSize.x, frameSize.y);
 	animationComponent->AddAnimation(this->MOVING_DOWN, 0.2f, 0, 0, 2, 0, frameSize.x, frameSize.y);
 
-	auto spriteBounds = sprite->getLocalBounds();
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
+	auto spriteBounds = shipSprite->getLocalBounds();
 	hitboxComponent->Set(
-		sprite->getPosition(),
+		shipSprite->getPosition(),
 		spriteBounds.left - spriteFrameSize.x / 2 - 8,
 		spriteBounds.top - spriteFrameSize.y / 2,
 		spriteFrameSize.x + 15,
 		spriteFrameSize.y - 3); // All these magic numbers
 
-	manifest[PlayerObjects::SHIP] = ship;
+	auto movementComponent = std::make_shared<OffSetMovementComponent>(shipSprite->getOrigin());
+
+	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
+	auto weaponComponent = std::make_shared<RadialBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f, 5.0f, 2.0f);
+	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
+
+	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, shipSprite);
 }
 
-void PlayerBuilder::BuildExhaust()
+std::shared_ptr<EntityObject> PlayerBuilder::BuildExhaust(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerExhaust");
 
@@ -95,31 +90,27 @@ void PlayerBuilder::BuildExhaust()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSpriteOrigin = manifest.at(PlayerObjects::SHIP)->GetSprite()->getOrigin();
-
-	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
-	auto movementComponent = std::make_shared<OffSetMovementComponent>(sf::Vector2f(-10.0, shipSpriteOrigin.y + 2));
-	auto weaponComponent = std::make_shared<InertWeaponComponent>();
-	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
-	auto exhaust = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
-	auto sprite = exhaust->GetSprite();
-
+	auto sprite = std::make_shared<sf::Sprite>();
 	sprite->setOrigin(spriteOrigin);
 	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
-
 	sprite->setTexture(*texture);
-	animationComponent->SetAssets(sprite, texture);
 
-	auto frameSize = sf::Vector2i(
-		(int)spriteFrameSize.x,
-		(int)spriteFrameSize.y);
+	auto animationComponent = std::make_shared<AnimationComponent>();
+	animationComponent->SetAssets(sprite, texture);
+	auto frameSize = sf::Vector2i((int)spriteFrameSize.x, (int)spriteFrameSize.y);
 	animationComponent->AddAnimation(this->IDLE, 0.1f, 0, 0, 1, 0, frameSize.x, frameSize.y);
 
-	manifest[PlayerObjects::EXHAUST] = exhaust;
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Green);
+
+	auto movementComponent = std::make_shared<OffSetMovementComponent>(sf::Vector2f(-10.0, shipSprite->getOrigin().y + 2));
+#
+	auto weaponComponent = std::make_shared<InertWeaponComponent>();
+	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
+
+	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
 }
 
-void PlayerBuilder::BuildTurret()
+std::shared_ptr<EntityObject> PlayerBuilder::BuildTurret(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerTurret");
 
@@ -132,36 +123,30 @@ void PlayerBuilder::BuildTurret()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSprite = manifest.at(PlayerObjects::SHIP)->GetSprite();
-	auto bounds = shipSprite->getLocalBounds();
-	auto offset = shipSprite->getOrigin();
-	offset.x += bounds.width;
-	offset.y += bounds.height;
+	auto sprite = std::make_shared<sf::Sprite>();
+	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
+	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
+	sprite->setTexture(*texture);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
+	animationComponent->SetAssets(sprite, texture);
+	auto frameSize = sf::Vector2i((int)spriteFrameSize.x, (int)spriteFrameSize.y);
+	animationComponent->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
+
 	auto hitboxComponent = std::make_shared<InertHitboxComponent>();
+
+	auto bounds = shipSprite->getLocalBounds();
+	auto offset = shipSprite->getOrigin() + sf::Vector2f(bounds.width, bounds.height);
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(offset);
+
 	auto projectileFactory = std::make_shared<HomingProjectileFactory>();
 	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 2.0f, 0.0f, 10.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
-	auto turret = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
-	auto sprite = turret->GetSprite();
 
-	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
-	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
-
-	sprite->setTexture(*texture);
-	animationComponent->SetAssets(sprite, texture);
-
-	auto frameSize = sf::Vector2i(
-		(int)spriteFrameSize.x,
-		(int)spriteFrameSize.y);
-	animationComponent->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
-
-	manifest[PlayerObjects::TURRET] = turret;
+	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
 }
 
-void PlayerBuilder::BuildGlowie()
+std::shared_ptr<EntityObject> PlayerBuilder::BuildGlowie(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerGlowie");
 
@@ -174,27 +159,23 @@ void PlayerBuilder::BuildGlowie()
 		spriteFrameSize.x / 2,
 		spriteFrameSize.y / 2);
 
-	auto shipSpriteOrigin = manifest.at(PlayerObjects::SHIP)->GetSprite()->getOrigin();
+	auto sprite = std::make_shared<sf::Sprite>();
+	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
+	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
+	sprite->setTexture(*texture);
 
 	auto animationComponent = std::make_shared<AnimationComponent>();
+	animationComponent->SetAssets(sprite, texture);
+	auto frameSize = sf::Vector2i((int)spriteFrameSize.x, (int)spriteFrameSize.y);
+	animationComponent->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
+
 	auto hitboxComponent = std::make_shared<InertHitboxComponent>();
-	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSpriteOrigin, 75.0f, -100.0f);
+
+	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSprite->getOrigin(), 75.0f, -100.0f);
+
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
 	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 15.0f, 10.0f, 90.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
-	auto glowie = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent);
-	auto sprite = glowie->GetSprite();
 
-	sprite->setOrigin(spriteFrameSize.x / 2, spriteFrameSize.y / 2);
-	sprite->setScale(sf::Vector2f(spriteScale, spriteScale));
-
-	sprite->setTexture(*texture);
-	animationComponent->SetAssets(sprite, texture);
-
-	auto frameSize = sf::Vector2i(
-		(int)spriteFrameSize.x,
-		(int)spriteFrameSize.y);
-	animationComponent->AddAnimation(this->IDLE, 0.05f, 0, 0, 3, 0, frameSize.x, frameSize.y);
-
-	manifest[PlayerObjects::GLOWIE] = glowie;
+	return  std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
 }

@@ -11,12 +11,13 @@ EntityObject::EntityObject(
 	std::shared_ptr<IAnimationComponent> animationComponent,
 	std::shared_ptr<IHitboxComponent> hitboxComponent,
 	std::shared_ptr<ILocalMovementComponent> movementComponent,
-	std::shared_ptr<IWeaponComponent> weaponComponent)
+	std::shared_ptr<IWeaponComponent> weaponComponent,
+	std::shared_ptr<sf::Sprite> sprite)
 	: animationComponent(animationComponent),
 	hitboxComponent(hitboxComponent),
 	movementComponent(movementComponent),
 	weaponComponent(weaponComponent),
-	sprite(std::make_shared<sf::Sprite>())
+	sprite(sprite)
 {
 }
 

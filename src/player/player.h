@@ -16,9 +16,6 @@ struct Input;
 struct Collision;
 struct CollisionMediators;
 
-template <typename T>
-class IEntityObjectBuilder;
-
 template<typename C, typename P>
 class QuadTree;
 
@@ -30,7 +27,7 @@ public:
 	enum movementStates : int { IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN };
 	Player() = default;
 	Player(
-		std::shared_ptr<IEntityObjectBuilder<PlayerObjects>> playerBuilder,
+		std::map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 		std::shared_ptr<IPlayerMovementComponent> movementComponent,
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent);

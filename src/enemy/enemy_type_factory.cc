@@ -73,24 +73,16 @@ EntityManifest<EnemyObjects> EnemyTypeFactory::BuildEnemy(EnemyConfig config, st
 		(float)textureSize.x / config.animationConfig.frames,
 		(float)textureSize.y);
 
-	auto animationComponent = std::make_shared<AnimationComponent>();
-	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
-	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
-	auto ship = std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent);
-
-	auto sprite = ship->GetSprite();
-	sprite->setOrigin(sf::Vector2f(
-		spriteFrameSize.x / 2,
-		spriteFrameSize.y / 2));
-	sprite->setScale(sf::Vector2f(
-		config.animationConfig.scale,
-		config.animationConfig.scale));
-
+	auto sprite = std::make_shared<sf::Sprite>();
+	sprite->setOrigin(sf::Vector2f(spriteFrameSize.x / 2, spriteFrameSize.y / 2));
+	sprite->setScale(sf::Vector2f(config.animationConfig.scale,	config.animationConfig.scale));
 	sprite->setTexture(*config.animationConfig.texture);
 
+	auto animationComponent = std::make_shared<AnimationComponent>();
 	animationComponent->SetAssets(sprite, config.animationConfig.texture);
 	animationComponent->AddAnimation(movementStates::IDLE, config.animationConfig.frameDuration, 0, 0, config.animationConfig.frames - 1, 0, (int)spriteFrameSize.x, (int)spriteFrameSize.y);
 
+	auto hitboxComponent = std::make_shared<HitboxComponent>(sf::Color::Red);
 	auto spriteBounds = sprite->getLocalBounds();
 	hitboxComponent->Set(
 		sprite->getPosition(),
@@ -99,7 +91,12 @@ EntityManifest<EnemyObjects> EnemyTypeFactory::BuildEnemy(EnemyConfig config, st
 		spriteFrameSize.x,
 		spriteFrameSize.y);
 
+	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
+
 	return EntityManifest<EnemyObjects>{
-		{EnemyObjects::ENEMY, ship}
+		{
+			EnemyObjects::ENEMY, 
+			std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, weaponComponent, sprite)
+		}
 	};
 }

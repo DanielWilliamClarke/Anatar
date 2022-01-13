@@ -19,12 +19,10 @@ public:
 	virtual ~PlayerBuilder() = default;
 	virtual EntityManifest<PlayerObjects> Build() override;
 private:
-	void BuildShip();
-	void BuildExhaust();
-	void BuildTurret();
-	void BuildGlowie();
-
-	EntityManifest<PlayerObjects> manifest;
+	std::shared_ptr<EntityObject> BuildShip(std::shared_ptr<sf::Sprite> ship);
+	std::shared_ptr<EntityObject> BuildExhaust(std::shared_ptr<sf::Sprite> ship);
+	std::shared_ptr<EntityObject> BuildTurret(std::shared_ptr<sf::Sprite> ship);
+	std::shared_ptr<EntityObject> BuildGlowie(std::shared_ptr<sf::Sprite> ship);
 
 	std::shared_ptr<RayCaster> rayCaster;
 	std::shared_ptr<ITextureAtlas> textureAtlas;

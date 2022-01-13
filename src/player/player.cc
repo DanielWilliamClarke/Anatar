@@ -20,14 +20,12 @@
 #include "util/i_ray_caster.h"
 
 Player::Player(
-	std::shared_ptr<IEntityObjectBuilder<PlayerObjects>> entityBuilder,
+	std::map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent)
-	: Entity<PlayerObjects>{ globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
+	: Entity<PlayerObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
 {
-	this->objects = entityBuilder->Build();
-
 	auto shipSprite = this->GetObject(PlayerObjects::SHIP)->GetSprite();
 	shipSprite->setPosition(this->movementComponent->GetCenter());
 	this->movementComponent->SetEntityAttributes(shipSprite->getPosition(), shipSprite->getGlobalBounds());

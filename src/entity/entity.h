@@ -25,6 +25,7 @@ class Entity: public std::enable_shared_from_this<Entity<T>>
 public:
 	Entity() = default;
 	Entity(
+		std::map<T, std::shared_ptr<EntityObject>> objects,
 		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
@@ -59,11 +60,12 @@ protected:
 
 template <typename T>
 Entity<T>::Entity(
+	std::map<T, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 	std::string tag)
-	: globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), collisionDetectionComponent(collisionDetectionComponent), tag(tag)
+	: objects(objects), globalMovementComponent(globalMovementComponent), attributeComponent(attributeComponent), collisionDetectionComponent(collisionDetectionComponent), tag(tag)
 {}
 
 template <typename T>
