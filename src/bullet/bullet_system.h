@@ -32,6 +32,7 @@ private:
 
 	void AddBullet(std::shared_ptr<Bullet> bullet);
 	void EraseBullets();
+	void ResolveCollisions(std::vector<std::shared_ptr<Collision>> collisions) const;
 
 private:
 	std::vector<std::shared_ptr<Bullet>> bullets;

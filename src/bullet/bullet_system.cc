@@ -44,14 +44,7 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators
 		}
 	}
 
-	// Resolve each collision
-	std::for_each(unresolved.begin(), unresolved.end(),
-		[&](std::shared_ptr<Collision> c) {
-			auto damage = c->bullet->GetDamage();
-			c->bullet->GetCollisionResolver()(
-				c->target->payload->resolver(damage, c->collisionPosition),
-				damage);
-		});
+	this->ResolveCollisions(unresolved);
 }
 
 void BulletSystem::Draw(std::shared_ptr<IRenderer> renderer, float interp)
@@ -76,4 +69,15 @@ void BulletSystem::EraseBullets()
 				return b->isSpent();
 			}),
 		this->bullets.end());
+}
+
+void BulletSystem::ResolveCollisions(std::vector<std::shared_ptr<Collision>> collisions) const
+{
+	std::for_each(collisions.begin(), collisions.end(),
+		[=](std::shared_ptr<Collision> c) {
+			auto damage = c->bullet->GetDamage();
+			c->bullet->GetCollisionResolver()(
+				c->target->payload->resolver(damage, c->collisionPosition),
+				damage);
+		});
 }
