@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <vector>
 
-#include "player/player_builder.h"
+#include "player/player_entity_builder.h"
 #include "util/texture_atlas.h"
 
 TEST(PlayerBuilderTest, ShouldCreateShipAndExhaust) {

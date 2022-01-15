@@ -7,6 +7,8 @@
 class Bullet;
 struct BulletTrajectory;
 
+struct BulletConfig;
+
 class IBulletFactory
 {
 public:

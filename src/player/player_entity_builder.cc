@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#include "player_builder.h"
+#include "player_entity_builder.h"
 
 #include "util/i_texture_atlas.h"
 #include "components/animation/animation_component.h"
@@ -21,11 +21,11 @@
 #include "bullet/types/beam_factory.h"
 #include "util/ray_caster.h"
 
-PlayerBuilder::PlayerBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds)
+PlayerEntityBuilder::PlayerEntityBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds)
 	: textureAtlas(textureAtlas), bulletSystem(bulletSystem), bounds(bounds), rayCaster(std::make_shared<RayCaster>())
 {}
 
-EntityManifest<PlayerObjects> PlayerBuilder::Build()
+EntityManifest<PlayerObjects> PlayerEntityBuilder::Build()
 {
 	auto texture = textureAtlas->GetTexture("playerShip");
 	auto spriteScale = 2.0f;
@@ -46,7 +46,7 @@ EntityManifest<PlayerObjects> PlayerBuilder::Build()
 	};
 }
 
-std::shared_ptr<EntityObject> PlayerBuilder::BuildShip(std::shared_ptr<sf::Sprite> shipSprite)
+std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildShip(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerShip");
 	auto textureSize = texture->getSize();
@@ -77,7 +77,7 @@ std::shared_ptr<EntityObject> PlayerBuilder::BuildShip(std::shared_ptr<sf::Sprit
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, shipSprite);
 }
 
-std::shared_ptr<EntityObject> PlayerBuilder::BuildExhaust(std::shared_ptr<sf::Sprite> shipSprite)
+std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildExhaust(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerExhaust");
 
@@ -110,7 +110,7 @@ std::shared_ptr<EntityObject> PlayerBuilder::BuildExhaust(std::shared_ptr<sf::Sp
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
 }
 
-std::shared_ptr<EntityObject> PlayerBuilder::BuildTurret(std::shared_ptr<sf::Sprite> shipSprite)
+std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildTurret(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerTurret");
 
@@ -146,7 +146,7 @@ std::shared_ptr<EntityObject> PlayerBuilder::BuildTurret(std::shared_ptr<sf::Spr
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
 }
 
-std::shared_ptr<EntityObject> PlayerBuilder::BuildGlowie(std::shared_ptr<sf::Sprite> shipSprite)
+std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildGlowie(std::shared_ptr<sf::Sprite> shipSprite)
 {
 	auto texture = textureAtlas->GetTexture("playerGlowie");
 
