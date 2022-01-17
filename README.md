@@ -3,23 +3,16 @@
 ![](./src/assets/p1.gif)
 
 - Fresh repo to build a working version of my old first year programming project
-- Using SFML 2.5 as a 2D renderer instead of Gwin
+- Using SFML 2.5 as a 2D renderer
 
-- Developing in Visual Studio Community 2019
+- Developing in Visual Studio Community 2022
   - Build system = CMake
   - Compiler = Ninja
   - x64
 
-- Open and build in Visual Studio Community 2019
-
-- if forking this repo download and place the SFML sources files / binaries in `libraries`
-  - This project is current using the following verison of SFML
-
-https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
-
 ## Install Conan packages, generate CMake files and build
 
-For now update profile.txt to contain the Build Config mode [`Debug` or `Release]
+For now update profile.txt to contain the Build Config mode [`Debug` or `Release`]
 
 ```Powershell
 # cd into build location
