@@ -29,7 +29,6 @@ protected:
 
 private:
 	void Transition(std::shared_ptr<State<T>> nextState);
-	std::shared_ptr<State<T>> Pop(std::shared_ptr<State<T>> state);
 
 private:
 	std::unordered_map<T, std::shared_ptr<State<T>>> transtions;
@@ -39,7 +38,7 @@ private:
 
 template <typename T>
 std::shared_ptr<State<T>> State<T>::AddTransition(T t, std::shared_ptr<State<T>> state) {
-	this->transtions[t] = state;
+	this->transtions.emplace(t, state);
 	return this->shared_from_this();
 }
 

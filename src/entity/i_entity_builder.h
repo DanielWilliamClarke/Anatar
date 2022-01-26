@@ -3,13 +3,13 @@
 #pragma once
 
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class EntityObject;
 
 template<typename T>
-using EntityManifest = std::map<T, std::shared_ptr<EntityObject>>;
+using EntityManifest = std::unordered_map<T, std::shared_ptr<EntityObject>>;
 
 template<typename T>
 class IEntityObjectBuilder

@@ -16,7 +16,7 @@ class ILocalMovementComponent;
 struct DamageEffects;
 
 template<typename T>
-using EntityManifest = std::map<T, std::shared_ptr<EntityObject>>;
+using EntityManifest = std::unordered_map<T, std::shared_ptr<EntityObject>>;
 
 struct EnemyWeaponConfig
 {

@@ -14,7 +14,7 @@
 #include "bullet/bullet.h"
 
 Enemy::Enemy(
-	std::map<EnemyObjects, std::shared_ptr<EntityObject>> objects,
+	std::unordered_map<EnemyObjects, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,

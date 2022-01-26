@@ -20,7 +20,7 @@
 #include "util/i_ray_caster.h"
 
 Player::Player(
-	std::map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
+	std::unordered_map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent)

@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <unordered_map>
 
 #include "entity_object.h"
 #include "entity_update.h"
@@ -25,7 +26,7 @@ class Entity: public std::enable_shared_from_this<Entity<T>>
 public:
 	Entity() = default;
 	Entity(
-		std::map<T, std::shared_ptr<EntityObject>> objects,
+		std::unordered_map<T, std::shared_ptr<EntityObject>> objects,
 		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
@@ -45,22 +46,22 @@ public:
 	std::string GetTag() const;
 
 protected:
-	void Update(std::map<T, EntityUpdate> update, float dt) const;
+	void Update(std::unordered_map<T, EntityUpdate> update, float dt) const;
 	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
 
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
 	std::shared_ptr<IAttributeComponent> attributeComponent;
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent;
 
-	std::map<T, std::shared_ptr<EntityObject>> objects;
-	std::map<T, std::shared_ptr<BulletConfig>> bulletConfigs;
+	std::unordered_map<T, std::shared_ptr<EntityObject>> objects;
+	std::unordered_map<T, std::shared_ptr<BulletConfig>> bulletConfigs;
 
 	std::string tag;
 };
 
 template <typename T>
 Entity<T>::Entity(
-	std::map<T, std::shared_ptr<EntityObject>> objects,
+	std::unordered_map<T, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
@@ -87,7 +88,7 @@ std::shared_ptr<EntityObject> Entity<T>::GetObject(T id) const
 }
 
 template <typename T>
-void Entity<T>::Update(std::map<T, EntityUpdate> update, float dt) const
+void Entity<T>::Update(std::unordered_map<T, EntityUpdate> update, float dt) const
 {
 	for (auto& up : update)
 	{

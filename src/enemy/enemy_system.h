@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <list>
-#include <map>
+#include <unordered_map>
 
 #include "enemy/enemy.h"
 
@@ -32,7 +32,7 @@ public:
 	std::vector<std::shared_ptr<Entity<EnemyObjects>>>& GetEnemies();
 private:
 	std::vector<std::shared_ptr<Entity<EnemyObjects>>> enemies;
-	std::map<float, std::vector<std::shared_ptr<IEnemyTypeFactory<EnemyObjects>>>> factories;
+	std::unordered_map<float, std::vector<std::shared_ptr<IEnemyTypeFactory<EnemyObjects>>>> factories;
 
 	float accumulator;
 	float maxInterval;

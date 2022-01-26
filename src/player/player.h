@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <map>
+#include <unordered_map>
 
 #include "entity/entity.h"
 
@@ -27,7 +27,7 @@ public:
 	enum movementStates : int { IDLE = 0, MOVING, MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN };
 	Player() = default;
 	Player(
-		std::map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
+		std::unordered_map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 		std::shared_ptr<IPlayerMovementComponent> movementComponent,
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent);

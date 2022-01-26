@@ -23,7 +23,7 @@ public:
 	enum movementStates { IDLE = 0 };
 	Enemy() = default;
 	Enemy(
-		std::map<EnemyObjects, std::shared_ptr<EntityObject>> manifest,
+		std::unordered_map<EnemyObjects, std::shared_ptr<EntityObject>> manifest,
 		std::shared_ptr<IGlobalMovementComponent> movementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,

@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <map>
+#include <unordered_map>
 
 #include "i_texture_atlas.h"
 
@@ -17,7 +17,7 @@ public:
 	virtual std::shared_ptr<sf::Texture> GetTexture(std::string tag) const override;
 
 private:
-	std::map<std::string, std::shared_ptr<sf::Texture>> textures;
+	std::unordered_map<std::string, std::shared_ptr<sf::Texture>> textures;
 };
 
 #endif // TEXTURE_ATLAS
