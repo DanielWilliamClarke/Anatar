@@ -13,7 +13,6 @@
 #include "components/weapon/player/player_weapon_component.h"
 #include "components/weapon/inert_weapon_component.h"
 #include "components/weapon/beam/single_beam_weapon_component.h"
-#include "components/weapon/beam/radial_beam_weapon_component.h"
 #include "entity/entity_object.h"
 
 #include "bullet/types/projectile_factory.h"
@@ -71,7 +70,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildShip(std::shared_ptr<sf:
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(shipSprite->getOrigin());
 
 	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
-	auto weaponComponent = std::make_shared<RadialBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f, 5.0f, 2.0f);
+	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, shipSprite);

@@ -12,6 +12,7 @@
 
 #include "game_states/play/play_state_builder.h"
 #include "game_states/play/play_state.h"
+#include "game_states/menu/menu_state.h"
 
 Game::Game()
 	: clock(std::make_shared<sf::Clock>()),
@@ -71,10 +72,16 @@ void Game::InitTextureAtlas()
 			->AddTexture("big_core_mk_ii", "assets/bosses/big_core_mk_iii.png");
 }
 
-void Game::InitGameStates() {
-	
-	this->state = std::make_shared<PlayState>(
+void Game::InitGameStates() 
+{
+	auto menuState = std::make_shared<MenuState>();
+	auto playState = std::make_shared<PlayState>(
 		std::make_unique<PlayStateBuilder>(this->bounds, this->textureAtlas));
+
+	menuState->AddTransition(GameStates::PLAY, playState);
+	playState->AddTransition(GameStates::MENU, menuState);
+
+	this->state = menuState;
 }
 
 void Game::WindowEvents()
@@ -87,6 +94,8 @@ void Game::WindowEvents()
 			this->window->close();
 		}
 	}
+
+	this->state = this->state->Yield();
 }
 
 void Game::Update()
@@ -94,8 +103,7 @@ void Game::Update()
 	this->accumulator += this->clock->restart().asSeconds();
 	while (this->accumulator >= this->dt)
 	{
-		this->state = this->state->Update(dt);
-
+		this->state->Update(dt);
 		this->fps->Update();
 		this->accumulator -= this->dt;
 	}

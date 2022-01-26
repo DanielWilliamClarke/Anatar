@@ -3,8 +3,8 @@
 #pragma once
 
 enum class GameStates {
-	MAIN,
-	GAME,
+	MENU,
+	PLAY,
 	PAUSE,
 	STOP,
 	SCORES,

@@ -1,5 +1,7 @@
 #include "play_state.h"
 
+#include <iostream>
+
 #include "i_play_state_builder.h"
 #include "renderer/i_renderer.h"
 
@@ -16,18 +18,37 @@
 PlayState::PlayState(std::shared_ptr<IPlayStateBuilder> builder)
 	: builder(builder), worldSpeed(40.f)
 {
+	this->Setup();
+}
+
+void PlayState::Setup()
+{
+	std::cout << "play setting up" << std::endl;
+	this->quadTree = builder->BuildQuadTree();
+
 	this->level = builder->BuildLevel();
 	this->bulletSystem = builder->BuildBulletSystem();
 	this->input = builder->BuildPlayerInput();
 	this->hud = builder->BuildPlayerHud();
 
-	auto debrisSystem = builder->BuildDebrisSystem(bulletSystem);
-	this->player = builder->BuildPlayer(bulletSystem, debrisSystem, hud, worldSpeed);
-	this->enemySystem = builder->BuildEnemySystem(bulletSystem, debrisSystem, worldSpeed);
+	this->debrisEmitter = builder->BuildDebrisSystem(bulletSystem);
+	this->player = builder->BuildPlayer(bulletSystem, debrisEmitter, hud, worldSpeed);
+	this->enemySystem = builder->BuildEnemySystem(bulletSystem, debrisEmitter, worldSpeed);
 }
 
-std::shared_ptr<State<GameStates>> PlayState::Update(float dt)
+void PlayState::TearDown()
 {
+	std::cout << "play tearing down" << std::endl;
+}
+
+void PlayState::Update(float dt)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		this->Forward(GameStates::MENU);
+		return;
+	}
+
 	auto in = this->input->SampleInput();
 	this->quadTree = builder->BuildQuadTree();
 
@@ -38,10 +59,8 @@ std::shared_ptr<State<GameStates>> PlayState::Update(float dt)
 
 	if (this->player->HasDied())
 	{
-		exit(0); // Here we would transition to dead screen etc
+		this->Back();
 	}
-
-	return this->shared_from_this();
 }
 
 void PlayState::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
@@ -53,3 +72,4 @@ void PlayState::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 	this->hud->Draw(renderer);
 	this->quadTree->Draw(renderer);
 }
+

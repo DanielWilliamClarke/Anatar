@@ -28,8 +28,12 @@ public:
 	PlayState(std::shared_ptr<IPlayStateBuilder> builder);
 	virtual ~PlayState() = default;
 
-	virtual std::shared_ptr<State<GameStates>> Update(float dt) override;
+	virtual void Update(float dt) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
+
+protected: 
+	virtual void Setup() override;
+	virtual void TearDown() override;
 
 private: 
 	std::shared_ptr<IPlayStateBuilder> builder;
@@ -43,6 +47,7 @@ private:
 	std::shared_ptr<EnemySystem> enemySystem;
 
 	std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree;
+	std::shared_ptr<IWeaponComponent> debrisEmitter;
 
 	float worldSpeed;
 };
