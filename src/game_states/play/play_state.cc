@@ -43,11 +43,7 @@ void PlayState::TearDown()
 
 void PlayState::Update(float dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-	{
-		this->Forward(GameStates::MENU);
-		return;
-	}
+
 
 	auto in = this->input->SampleInput();
 	this->quadTree = builder->BuildQuadTree();
@@ -60,6 +56,10 @@ void PlayState::Update(float dt)
 	if (this->player->HasDied())
 	{
 		this->Back();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		this->Forward(GameStates::MENU);
 	}
 }
 

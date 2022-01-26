@@ -11,7 +11,7 @@ MenuState::MenuState() {
 	text.setScale(2, 2);
 	text.setFillColor(sf::Color::Cyan);
 	text.setPosition(50.0f, 50.0f);
-	text.setString("PRESS SPACE TO START");
+	text.setString("PRESS RETURN TO START");
 }
 
 void MenuState::Setup()
@@ -26,7 +26,7 @@ void MenuState::TearDown()
 
 void MenuState::Update(float dt) 
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 	{
 		return this->Forward(GameStates::PLAY);
 	}

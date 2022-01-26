@@ -28,13 +28,13 @@ protected:
 	void SetBack(std::shared_ptr<State<T>> p);
 
 private:
-	std::shared_ptr<State<T>> Transition(std::shared_ptr<State<T>> currentState, std::shared_ptr<State<T>> nextState);
+	void Transition(std::shared_ptr<State<T>> nextState);
+	std::shared_ptr<State<T>> Pop(std::shared_ptr<State<T>> state);
 
 private:
 	std::unordered_map<T, std::shared_ptr<State<T>>> transtions;
 	std::shared_ptr<State<T>> previous;
 	std::shared_ptr<State<T>> next;
-
 };
 
 template <typename T>
@@ -46,9 +46,15 @@ std::shared_ptr<State<T>> State<T>::AddTransition(T t, std::shared_ptr<State<T>>
 template <typename T>
 std::shared_ptr<State<T>> State<T>::Yield() 
 {
-	if (next) {
+	if (this->next) {
 		auto nextState = this->next;
+
+		// Yield should be called before Update and Draw
+		// So tearing down will occur cleanly between frames
+		this->TearDown();
+		this->previous = nullptr;
 		this->next = nullptr;
+
 		return nextState;
 	}
 
@@ -57,12 +63,12 @@ std::shared_ptr<State<T>> State<T>::Yield()
 
 template <typename T>
 void State<T>::Forward(T t) {
-	this->next = this->Transition(this->shared_from_this(), this->transtions.at(t));
+	this->Transition(this->transtions.at(t));
 }
 
 template <typename T>
 void State<T>::Back() {
-	this->next = this->Transition(this->shared_from_this(), this->previous);
+	this->Transition(this->previous);
 }
 
 template <typename T>
@@ -71,17 +77,15 @@ void State<T>::SetBack(std::shared_ptr<State<T>> p) {
 }
 
 template <typename T>
-std::shared_ptr<State<T>> State<T>::Transition(std::shared_ptr<State<T>> currentState, std::shared_ptr<State<T>> nextState)
+void State<T>::Transition(std::shared_ptr<State<T>> nextState)
 {
 	if (nextState)
 	{
-		currentState->TearDown();
-		nextState->SetBack(currentState);
+		// Prepare next state
+		nextState->SetBack(this->shared_from_this());
 		nextState->Setup();
-		return nextState;
+		this->next = nextState;
 	}
-
-	return currentState;
 }
 
 #endif // STATE
