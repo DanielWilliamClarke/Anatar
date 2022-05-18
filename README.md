@@ -37,7 +37,7 @@ then build
 - [ ] settings, 
 - [ ] highscores etc 
 
-###Gameplay
+### Gameplay
 
 - [x] Create base entity class so players and enemies may implement / derive 
 - [x] Create enemies and enemy movement
