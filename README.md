@@ -29,6 +29,16 @@ then build
 
 ## Plan
 
+### Game states
+
+- [x] main menu, 
+- [x] gameplay, 
+- [ ] pause, 
+- [ ] settings, 
+- [ ] highscores etc 
+
+###Gameplay
+
 - [x] Create base entity class so players and enemies may implement / derive 
 - [x] Create enemies and enemy movement
 - [x] Player weapons
@@ -40,14 +50,23 @@ then build
   - [x] Player -> enemy collisions
   - [ ] bullet -> bullet collisions? 
 - [x] implement debug renderer that can be turned on with key press
-- [ ] Game states - main menu, gameplay, pause, settings, highscores etc 
 - [ ] Buff / Debuff / Power up / Helper system 
   - [ ] player to collide with power ups and entity object is attached to the player
 - [ ] Improve player control scheme
   - [ ] Demo mode (AI controlled player)
   - [ ] Weapon selection
-- [ ] Finite state logic
+- [x] Finite state logic
   - [ ] Generic state machine functionality that can be dropped in to simplify logic for movement, weapons etc
+- [x] Better weapons: (now able to add new weapon types easily)
+  - [x] beam weapons
+  - [x] homing projectiles
+  - [ ] mines.
+  - [ ] barriers
+  - [ ] bolas's
+  - [ ] EMP's - or other debuff weapons
+
+### Visuals
+
 - [ ] Visualise player stats, as in weapon temp, weapon energy, ammo, current weapon etc.
   - [x] Visualise damage
 - [ ] Debug visualisation (both current and timeseries data)
@@ -56,13 +75,8 @@ then build
   - [ ] total memory usage
   - [ ] total cpu usage
 - [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
-- [x] Better weapons: (now able to add new weapon types easily)
-  - [x] beam weapons
-  - [x] homing projectiles
-  - [ ] mines.
-  - [ ] barriers
-  - [ ] bolas's
-  - [ ] EMP's - or other debuff weapons
+- [ ] Better player and enemy graphics
+- [ ] Procedural planets / asteroids / other celestail objects - <https://deep-fold.itch.io/pixel-planet-generator>
 
 ### Nice to haves:
 - [ ] Intelligent enemies: track and shoot towards player
@@ -73,6 +87,5 @@ then build
   - [ ] Stat buffs - shield regen, health regen, invincibility, damage multiplier
 - [ ] Debuff - can be encountered mid level, will attach themselves to the player
   - [ ] stat debuffs or damage over time.
-- [ ] Android app?
 - [ ] Highscores?
 - [ ] online coop - Boost ASIO, SFML network?
