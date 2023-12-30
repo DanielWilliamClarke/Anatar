@@ -11,4 +11,5 @@
 /src/out/build/x64-Debug
 /src/out/build/x64-Release
 
-/vcpkg
+/.idea
+/cmake-build-debug
