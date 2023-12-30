@@ -12,4 +12,4 @@
 /src/out/build/x64-Release
 
 /.idea
-/cmake-build-debug
+/cmake-build-*
