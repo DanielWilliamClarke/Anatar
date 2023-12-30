@@ -1,6 +1,6 @@
 #ifndef STATE
 #define STATE
-#pragma once
+
 
 #include <memory>
 #include <stack>

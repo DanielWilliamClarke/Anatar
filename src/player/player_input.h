@@ -1,6 +1,6 @@
 #ifndef PLAYER_INPUT_H
 #define PLAYER_INPUT_H
-#pragma once 
+
 
 #include <SFML/Graphics.hpp>
 

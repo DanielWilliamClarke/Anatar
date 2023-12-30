@@ -3,29 +3,12 @@
 ![](./src/assets/p1.gif)
 
 - Fresh repo to build a working version of my old first year programming project
-- Using SFML 2.5 as a 2D renderer
+- Using SFML 2.6.1 as a 2D renderer
 
-- Developing in Visual Studio Community 2022
+- Developing in ~~Visual Studio Community 2022~~ CLion
   - Build system = CMake
   - Compiler = Ninja
   - x64
-
-## Install Conan packages, generate CMake files and build
-
-For now update profile.txt to contain the Build Config mode [`Debug` or `Release`]
-
-```Powershell
-# cd into build location
-cd build/<build-confiuration> -> so: cd build/x64-Debug
-
-# Install Deps
-conan install --build=missing --profile ../../profile.txt ../..     
-
-# then run cmake
-cmake ..
-```
-
-then build
 
 ## Plan
 
@@ -36,6 +19,17 @@ then build
 - [ ] pause, 
 - [ ] settings, 
 - [ ] highscores etc 
+
+### Next up 2024
+
+- [ ] Modernise code to c++20 (ranges etc)
+- [ ] Swap Cmake for bazel
+- [ ] Configuration based entities (build entities from json configs)
+- [ ] Configuration based levels (enemy waves, level background etc)
+- [ ] smarter enemy motion
+- [ ] Buffs, Debuffs, and weapon upgrades 
+- [ ] Greater control over weapons (weapon selection? multiple weapons controlled via number keys?)
+- [ ] perhaps play with play rotation
 
 ### Gameplay
 
@@ -69,16 +63,16 @@ then build
 
 - [ ] Visualise player stats, as in weapon temp, weapon energy, ammo, current weapon etc.
   - [x] Visualise damage
-- [ ] Debug visualisation (both current and timeseries data)
+- [ ] Debug visualisation (both current and time series data)
   - [ ] total bullets on screen
-  - [ ] total enemise
+  - [ ] total enemies
   - [ ] total memory usage
   - [ ] total cpu usage
 - [ ] Level design: missions, bosses, enemy squadrons, mission select screen?
 - [ ] Better player and enemy graphics
-- [ ] Procedural planets / asteroids / other celestail objects - <https://deep-fold.itch.io/pixel-planet-generator>
+- [ ] Procedural planets / asteroids / other celestial objects - <https://deep-fold.itch.io/pixel-planet-generator>
 
-### Nice to haves:
+### Nice to haves / Ideas:
 - [ ] Intelligent enemies: track and shoot towards player
   - [ ] Bosses, multiple firing patterns, interesting mechanics, weak points? youtube.com/watch?v=V4ctJETN-mg?
   - [ ] Enemy waves, Sqaudrons?

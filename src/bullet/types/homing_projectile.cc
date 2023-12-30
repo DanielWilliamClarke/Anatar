@@ -27,7 +27,7 @@ void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	Projectile::Draw(renderer, interp);
 }
 
-std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
+std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
 {
 	auto distance = 200.0f;
 	this->zone = sf::FloatRect(

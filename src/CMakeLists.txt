@@ -14,15 +14,11 @@ set(EXECUTABLE_NAME ${BINARY})
 
 # Create executable to run game
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
-target_link_libraries(${BINARY} PUBLIC 
-   CONAN_PKG::sfml
-) 
+target_link_libraries(${BINARY} PUBLIC sfml-system sfml-network sfml-graphics sfml-window)
 
 # Create lib for testing purposes
 add_library(${BINARY_LIB} STATIC ${SOURCES})
-target_link_libraries(${BINARY_LIB} PUBLIC
-    CONAN_PKG::sfml
-)
+target_link_libraries(${BINARY_LIB} PUBLIC sfml-system sfml-network sfml-graphics sfml-window)
 
 # Copy assets on post build
 add_custom_command(TARGET ${BINARY} POST_BUILD

@@ -1,6 +1,6 @@
 #ifndef PLAYER_HUD
 #define PLAYER_HUD
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

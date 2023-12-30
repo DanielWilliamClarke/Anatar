@@ -1,6 +1,6 @@
 #ifndef I_TEXTURE_ATLAS
 #define I_TEXTURE_ATLAS
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <memory>

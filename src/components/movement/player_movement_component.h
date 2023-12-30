@@ -1,6 +1,6 @@
 #ifndef PLAYER_MOVEMENT_COMPONENT_H
 #define PLAYER_MOVEMENT_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

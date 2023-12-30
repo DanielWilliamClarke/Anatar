@@ -1,6 +1,6 @@
 #ifndef ENEMY_TYPE_FACTORY_H
 #define ENEMY_TYPE_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <functional>

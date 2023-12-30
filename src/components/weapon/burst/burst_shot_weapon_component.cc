@@ -30,7 +30,7 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 		}
 			
 		// burst center point is (360 - theta) / 2
-		float theta = (((float)M_PI * 2.0f) - arcAngle) / 2.0f;
+		float theta = (((float)std::numbers::pi * 2.0f) - arcAngle) / 2.0f;
 		for (auto i = 0; i < numBullets; i++) 
 		{
 			sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));

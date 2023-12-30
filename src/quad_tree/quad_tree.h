@@ -1,6 +1,6 @@
 #ifndef I_QUAD_TREE_H
 #define I_QUAD_TREE_H
-#pragma once
+
 
 #include <memory>
 #include <vector>

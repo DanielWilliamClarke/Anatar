@@ -1,6 +1,6 @@
 #ifndef CONTAINER_UTILS_H
 #define CONTAINER_UTILS_H
-#pragma once
+
 
 class ArrayUtils
 {

@@ -1,7 +1,7 @@
 #ifndef HITBOX_COMPONENT_H
 #define HITBOX_COMPONENT_H
 
-#pragma once
+
 #include <memory>
 
 #include "i_hitbox_component.h"

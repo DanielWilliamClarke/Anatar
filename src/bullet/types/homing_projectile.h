@@ -1,6 +1,6 @@
 #ifndef HOMING_PROJECTILE_H
 #define HOMING_PROJECTILE_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <array>
@@ -13,7 +13,7 @@ public:
 	HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config);
 	virtual ~HomingProjectile() = default;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override;
 
 private:
 	std::array<sf::Vertex, 2> line;

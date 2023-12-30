@@ -1,7 +1,7 @@
 #ifndef ANIMATION_COMPONENT_H
 #define ANIMATION_COMPONENT_H
 
-#pragma once
+
 #include <unordered_map>
 #include <memory>
 

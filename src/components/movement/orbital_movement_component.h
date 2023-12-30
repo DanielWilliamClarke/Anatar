@@ -1,6 +1,6 @@
 #ifndef ORBITAL_MOVEMENT_COMPONENT_H
 #define ORBITAL_MOVEMENT_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

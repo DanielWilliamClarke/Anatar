@@ -1,6 +1,6 @@
 #ifndef I_WEAPON_COMPONENT_FACTORY_H
 #define I_WEAPON_COMPONENT_FACTORY_H
-#pragma once
+
 
 class IWeaponComponent;
 class IBulletSystem;

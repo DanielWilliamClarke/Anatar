@@ -1,6 +1,6 @@
 #ifndef BEAM_H
 #define BEAM_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 
@@ -20,9 +20,9 @@ public:
 	Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
 	virtual ~Beam() = default;
 
-	virtual void Update(float dt, float worldSpeed) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override;
+	void Update(float dt, float worldSpeed) override;
+	void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
+	std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override;
 
 	void Reignite();
 	void Cease();

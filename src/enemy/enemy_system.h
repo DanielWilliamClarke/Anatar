@@ -1,6 +1,6 @@
 #ifndef ENEMY_SYSTEM_H
 #define ENEMY_SYSTEM_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <list>

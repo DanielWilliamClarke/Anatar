@@ -1,6 +1,6 @@
 #ifndef I_BULLET_SYSTEM_H
 #define I_BULLET_SYSTEM_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 
@@ -24,8 +24,8 @@ public:
 
 	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) = 0;
 
-	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt, float worldSpeed) {}
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) {}
+	virtual void Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed) {}
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) {}
 };
 
 #endif // I_BULLET_SYSTEM_H

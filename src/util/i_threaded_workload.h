@@ -1,6 +1,6 @@
 #ifndef I_THREADED_WORKLOAD_H
 #define I_THREADED_WORKLOAD_H
-#pragma once
+
 
 #include <memory>
 #include <thread>

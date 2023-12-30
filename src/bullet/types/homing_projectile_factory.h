@@ -1,6 +1,6 @@
 #ifndef HOMING_PROJECTILE_FACTORY_H
 #define HOMING_PROJECTILE_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

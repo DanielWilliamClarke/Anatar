@@ -1,6 +1,6 @@
 #ifndef ENTITY_UPDATE_H
 #define ENTITY_UPDATE_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

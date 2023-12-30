@@ -1,6 +1,6 @@
 #ifndef INERT_WEAPON_COMPONENT_H
 #define INERT_WEAPON_COMPONENT_H
-#pragma once
+
 
 #include "i_weapon_component.h"
 

@@ -1,8 +1,9 @@
 #ifndef FPS_H
 #define FPS_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class IRenderer;
 

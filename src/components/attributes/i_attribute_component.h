@@ -1,8 +1,9 @@
 #ifndef I_ATTRBUTE_COMPONENT_H
 #define I_ATTRBUTE_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 struct BulletConfig;
 class IWeaponComponent;

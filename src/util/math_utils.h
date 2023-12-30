@@ -1,22 +1,21 @@
 #ifndef MATH_HELPERS_H
 #define MATH_HELPERS_H
-#pragma once
 
-#define _USE_MATH_DEFINES
+
+#include <numbers>
 #include <cmath>
-#include <math.h>
 
 class AngleConversion
 {
 public:
 	static float ToDegrees(float radians)
 	{
-		return radians * (180.0f / (float)M_PI);
+		return radians * (180.0f / (float)std::numbers::pi);
 	}
 
 	static float ToRadians(float degrees)
 	{
-		return degrees * ((float)M_PI / 180.0f);
+		return degrees * ((float)std::numbers::pi / 180.0f);
 	}
 };
 

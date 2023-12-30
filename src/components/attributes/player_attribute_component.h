@@ -1,8 +1,10 @@
 #ifndef PLAYER_ATTRBUTE_COMPONENT_H
 #define PLAYER_ATTRBUTE_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
+
 #include "i_player_attribute_component.h"
 
 class IPlayerHud;
@@ -22,8 +24,13 @@ struct PlayerAttributeConfig
 class PlayerAttributeComponent : public IPlayerAttributeComponent
 {
 public:
-	PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, std::shared_ptr<DamageEffects> damageEffects, PlayerAttributeConfig config);
-	virtual ~PlayerAttributeComponent() = default;
+	PlayerAttributeComponent(
+        std::shared_ptr<IPlayerHud> hud,
+        std::shared_ptr<DamageEffects> damageEffects,
+        PlayerAttributeConfig config
+    );
+
+    virtual ~PlayerAttributeComponent() = default;
 
 	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
 	virtual bool IsDead() const override;

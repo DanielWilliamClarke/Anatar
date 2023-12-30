@@ -1,6 +1,6 @@
 #ifndef I_BULLET_FACTORY_H
 #define I_BULLET_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

@@ -26,7 +26,7 @@ std::shared_ptr<Bullet> BulletSystem::FireBullet(std::shared_ptr<IBulletFactory>
 	return bullet;
 }
 
-void BulletSystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt, float worldSpeed)
+void BulletSystem::Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed)
 {
 	this->EraseBullets();
 
@@ -37,17 +37,17 @@ void BulletSystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators
 		b->Update(dt, worldSpeed);
 
 		auto collisions = b->DetectCollisions(quadTree);
-		if (collisions.size() && b->GetDamage() > 0.0f)
+		if (!collisions.empty() && b->GetDamage() > 0.0f)
 		{
 			unresolved.reserve(std::max(unresolved.capacity(), unresolved.size() + collisions.size()));
 			unresolved.insert(unresolved.end(), collisions.begin(), collisions.end());
 		}
 	}
 
-	this->ResolveCollisions(unresolved);
+	BulletSystem::ResolveCollisions(unresolved);
 }
 
-void BulletSystem::Draw(std::shared_ptr<IRenderer> renderer, float interp)
+void BulletSystem::Draw(const std::shared_ptr<IRenderer>& renderer, float interp)
 {
 	for (auto& b : this->bullets)
 	{
@@ -55,29 +55,26 @@ void BulletSystem::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	}
 }
 
-void BulletSystem::AddBullet(std::shared_ptr<Bullet> bullet)
+void BulletSystem::AddBullet(const std::shared_ptr<Bullet>& bullet)
 {
 	this->bullets.push_back(bullet);
 }
 
 void BulletSystem::EraseBullets()
 {
-	this->bullets.erase(
-		std::remove_if(
-			this->bullets.begin(), this->bullets.end(),
-			[this](std::shared_ptr<Bullet>& b) -> bool {
-				return b->isSpent();
-			}),
-		this->bullets.end());
+    std::erase_if(this->bullets, [this](std::shared_ptr<Bullet>& b) -> bool {
+        return b->isSpent();
+    });
 }
 
-void BulletSystem::ResolveCollisions(std::vector<std::shared_ptr<Collision>> collisions) const
+void BulletSystem::ResolveCollisions(const std::vector<std::shared_ptr<Collision>>& collisions)
 {
-	std::for_each(collisions.begin(), collisions.end(),
-		[=](std::shared_ptr<Collision> c) {
-			auto damage = c->bullet->GetDamage();
-			c->bullet->GetCollisionResolver()(
-				c->target->payload->resolver(damage, c->collisionPosition),
-				damage);
-		});
+    for(const auto& c : collisions)
+    {
+        auto damage = c->bullet->GetDamage();
+        c->bullet->GetCollisionResolver()(
+            c->target->payload->resolver(damage, c->collisionPosition),
+            damage
+        );
+    }
 }

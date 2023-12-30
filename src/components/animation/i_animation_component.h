@@ -1,6 +1,6 @@
 #ifndef I_ANIMATION_COMPONENT_H
 #define I_ANIMATION_COMPONENT_H
-#pragma once
+
 #include <memory>
 
 namespace sf {

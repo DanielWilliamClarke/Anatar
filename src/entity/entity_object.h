@@ -1,8 +1,9 @@
 #ifndef ENTITY_OBJECT_H
 #define ENTITY_OBJECT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 #include "entity_update.h"
 

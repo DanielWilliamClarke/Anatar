@@ -1,6 +1,6 @@
 #ifndef BEAM_FACTORY_H
 #define BEAM_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

@@ -1,6 +1,6 @@
 #ifndef I_RANDOM_NUMBER_SOURCE
 #define I_RANDOM_NUMBER_SOURCE
-#pragma once
+
 
 #include <vector>
 

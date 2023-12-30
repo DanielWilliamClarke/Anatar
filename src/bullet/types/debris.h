@@ -1,6 +1,6 @@
 #ifndef DEBRIS_H
 #define DEBRIS_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 
@@ -21,7 +21,7 @@ public:
 
 	virtual ~Debris() = default;
 
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override { return {}; }
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override { return {}; }
 };
 
 #endif // DEBRIS_H

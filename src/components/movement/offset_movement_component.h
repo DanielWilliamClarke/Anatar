@@ -1,6 +1,5 @@
 #ifndef OFFSET_MOVEMENT_COMPONENT_H
 #define OFFSET_MOVEMENT_COMPONENT_H
-#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -18,4 +17,4 @@ protected:
 	sf::Vector2f offset;
 };
 
-#endif OFFSET_MOVEMENT_COMPONENT_H
+#endif

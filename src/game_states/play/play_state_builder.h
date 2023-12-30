@@ -1,6 +1,6 @@
 #ifndef PLAY_STATE_BUILDER
 #define PLAY_STATE_BUILDER
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

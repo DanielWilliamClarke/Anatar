@@ -1,6 +1,6 @@
 #ifndef I_RAY_CASTER_H
 #define I_RAY_CASTER_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <memory>

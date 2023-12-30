@@ -1,6 +1,6 @@
 #ifndef I_COLLISION_DETECTION_COMPONENT_H
 #define I_COLLISION_DETECTION_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <memory>

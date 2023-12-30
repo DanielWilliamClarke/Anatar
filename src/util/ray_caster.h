@@ -1,6 +1,6 @@
 #ifndef RAY_CASTER_H
 #define RAY_CASTER_H
-#pragma once
+
 
 #include "i_ray_caster.h"
 

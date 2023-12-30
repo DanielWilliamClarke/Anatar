@@ -1,11 +1,12 @@
 #ifndef BULLET_H
 #define BULLET_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <iostream>
 #include <list>
+#include <memory>
 
 struct Collision;
 struct CollisionMediators;
@@ -97,7 +98,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) = 0;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) = 0;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) = 0;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) = 0;
 
 	bool isSpent() const;
 	sf::Vector2f GetPosition() const;

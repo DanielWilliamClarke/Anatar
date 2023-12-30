@@ -1,6 +1,6 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 
@@ -20,7 +20,7 @@ public:
 
 	virtual void Update(float dt, float worldSpeed) override;
 	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override;
 
 protected:
 

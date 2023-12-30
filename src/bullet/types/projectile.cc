@@ -64,7 +64,7 @@ void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 }
 
-std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
+std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
 {
 	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());

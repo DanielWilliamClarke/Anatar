@@ -1,6 +1,6 @@
 #ifndef PLAY_STATE
 #define PLAY_STATE
-#pragma once
+
 
 #include "game_states/game_states.h"
 #include "state/state.h"

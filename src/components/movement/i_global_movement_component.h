@@ -1,6 +1,6 @@
 #ifndef I_GLOBAL_MOVEMENT_COMPONENT_H
 #define I_GLOBAL_MOVEMENT_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

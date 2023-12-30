@@ -1,6 +1,6 @@
 #ifndef COMPOSITE_RENDERER
 #define COMPOSITE_RENDERER
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

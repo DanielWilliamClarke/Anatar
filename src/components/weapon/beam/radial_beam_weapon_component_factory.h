@@ -1,6 +1,6 @@
 #ifndef RADIAL_BEAM_WEAPON_COMPONENT_FACTORY_H
 #define RADIAL_BEAM_WEAPON_COMPONENT_FACTORY_H
-#pragma once
+
 
 #include "components/weapon/i_weapon_component_factory.h"
 #include "bullet/i_bullet_factory.h"

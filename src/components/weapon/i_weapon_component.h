@@ -1,6 +1,6 @@
 #ifndef I_WEAPON_COMPONENT_H
 #define I_WEAPON_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

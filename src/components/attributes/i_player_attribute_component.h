@@ -1,6 +1,6 @@
 #ifndef I_PLAYER_ATTRBUTE_COMPONENT_H
 #define I_PLAYER_ATTRBUTE_COMPONENT_H
-#pragma once
+
 
 #include "i_attribute_component.h"
 

@@ -1,6 +1,6 @@
 #ifndef I_RENDERER
 #define I_RENDERER
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

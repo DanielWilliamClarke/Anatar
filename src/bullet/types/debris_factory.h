@@ -1,6 +1,6 @@
 #ifndef DEBRIS_FACTORY_H
 #define DEBRIS_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

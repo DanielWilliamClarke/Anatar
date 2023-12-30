@@ -1,6 +1,6 @@
 #ifndef MENU_STATE
 #define MENU_STATE
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

@@ -79,7 +79,7 @@ void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	}
 }
 
-std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree)
+std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;

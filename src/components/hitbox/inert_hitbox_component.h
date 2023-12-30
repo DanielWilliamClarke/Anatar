@@ -1,6 +1,6 @@
 #ifndef INERT_HITBOX_COMPONENT_H
 #define INERT_HITBOX_COMPONENT_H
-#pragma once
+
 
 #include <memory>
 

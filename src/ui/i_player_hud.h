@@ -1,8 +1,9 @@
 #ifndef I_PLAYER_HUD
 #define I_PLAYER_HUD
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class IRenderer;
 

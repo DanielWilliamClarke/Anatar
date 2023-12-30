@@ -1,6 +1,6 @@
 #ifndef PROJECTILE_FACTORY_H
 #define PROJECTILE_FACTORY_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

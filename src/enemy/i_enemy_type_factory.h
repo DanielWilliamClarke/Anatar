@@ -1,6 +1,6 @@
 #ifndef I_ENEMY_TYPE_FACTORY_H
 #define I_ENEMY_TYPE_FACTORY_H
-#pragma once
+
 
 #include <memory>
 

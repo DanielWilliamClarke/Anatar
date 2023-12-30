@@ -1,6 +1,6 @@
 #ifndef PLAYER_BUILDER_H
 #define PLAYER_BUILDER_H
-#pragma once
+
 
 #include <memory>
 

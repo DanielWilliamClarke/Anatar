@@ -1,6 +1,6 @@
 #ifndef GLOW_SHADER_RENDERER
 #define GLOW_SHADER_RENDERER
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

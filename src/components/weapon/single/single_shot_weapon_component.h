@@ -1,8 +1,9 @@
 #ifndef SINGLE_SHOT_WEAPON_COMPONENT_H
 #define SINGLE_SHOT_WEAPON_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 #include "components/weapon/i_weapon_component.h"
 

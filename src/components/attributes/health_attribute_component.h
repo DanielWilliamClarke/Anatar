@@ -1,6 +1,8 @@
 #ifndef HEALTH_ATTRBUTE_COMPONENT_H
 #define HEALTH_ATTRBUTE_COMPONENT_H
-#pragma once
+
+
+#include <memory>
 
 #include "i_attribute_component.h"
 

@@ -1,6 +1,6 @@
 #ifndef BULLET_SYSTEM_H
 #define BULLET_SYSTEM_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -24,15 +24,15 @@ public:
 	BulletSystem(sf::FloatRect bounds);
 	virtual ~BulletSystem() = default;
 
-	virtual std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt, float worldSpeed);
-	void Draw(std::shared_ptr<IRenderer> renderer, float interp);
+	std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
+	void Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed);
+	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp);
 
 private:
 
-	void AddBullet(std::shared_ptr<Bullet> bullet);
+	void AddBullet(const std::shared_ptr<Bullet>& bullet);
 	void EraseBullets();
-	void ResolveCollisions(std::vector<std::shared_ptr<Collision>> collisions) const;
+	static void ResolveCollisions(const std::vector<std::shared_ptr<Collision>>& collisions) ;
 
 private:
 	std::vector<std::shared_ptr<Bullet>> bullets;

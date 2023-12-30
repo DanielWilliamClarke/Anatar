@@ -1,6 +1,6 @@
 #ifndef THREADED_WORKLOAD_H
 #define THREADED_WORKLOAD_H
-#pragma once
+
 
 #include "i_threaded_workload.h"
 

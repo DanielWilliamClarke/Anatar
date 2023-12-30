@@ -1,6 +1,6 @@
 #ifndef RANDOM_NUMBER_MERSENNE_SOURCE
 #define RANDOM_NUMBER_MERSENNE_SOURCE
-#pragma once
+
 
 #include <random>
 

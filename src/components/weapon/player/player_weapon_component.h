@@ -1,6 +1,6 @@
 #ifndef PLAYER_WEAPON_COMPONENT_H
 #define PLAYER_WEAPON_COMPONENT_H
-#pragma once
+
 
 #include <memory>
 

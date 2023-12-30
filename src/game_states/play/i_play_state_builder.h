@@ -1,6 +1,6 @@
 #ifndef I_PLAY_STATE_BUILDER
 #define I_PLAY_STATE_BUILDER
-#pragma once
+
 
 class ITextureAtlas;
 class SpaceLevel;

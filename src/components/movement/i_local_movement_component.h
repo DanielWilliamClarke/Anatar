@@ -1,6 +1,6 @@
 #ifndef I_LOCAL_MOVEMENT_COMPONENT_H
 #define I_LOCAL_MOVEMENT_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 

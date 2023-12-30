@@ -1,9 +1,10 @@
 #ifndef SHAPES_H
 #define SHAPES_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <functional>
+#include <memory>
 
 template<typename P>
 struct Point {

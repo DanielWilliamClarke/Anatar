@@ -1,8 +1,9 @@
 #ifndef RADIAL_BEAM_WEAPON_COMPONENT_H
 #define RADIAL_BEAM_WEAPON_COMPONENT_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 #include "components/weapon/i_weapon_component.h"
 

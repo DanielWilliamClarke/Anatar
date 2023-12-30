@@ -1,7 +1,7 @@
 #ifndef ENEMY_MOVEMENT_COMPONENT_H
 #define ENEMY_MOVEMENT_COMPONENT_H
 
-#pragma once
+
 #include <SFML/Graphics.hpp>
 
 #include "i_global_movement_component.h"

@@ -1,9 +1,10 @@
 #ifndef SPACE_LEVEL_H
 #define SPACE_LEVEL_H
-#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <memory>
 
 #include "util/i_random_number_source.h"
 
