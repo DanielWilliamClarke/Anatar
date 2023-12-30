@@ -2,15 +2,11 @@
 
 project(Annatar CXX)
 
+include(dependencies.cmake)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
-
-# install sfml
-include(FetchContent)
-set(BUILD_SHARED_LIBS OFF)
-FETCHCONTENT_DECLARE(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.6.1)
-FETCHCONTENT_MAKEAVAILABLE(SFML)
 
 # Enable debug symbols by default
 # must be done before project() statement
