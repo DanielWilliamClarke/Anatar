@@ -32,11 +32,11 @@ public:
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent);
 	virtual ~Player() = default;
-	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt);
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
+	virtual void Update(const CollisionQuadTree& quadTree, Input& in, float dt);
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const override;
 
 protected:
-	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) override {};
+	virtual void Update(const CollisionQuadTree& quadTree, float dt) override {};
 	const unsigned int CalculateDirection(sf::Vector2f position, sf::Vector2f lastPosition) const;
 	void InitBullets();
 

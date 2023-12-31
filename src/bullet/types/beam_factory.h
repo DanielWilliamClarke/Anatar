@@ -1,7 +1,6 @@
 #ifndef BEAM_FACTORY_H
 #define BEAM_FACTORY_H
 
-
 #include <SFML/Graphics.hpp>
 
 #include "bullet/i_bullet_factory.h"
@@ -16,9 +15,9 @@ public:
 		: rayCaster(rayCaster), bounds(bounds), damageRate(damageRate)
 	{}
 
-	virtual ~BeamFactory() = default;
+	~BeamFactory() override = default;
 
-	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
+	std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
 		return std::make_shared<Beam>(trajectory, config, rayCaster, bounds, damageRate);
 	};
 

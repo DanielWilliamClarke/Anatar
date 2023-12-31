@@ -18,4 +18,4 @@ private:
 	std::vector<std::function<void(void)>> tasks;
 };
 
-#endif // THREADED_WORKLOAD_H
+#endif

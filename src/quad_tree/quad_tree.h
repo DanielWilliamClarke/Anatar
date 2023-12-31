@@ -1,7 +1,6 @@
 #ifndef I_QUAD_TREE_H
 #define I_QUAD_TREE_H
 
-
 #include <memory>
 #include <vector>
 #include <functional>
@@ -11,6 +10,7 @@
 #include "renderer/i_renderer.h"
 
 #include "shapes.h"
+#include "bullet/collision.h"
 
 template <typename C, typename P>
 class QuadTree

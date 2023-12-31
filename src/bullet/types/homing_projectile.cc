@@ -3,16 +3,14 @@
 #include "util/math_utils.h"
 
 #include "renderer/i_renderer.h"
-#include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
-#include "quad_tree/quad_tree.h"
 #include "bullet/collision.h"
 
 HomingProjectile::HomingProjectile(BulletTrajectory& trajectory, BulletConfig& config)
 	: Projectile(trajectory, config)
 {}
 
-void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
+void HomingProjectile::Draw(const std::shared_ptr<IRenderer>& renderer, float interp)
 {
 	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 
@@ -27,7 +25,7 @@ void HomingProjectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	Projectile::Draw(renderer, interp);
 }
 
-std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
+std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const CollisionQuadTree& quadTree)
 {
 	auto distance = 200.0f;
 	this->zone = sf::FloatRect(
@@ -39,7 +37,7 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const
 
 	std::vector<std::shared_ptr<Collision>> collisions;
 	quadTree->Query(&query, collisions,
-		[this](std::shared_ptr<Point<CollisionMediators>> point) -> std::shared_ptr<Collision> {
+		[this](const auto& point) -> std::shared_ptr<Collision> {
 			if (point->tag != this->GetTag() && point->payload->zoneTest(this->zone))
 			{
 				return std::make_shared<Collision>(this->shared_from_this(), point);
@@ -49,7 +47,7 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const
 
 	this->line = {};
 	std::vector<std::shared_ptr<Collision>> fineTuned;
-	if (collisions.size())
+	if (!collisions.empty())
 	{
 		// We want to check all for collisions just in case
 		for (auto& c : collisions)
@@ -71,7 +69,7 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const
 		{
 			// find closest
 			std::sort(collisions.begin(), collisions.end(),
-				[this](std::shared_ptr<Collision> a, std::shared_ptr<Collision> b) -> bool {
+				[this](const auto& a, const auto& b) -> bool {
 					auto aDist = Dimensions::ManhattanDistance(this->position, a->target->position);
 					auto bDist = Dimensions::ManhattanDistance(this->position, b->target->position);
 					return aDist < bDist;

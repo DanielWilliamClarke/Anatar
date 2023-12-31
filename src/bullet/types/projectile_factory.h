@@ -11,12 +11,12 @@
 class ProjectileFactory : public IBulletFactory
 {
 public:
-	ProjectileFactory() {}
-	virtual ~ProjectileFactory() = default;
+	ProjectileFactory() = default;
+	~ProjectileFactory() override = default;
 
-	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
+	std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
 		return std::make_shared<Projectile>(trajectory, config);
 	};
 };
 
-#endif //PROJECTILE_FACTORY_H
+#endif

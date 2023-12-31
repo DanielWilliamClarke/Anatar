@@ -11,10 +11,10 @@
 class DebrisFactory : public IBulletFactory
 {
 public:
-	DebrisFactory() {}
-	virtual ~DebrisFactory() = default;
+	DebrisFactory() = default;
+	~DebrisFactory() override = default;
 
-	virtual std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
+	std::shared_ptr<Bullet> Construct(BulletTrajectory& trajectory, BulletConfig& config) const override {
 		return std::make_shared<Debris>(trajectory, config);
 	};
 };

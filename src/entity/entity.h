@@ -1,7 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-
 #include <SFML/Graphics.hpp>
 
 #include <memory>
@@ -14,11 +13,8 @@
 #include "components/movement/i_global_movement_component.h"
 #include "components/attributes/i_attribute_component.h"
 #include "components/collision_detection/i_collision_detection_component.h"
-#include "quad_tree/quad_tree.h"
 #include "bullet/collision.h"
-
-template <typename C, typename P>
-class QuadTree;
+#include "quad_tree/collision_quad_tree.h"
 
 template<typename T>
 class Entity: public std::enable_shared_from_this<Entity<T>>
@@ -30,24 +26,25 @@ public:
 		std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 		std::shared_ptr<IAttributeComponent> attributeComponent,
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
-		std::string tag);
+		std::string tag
+    );
+
 	virtual ~Entity() = default;
 
 	void AddObject(T id, std::shared_ptr<EntityObject> object);
 	void RemoveObject(T id);
 	std::shared_ptr<EntityObject> GetObject(T id) const;
 
-	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) = 0;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
+	virtual void Update(const CollisionQuadTree& quadTree, float dt) = 0;
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const = 0;
 
-	std::shared_ptr<sf::Vector2f> DetectCollision(const sf::Vector2f& origin, const bool ray = false, const sf::Vector2f& direction = sf::Vector2f()) const;
-	bool HasDied() const;
-
-	std::string GetTag() const;
+	[[nodiscard]] std::shared_ptr<sf::Vector2f> DetectCollision(const sf::Vector2f& origin, const bool ray = false, const sf::Vector2f& direction = sf::Vector2f()) const;
+	[[nodiscard]] bool HasDied() const;
+	[[nodiscard]] std::string GetTag() const;
 
 protected:
 	void Update(std::unordered_map<T, EntityUpdate> update, float dt) const;
-	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, sf::Vector2f interPosition) const;
 
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent;
 	std::shared_ptr<IAttributeComponent> attributeComponent;
@@ -100,7 +97,7 @@ void Entity<T>::Update(std::unordered_map<T, EntityUpdate> update, float dt) con
 }
 
 template <typename T>
-void Entity<T>::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
+void Entity<T>::Draw(const std::shared_ptr<IRenderer>& renderer, sf::Vector2f interPosition) const
 {
 	for (auto& obj : this->objects)
 	{
@@ -114,7 +111,8 @@ std::shared_ptr<sf::Vector2f> Entity<T>::DetectCollision(const sf::Vector2f& ori
 	for (auto& o : objects)
 	{
 		auto collision = this->collisionDetectionComponent->DetectCollision(o.second->GetHitbox(), origin, ray, direction);
-		if (collision) {
+		if (collision)
+        {
 			return collision;
 		}
 	}
@@ -134,4 +132,4 @@ std::string Entity<T>::GetTag() const
 	return tag;
 }
 
-#endif //ENTITY_H
+#endif

@@ -19,4 +19,4 @@ public:
 	};
 };
 
-#endif //HOMING_PROJECTILE_FACTORY_H
+#endif

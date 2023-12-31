@@ -23,4 +23,4 @@ struct EntityUpdate
 	{}
 };
 
-#endif //ENTITY_UPDATE_H
+#endif

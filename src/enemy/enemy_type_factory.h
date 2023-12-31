@@ -1,7 +1,6 @@
 #ifndef ENEMY_TYPE_FACTORY_H
 #define ENEMY_TYPE_FACTORY_H
 
-
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <memory>
@@ -88,9 +87,8 @@ public:
 	static EntityManifest<EnemyObjects> BuildOribitalEnemy(EnemyConfig config);
 
 private:
-
 	static EntityManifest<EnemyObjects> BuildEnemy(EnemyConfig config, std::shared_ptr<ILocalMovementComponent> movementComponent);
 	EnemyConfig config;
 };
 
-#endif //I_ENEMY_TYPE_FACTO
+#endif

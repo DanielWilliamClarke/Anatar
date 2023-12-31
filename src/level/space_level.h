@@ -20,10 +20,9 @@ public:
 	virtual ~SpaceLevel() = default;
 
 	void Update(float worldSpeed, float dt);
-	void Draw(std::shared_ptr<IRenderer> renderer) const;
+	void Draw(const std::shared_ptr<IRenderer>& renderer) const;
 
 private:
-
 	void UpdateStars(StarIter start, StarIter end, size_t index, float worldSpeed, float dt) const;
 
 private:

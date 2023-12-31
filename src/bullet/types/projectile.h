@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "bullet/bullet.h"
+#include "quad_tree/quad_tree.h"
 
 struct Collision;
 struct CollisionMediators;
@@ -16,15 +17,14 @@ class Projectile : public Bullet
 {
 public:
 	Projectile(BulletTrajectory& trajectory, BulletConfig& config);
-	virtual ~Projectile() = default;
+	~Projectile() override = default;
 
-	virtual void Update(float dt, float worldSpeed) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override;
+	void Update(float dt, float worldSpeed) override;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const CollisionQuadTree& quadTree) override;
 
 protected:
-
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc
 };
 
-#endif // PROJECTILE_H
+#endif

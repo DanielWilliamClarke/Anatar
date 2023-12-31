@@ -2,12 +2,8 @@
 
 #include <array>
 
-#include "util/math_utils.h"
-
 #include "renderer/i_renderer.h"
-#include "util/i_ray_caster.h"
 #include "quad_tree/shapes.h"
-#include "quad_tree/quad_tree.h"
 #include "bullet/collision.h"
 
 Projectile::Projectile(BulletTrajectory& trajectory, BulletConfig& config)
@@ -51,7 +47,7 @@ void Projectile::Update(float dt, float worldSpeed)
 	}
 }
 
-void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
+void Projectile::Draw(const std::shared_ptr<IRenderer>& renderer, float interp)
 {
 	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->GetTarget().draw(*round);
@@ -64,7 +60,7 @@ void Projectile::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	renderer->GetDebugTarget().draw(line.data(), 2, sf::Lines);
 }
 
-std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
+std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(const CollisionQuadTree& quadTree)
 {
 	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());

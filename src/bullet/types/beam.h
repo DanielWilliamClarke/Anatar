@@ -9,20 +9,16 @@
 class IRayCaster;
 
 struct Collision;
-struct CollisionMediators;
-
-template<typename C, typename P>
-class QuadTree;
 
 class Beam : public Bullet
 {
 public:
 	Beam(BulletTrajectory& trajectory, BulletConfig& config, std::shared_ptr<IRayCaster> rayCaster, sf::FloatRect bounds, float damageRate);
-	virtual ~Beam() = default;
+	~Beam() override = default;
 
 	void Update(float dt, float worldSpeed) override;
-	void Draw(std::shared_ptr<IRenderer> renderer, float interp) override;
-	std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) override;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
+	std::vector<std::shared_ptr<Collision>> DetectCollisions(const CollisionQuadTree& quadTree) override;
 
 	void Reignite();
 	void Cease();
@@ -38,4 +34,4 @@ protected:
 	float damageCache;
 };
 
-#endif // BEAM_H
+#endif

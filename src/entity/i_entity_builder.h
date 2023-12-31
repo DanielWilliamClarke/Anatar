@@ -1,7 +1,6 @@
 #ifndef I_ENTITY_BUILDER_H
 #define I_ENTITY_BUILDER_H
 
-
 #include <memory>
 #include <unordered_map>
 #include <string>

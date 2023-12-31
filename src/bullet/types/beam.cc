@@ -68,7 +68,7 @@ void Beam::Update(float dt, float worldSpeed)
 	}
 }
 
-void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
+void Beam::Draw(const std::shared_ptr<IRenderer>& renderer, float interp)
 {
    	this->round->setPosition(position * interp + lastPosition * (1.0f - interp));
 	renderer->GetTarget().draw(*round);
@@ -79,7 +79,7 @@ void Beam::Draw(std::shared_ptr<IRenderer> renderer, float interp)
 	}
 }
 
-std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree)
+std::vector<std::shared_ptr<Collision>> Beam::DetectCollisions(const CollisionQuadTree& quadTree)
 {
 	// Clear collision point before detection
 	collisionPosition = nullptr;

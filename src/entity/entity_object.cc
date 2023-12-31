@@ -12,14 +12,14 @@ EntityObject::EntityObject(
 	std::shared_ptr<IHitboxComponent> hitboxComponent,
 	std::shared_ptr<ILocalMovementComponent> movementComponent,
 	std::shared_ptr<IWeaponComponent> weaponComponent,
-	std::shared_ptr<sf::Sprite> sprite)
+	std::shared_ptr<sf::Sprite> sprite
+)
 	: animationComponent(animationComponent),
 	hitboxComponent(hitboxComponent),
 	movementComponent(movementComponent),
 	weaponComponent(weaponComponent),
 	sprite(sprite)
-{
-}
+{}
 
 EntityObject::~EntityObject() 
 {
@@ -39,7 +39,7 @@ void EntityObject::Update(EntityUpdate update, float dt) const
 	this->hitboxComponent->Update(this->sprite->getPosition());
 }
 
-void EntityObject::Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const
+void EntityObject::Draw(const std::shared_ptr<IRenderer>& renderer, sf::Vector2f interPosition) const
 {
 	this->sprite->setPosition(this->movementComponent->Interpolate(interPosition));
 	renderer->GetTarget().draw(*this->sprite);

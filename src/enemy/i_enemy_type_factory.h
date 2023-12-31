@@ -1,7 +1,6 @@
 #ifndef I_ENEMY_TYPE_FACTORY_H
 #define I_ENEMY_TYPE_FACTORY_H
 
-
 #include <memory>
 
 template<typename T>

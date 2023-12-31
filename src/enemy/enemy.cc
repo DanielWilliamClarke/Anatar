@@ -18,7 +18,8 @@ Enemy::Enemy(
 	std::shared_ptr<IGlobalMovementComponent> globalMovementComponent,
 	std::shared_ptr<IAttributeComponent> attributeComponent,
 	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
-	sf::Vector2f initialPosition)
+	sf::Vector2f initialPosition
+)
 	: Entity<EnemyObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
 {
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
@@ -38,7 +39,7 @@ Enemy::Enemy(
 			}));
 }
 
-void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt)
+void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -58,7 +59,7 @@ void Enemy::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quad
 	}, dt);
 }
 
-void Enemy::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
+void Enemy::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 {
 	const auto interpPosition = this->globalMovementComponent->Interpolate(interp);
 	Entity::Draw(renderer, interpPosition);

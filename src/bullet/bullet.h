@@ -7,14 +7,10 @@
 #include <iostream>
 #include <list>
 #include <memory>
-
-struct Collision;
-struct CollisionMediators;
+#include "quad_tree/quad_tree.h"
+#include "quad_tree/collision_quad_tree.h"
 
 class IRenderer;
-
-template<typename C, typename P>
-class QuadTree;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 
@@ -97,8 +93,8 @@ public:
 	virtual ~Bullet() = default;
 
 	virtual void Update(float dt, float worldSpeed) = 0;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) = 0;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree) = 0;
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) = 0;
+	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const CollisionQuadTree& quadTree) = 0;
 
 	bool isSpent() const;
 	sf::Vector2f GetPosition() const;

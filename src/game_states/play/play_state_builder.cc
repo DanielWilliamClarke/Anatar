@@ -1,7 +1,6 @@
 #include "play_state_builder.h"
 
 #include <algorithm>
-#include <chrono>
 
 #include "util/texture_atlas.h"
 #include "util/threaded_workload.h"
@@ -39,7 +38,8 @@ std::shared_ptr<SpaceLevel> PlayStateBuilder::BuildLevel() const
 	return std::make_shared<SpaceLevel>(std::make_shared<ThreadedWorkload>(), randGenerator, sf::Vector2f(bounds.width, bounds.height));
 }
 
-std::shared_ptr<IBulletSystem> PlayStateBuilder::BuildBulletSystem() const {
+std::shared_ptr<IBulletSystem> PlayStateBuilder::BuildBulletSystem() const
+{
 	return  std::make_shared<BulletSystem>(bounds);
 }
 
@@ -50,11 +50,13 @@ std::shared_ptr<IWeaponComponent> PlayStateBuilder::BuildDebrisSystem(std::share
 	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, randGenerator, 5.0f);
 }
 
-std::shared_ptr<IPlayerHud> PlayStateBuilder::BuildPlayerHud() const {
+std::shared_ptr<IPlayerHud> PlayStateBuilder::BuildPlayerHud() const
+{
 	return std::make_shared<PlayerHud>(this->bounds);
 }
 
-std::shared_ptr<PlayerInput> PlayStateBuilder::BuildPlayerInput() const {
+std::shared_ptr<PlayerInput> PlayStateBuilder::BuildPlayerInput() const
+{
 	return std::make_shared<PlayerInput>();
 }
 
@@ -102,7 +104,7 @@ std::shared_ptr<EnemySystem> PlayStateBuilder::BuildEnemySystem(std::shared_ptr<
 
 	auto mediators = BulletMediators()
 		.Inject([](bool kill, float damage) {})
-		.Inject([]() -> sf::Vector2f { return sf::Vector2f(); });
+		.Inject([]() -> sf::Vector2f { return {}; });
 
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
 		debrisGenerator,
@@ -151,7 +153,7 @@ std::shared_ptr<EnemySystem> PlayStateBuilder::BuildEnemySystem(std::shared_ptr<
 				EnemyAttributeConfig(enemyDamageEffects, 150.0f, 0.0f))));
 }
 
-std::shared_ptr<QuadTree<Collision, CollisionMediators>> PlayStateBuilder::BuildQuadTree() const
+CollisionQuadTree PlayStateBuilder::BuildQuadTree() const
 {
 	return std::make_shared<QuadTree<Collision, CollisionMediators>>(bounds, 4);
 }

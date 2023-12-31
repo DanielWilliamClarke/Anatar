@@ -39,7 +39,7 @@ void SpaceLevel::Update(float worldSpeed, float dt)
 	this->threadableWorkload->Join();
 }
 
-void SpaceLevel::Draw(std::shared_ptr<IRenderer> renderer) const
+void SpaceLevel::Draw(const std::shared_ptr<IRenderer>& renderer) const
 {
 	for (auto& s : stars)
 	{

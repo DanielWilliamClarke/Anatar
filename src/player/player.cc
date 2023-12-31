@@ -44,7 +44,7 @@ Player::Player(
 			}));
 }
 
-void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, Input& in, float dt)
+void Player::Update(const CollisionQuadTree& quadTree, Input& in, float dt)
 {
 	if (this->bulletConfigs.empty())
 	{
@@ -75,7 +75,7 @@ void Player::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> qua
 	this->attributeComponent->Update(dt);
 }
 
-void Player::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
+void Player::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 {
 	Entity::Draw(renderer, this->movementComponent->Interpolate(interp));
 }

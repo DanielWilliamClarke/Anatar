@@ -1,19 +1,12 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
 #include "entity/entity.h"
 
 class IRenderer;
-
-struct Collision;
-struct CollisionMediators;
-
-template<typename C, typename P>
-class QuadTree;
 
 enum class EnemyObjects { ENEMY };
 
@@ -29,8 +22,8 @@ public:
 		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent,
 		sf::Vector2f initialPosition);
 	virtual ~Enemy() = default;
-	virtual void Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
+	virtual void Update(const CollisionQuadTree& quadTree, float dt) override;
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const override;
 private:
 	void InitBullets();
 

@@ -14,7 +14,7 @@ EnemySystem::EnemySystem()
 	: accumulator(0), maxInterval(0), maxEnemies(50)
 {}
 
-void EnemySystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree, float dt)
+void EnemySystem::Update(const CollisionQuadTree& quadTree, float dt)
 {
 	// Create enemies
 	this->accumulator += dt;
@@ -53,7 +53,7 @@ void EnemySystem::Update(std::shared_ptr<QuadTree<Collision, CollisionMediators>
 	}
 }
 
-void EnemySystem::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
+void EnemySystem::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 {
 	for (auto& e : enemies)
 	{
@@ -61,10 +61,11 @@ void EnemySystem::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
 	}
 }
 
-std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, std::shared_ptr<IEnemyTypeFactory<EnemyObjects>> factory)
+std::shared_ptr<EnemySystem> EnemySystem::AddFactory(float spawnInterval, const std::shared_ptr<IEnemyTypeFactory<EnemyObjects>>& factory)
 {
 	this->factories[spawnInterval].push_back(factory);
-	if (spawnInterval > this->maxInterval) {
+	if (spawnInterval > this->maxInterval)
+    {
 		this->maxInterval = spawnInterval;
 	}
 	return shared_from_this();

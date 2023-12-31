@@ -1,9 +1,9 @@
 #ifndef PLAY_STATE
 #define PLAY_STATE
 
-
 #include "game_states/game_states.h"
 #include "state/state.h"
+#include "quad_tree/collision_quad_tree.h"
 
 class IPlayStateBuilder;
 
@@ -16,12 +16,6 @@ class Player;
 class PlayerInput;
 
 class EnemySystem;
-
-struct Collision;
-struct CollisionMediators;
-
-template<typename C, typename P>
-class QuadTree;
 
 class PlayState : public State<GameStates> {
 public:
@@ -46,7 +40,7 @@ private:
 	std::shared_ptr<Player> player;
 	std::shared_ptr<EnemySystem> enemySystem;
 
-	std::shared_ptr<QuadTree<Collision, CollisionMediators>> quadTree;
+	CollisionQuadTree quadTree;
 	std::shared_ptr<IWeaponComponent> debrisEmitter;
 
 	float worldSpeed;

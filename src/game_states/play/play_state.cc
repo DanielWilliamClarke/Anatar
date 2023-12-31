@@ -14,6 +14,7 @@
 
 #include "player/player.h"
 #include "enemy/enemy_system.h"
+#include "quad_tree/quad_tree.h"
 
 PlayState::PlayState(std::shared_ptr<IPlayStateBuilder> builder)
 	: builder(builder), worldSpeed(40.f)

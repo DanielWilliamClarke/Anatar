@@ -1,7 +1,6 @@
 #ifndef ENTITY_OBJECT_H
 #define ENTITY_OBJECT_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -21,14 +20,15 @@ public:
 		std::shared_ptr<IHitboxComponent> hitboxComponent,
 		std::shared_ptr<ILocalMovementComponent> movementComponent,
 		std::shared_ptr<IWeaponComponent> weaponComponent,
-		std::shared_ptr<sf::Sprite> sprite);
+		std::shared_ptr<sf::Sprite> sprite
+    );
 	virtual ~EntityObject();
 	
 	void Update(EntityUpdate position, float dt) const;
-	void Draw(std::shared_ptr<IRenderer> renderer, sf::Vector2f interPosition) const;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, sf::Vector2f interPosition) const;
 
-	std::shared_ptr<sf::Sprite> GetSprite() const;
-	sf::FloatRect GetHitbox() const;
+	[[nodiscard]] std::shared_ptr<sf::Sprite> GetSprite() const;
+	[[nodiscard]] sf::FloatRect GetHitbox() const;
 
 private:
 	std::shared_ptr<IAnimationComponent> animationComponent;
@@ -40,4 +40,4 @@ private:
 	std::shared_ptr<sf::Texture> texture;
 };
 
-#endif //ENTITY_OBJECT_H
+#endif

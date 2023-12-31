@@ -12,20 +12,17 @@ struct BulletConfig;
 struct BulletTrajectory;
 class IRenderer;
 
-struct Collision;
-struct CollisionMediators;
-
 template<typename C, typename P>
 class QuadTree;
 
 class BulletSystem : public IBulletSystem
 {
 public:
-	BulletSystem(sf::FloatRect bounds);
-	virtual ~BulletSystem() = default;
+	explicit BulletSystem(sf::FloatRect bounds);
+    ~BulletSystem() override = default;
 
 	std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed) override;
+	void Update(const CollisionQuadTree& quadTree, float dt, float worldSpeed) override;
 	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
 
 private:
@@ -39,4 +36,4 @@ private:
 	sf::FloatRect bounds;
 };
 
-#endif // BULLET_SYSTEM_H
+#endif
