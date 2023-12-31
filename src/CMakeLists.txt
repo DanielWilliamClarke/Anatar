@@ -14,11 +14,11 @@ set(EXECUTABLE_NAME ${BINARY})
 
 # Create executable to run game
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
-target_link_libraries(${BINARY} PUBLIC ImGui-SFML::ImGui-SFML)
+target_link_libraries(${BINARY} PUBLIC ImGui-SFML::ImGui-SFML range-v3)
 
 # Create lib for testing purposes
 add_library(${BINARY_LIB} STATIC ${SOURCES})
-target_link_libraries(${BINARY_LIB} PUBLIC ImGui-SFML::ImGui-SFML)
+target_link_libraries(${BINARY_LIB} PUBLIC ImGui-SFML::ImGui-SFML range-v3)
 
 # Copy assets on post build
 add_custom_command(TARGET ${BINARY} POST_BUILD

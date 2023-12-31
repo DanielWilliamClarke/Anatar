@@ -5,7 +5,8 @@
 
 #include "renderer/i_renderer.h"
 
-MenuState::MenuState() {
+MenuState::MenuState()
+{
 	font.loadFromFile("./assets/EightBitDragon-anqx.ttf");
 	text.setFont(font);
 	text.setScale(2, 2);
@@ -32,7 +33,7 @@ void MenuState::Update(float dt)
 	}
 }
 
-void MenuState::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
+void MenuState::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 {
 	renderer->GetTarget().draw(text);
 }

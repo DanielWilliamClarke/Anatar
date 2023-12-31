@@ -25,8 +25,8 @@ public:
 	virtual ~BulletSystem() = default;
 
 	std::shared_ptr<Bullet> FireBullet(std::shared_ptr<IBulletFactory> bulletFactory, BulletTrajectory& trajectory, BulletConfig& config) override;
-	void Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed);
-	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp);
+	void Update(const std::shared_ptr<QuadTree<Collision, CollisionMediators>>& quadTree, float dt, float worldSpeed) override;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
 
 private:
 

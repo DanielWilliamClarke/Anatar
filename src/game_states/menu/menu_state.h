@@ -1,7 +1,6 @@
 #ifndef MENU_STATE
 #define MENU_STATE
 
-
 #include <SFML/Graphics.hpp>
 
 #include "game_states/game_states.h"
@@ -10,18 +9,18 @@
 class MenuState : public State<GameStates> {
 public:
 	MenuState();
-	virtual ~MenuState() = default;
+	~MenuState() override = default;
 
-	virtual void Update(float dt) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
+	void Update(float dt) override;
+	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const override;
 
 protected:
-	virtual void Setup() override;
-	virtual void TearDown() override;
+	void Setup() override;
+	void TearDown() override;
 
 private:
 	sf::Font font;
 	sf::Text text;
 };
 
-#endif // MENU_STATE
+#endif

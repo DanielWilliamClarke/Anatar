@@ -16,10 +16,13 @@ void ThreadedWorkload::Join()
 	else if (tasks.size() > 1)
 	{
 		std::vector<std::thread> threads;
-		for (auto t : tasks)
+		threads.reserve(tasks.size());
+
+        for (const auto& t : tasks)
 		{
 			threads.push_back(std::move(std::thread(t)));
 		}
+
 		for (auto& t : threads)
 		{
 			if (t.joinable())

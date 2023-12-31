@@ -29,7 +29,7 @@ void Fps::Update()
   frames++;
 }
 
-void Fps::Draw(std::shared_ptr<IRenderer> renderer)
+void Fps::Draw(const std::shared_ptr<IRenderer>& renderer)
 {
   if (clockDraw.getElapsedTime().asSeconds() >= 1.0f)
   {

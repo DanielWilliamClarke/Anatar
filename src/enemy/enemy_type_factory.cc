@@ -13,7 +13,7 @@
 #include "components/movement/enemy_movement_component.h"
 #include "components/attributes/health_attribute_component.h"
 #include "components/weapon/i_weapon_component_factory.h"
-#include <components\collision_detection\collision_detection_component.h>
+#include "components/collision_detection/collision_detection_component.h"
 #include "bullet/bullet.h"
 
 #include "entity/entity_object.h"

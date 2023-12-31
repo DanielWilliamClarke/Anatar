@@ -25,15 +25,15 @@ class QuadTree;
 
 class PlayState : public State<GameStates> {
 public:
-	PlayState(std::shared_ptr<IPlayStateBuilder> builder);
-	virtual ~PlayState() = default;
+	explicit PlayState(std::shared_ptr<IPlayStateBuilder> builder);
+	~PlayState() override = default;
 
-	virtual void Update(float dt) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const override;
+	void Update(float dt) override;
+    void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const override;
 
 protected: 
-	virtual void Setup() override;
-	virtual void TearDown() override;
+	void Setup() override;
+	void TearDown() override;
 
 private: 
 	std::shared_ptr<IPlayStateBuilder> builder;
@@ -52,4 +52,4 @@ private:
 	float worldSpeed;
 };
 
-#endif // PLAY_STATE
+#endif

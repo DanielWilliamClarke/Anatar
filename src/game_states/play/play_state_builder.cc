@@ -44,7 +44,6 @@ std::shared_ptr<IBulletSystem> PlayStateBuilder::BuildBulletSystem() const {
 }
 
 std::shared_ptr<IWeaponComponent> PlayStateBuilder::BuildDebrisSystem(std::shared_ptr<IBulletSystem> bulletSystem) const {
-
 	auto factory = std::make_shared<DebrisFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);

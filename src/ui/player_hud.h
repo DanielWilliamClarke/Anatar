@@ -9,15 +9,14 @@
 class PlayerHud : public IPlayerHud
 {
 public:
-	PlayerHud(sf::FloatRect bounds);
-	virtual ~PlayerHud() = default;
+	explicit PlayerHud(sf::FloatRect bounds);
+	~PlayerHud() override = default;
 
 	virtual void Update(float health, float maxHealth, float shields, float maxShields, float score) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer) const override;
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer) const override;
 
 private:
-
-	sf::Color BlendColor(sf::Color start, sf::Color end, float percentage) const;
+	static sf::Color BlendColor(const sf::Color& start, const sf::Color& end, float percentage);
 
 	sf::FloatRect bounds;
 	float margin;

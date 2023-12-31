@@ -14,7 +14,6 @@ struct EntityUpdate
 	bool fire;
 	BulletConfig& bulletConfig;
 
-	EntityUpdate() = default;
 	EntityUpdate(sf::Vector2f position,
 		int direction,
 		BulletConfig& bulletConfig,

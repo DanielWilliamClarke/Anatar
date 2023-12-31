@@ -1,7 +1,6 @@
 #ifndef STATE
 #define STATE
 
-
 #include <memory>
 #include <stack>
 #include <unordered_map>
@@ -17,7 +16,7 @@ public:
 	std::shared_ptr<State<T>> AddTransition(T t, std::shared_ptr<State<T>> state);
 	std::shared_ptr<State<T>> Yield();
 	virtual void Update(float dt) = 0;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer, float interp) const = 0;
+	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const = 0;
 
 protected:
 	virtual void Setup() = 0;
@@ -31,14 +30,14 @@ private:
 	void Transition(std::shared_ptr<State<T>> nextState);
 
 private:
-	std::unordered_map<T, std::shared_ptr<State<T>>> transtions;
+	std::unordered_map<T, std::shared_ptr<State<T>>> transitions;
 	std::shared_ptr<State<T>> previous;
 	std::shared_ptr<State<T>> next;
 };
 
 template <typename T>
 std::shared_ptr<State<T>> State<T>::AddTransition(T t, std::shared_ptr<State<T>> state) {
-	this->transtions.emplace(t, state);
+	this->transitions.emplace(t, state);
 	return this->shared_from_this();
 }
 
@@ -62,7 +61,7 @@ std::shared_ptr<State<T>> State<T>::Yield()
 
 template <typename T>
 void State<T>::Forward(T t) {
-	this->Transition(this->transtions.at(t));
+	this->Transition(this->transitions.at(t));
 }
 
 template <typename T>
@@ -87,4 +86,4 @@ void State<T>::Transition(std::shared_ptr<State<T>> nextState)
 	}
 }
 
-#endif // STATE
+#endif

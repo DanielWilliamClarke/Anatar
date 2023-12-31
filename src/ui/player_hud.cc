@@ -59,7 +59,7 @@ void PlayerHud::Update(float health, float maxHealth, float shields, float maxSh
 	scoreText.setPosition(bounds.width - scoreBounds.width - margin, textHeight);
 }
 
-void PlayerHud::Draw(std::shared_ptr<IRenderer> renderer) const
+void PlayerHud::Draw(const std::shared_ptr<IRenderer>& renderer) const
 {
 	renderer->GetTarget().draw(playerText);
 	renderer->GetTarget().draw(scoreText);
@@ -67,10 +67,11 @@ void PlayerHud::Draw(std::shared_ptr<IRenderer> renderer) const
 	renderer->GetTarget().draw(shieldBar);
 }
 
-sf::Color PlayerHud::BlendColor(sf::Color start, sf::Color end, float percentage) const
+sf::Color PlayerHud::BlendColor(const sf::Color& start, const sf::Color& end, float percentage)
 {
-	return sf::Color(
+	return {
 		(sf::Uint8)((start.r - end.r) * percentage + end.r),
 		(sf::Uint8)((start.g - end.g) * percentage + end.g),
-		(sf::Uint8)((start.b - end.b) * percentage + end.b));
+		(sf::Uint8)((start.b - end.b) * percentage + end.b)
+    };
 }

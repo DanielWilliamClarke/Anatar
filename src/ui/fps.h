@@ -13,7 +13,7 @@ public:
   Fps();
   virtual ~Fps() = default;
   void Update();
-  void Draw(std::shared_ptr<IRenderer> renderer);
+  void Draw(const std::shared_ptr<IRenderer>& renderer);
 
 private:
   // Clocks
@@ -28,4 +28,4 @@ private:
   sf::Text dps;
 };
 
-#endif //FPS_H
+#endif

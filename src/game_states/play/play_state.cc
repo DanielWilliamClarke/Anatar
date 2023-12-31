@@ -43,8 +43,6 @@ void PlayState::TearDown()
 
 void PlayState::Update(float dt)
 {
-
-
 	auto in = this->input->SampleInput();
 	this->quadTree = builder->BuildQuadTree();
 
@@ -57,13 +55,14 @@ void PlayState::Update(float dt)
 	{
 		this->Back();
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
 		this->Forward(GameStates::MENU);
 	}
 }
 
-void PlayState::Draw(std::shared_ptr<IRenderer> renderer, float interp) const
+void PlayState::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 {
 	this->level->Draw(renderer);
 	this->bulletSystem->Draw(renderer, interp);

@@ -32,7 +32,6 @@ public:
 	virtual std::shared_ptr<Player> BuildPlayer(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IWeaponComponent> debrisGenerator, std::shared_ptr<IPlayerHud> hud, float worldSpeed) const = 0;
 	virtual std::shared_ptr<EnemySystem> BuildEnemySystem(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IWeaponComponent> debrisGenerator, float worldSpeed) const = 0;
 	virtual std::shared_ptr<QuadTree<Collision, CollisionMediators>> BuildQuadTree() const = 0;
-
 };
 
 #endif // I_PLAY_STATE_BUILDER

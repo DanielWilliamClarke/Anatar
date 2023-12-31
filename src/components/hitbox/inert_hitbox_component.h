@@ -16,7 +16,7 @@ public:
 	virtual void Draw(std::shared_ptr<IRenderer> renderer) override {};
 
 	virtual void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override {};
-	virtual sf::FloatRect Get() const { return sf::FloatRect(); };
+	virtual sf::FloatRect Get() const override { return {}; };
 };
 
 #endif // INERT_HITBOX_COMPONENT_H

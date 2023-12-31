@@ -1,7 +1,6 @@
 #ifndef MATH_HELPERS_H
 #define MATH_HELPERS_H
 
-
 #include <numbers>
 #include <cmath>
 
