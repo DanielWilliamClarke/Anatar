@@ -10,12 +10,12 @@ class InertHitboxComponent : public IHitboxComponent
 {
 public:
 	InertHitboxComponent() = default;
-	virtual ~InertHitboxComponent() = default;
+	~InertHitboxComponent() override = default;
 
-	virtual void Update(sf::Vector2f position) override {};
-	virtual void Draw(std::shared_ptr<IRenderer> renderer) override {};
+	void Update(sf::Vector2f position) override {};
+    void Draw(const std::shared_ptr<IRenderer>& renderer) override {};
 
-	virtual void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override {};
+	void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override {};
 	virtual sf::FloatRect Get() const override { return {}; };
 };
 

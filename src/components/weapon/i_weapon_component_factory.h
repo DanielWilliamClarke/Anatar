@@ -11,7 +11,10 @@ public:
 	IWeaponComponentFactory() = default;
 	virtual ~IWeaponComponentFactory() = default;
 
-	virtual std::shared_ptr<IWeaponComponent> Construct(std::shared_ptr<IBulletSystem> bulletSystem, float delay) const = 0;
+	[[nodiscard]] virtual std::shared_ptr<IWeaponComponent> Construct(
+        const std::shared_ptr<IBulletSystem>& bulletSystem,
+        float delay
+    ) const = 0;
 };
 
 #endif //I_WEAPON_COMPONENT_FACTORY_H

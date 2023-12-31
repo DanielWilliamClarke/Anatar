@@ -1,7 +1,6 @@
 #ifndef RANDOM_SHOT_WEAPON_COMPONENT_H
 #define RANDOM_SHOT_WEAPON_COMPONENT_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -15,9 +14,9 @@ class RandomShotWeaponComponent : public IWeaponComponent
 {
 public:
 	RandomShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, std::shared_ptr<IRandomNumberSource<int>> randSource, float numBullets);
-	virtual ~RandomShotWeaponComponent() = default;
+	~RandomShotWeaponComponent() override = default;
 
-	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
+	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

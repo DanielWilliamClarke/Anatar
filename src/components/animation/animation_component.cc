@@ -13,19 +13,19 @@ void AnimationComponent::SetAssets(std::shared_ptr<sf::Sprite> sprite, std::shar
 	this->sprite->setTexture(*textureSheet);
 }
 
-void AnimationComponent::AddAnimation(const int key, float frameDuration,
+void AnimationComponent::AddAnimation(int key, float frameDuration,
 	int startFrameX, int startFrameY, int framesX, int framesY, int width, int height)
 {
 	this->animations[key] = std::make_shared<Animation>(this->sprite, this->textureSheet,
 		frameDuration, startFrameX, startFrameY, framesX, framesY, width, height);
 }
 
-const bool& AnimationComponent::IsDone(const int key)
+bool AnimationComponent::IsDone(int key)
 {
 	return this->animations[key]->IsDone();
 }
 
-const bool& AnimationComponent::Play(const int key, const bool loop, const bool priority)
+bool AnimationComponent::Play(int key, bool loop, bool priority)
 {
 	if (this->priorityAnimation) //If there is a priority animation
 	{
@@ -33,7 +33,7 @@ const bool& AnimationComponent::Play(const int key, const bool loop, const bool 
 		{
 			if (this->lastAnimation != this->animations[key])
 			{
-				if (this->lastAnimation == NULL)
+				if (this->lastAnimation == nullptr)
 					this->lastAnimation = this->animations[key];
 				else
 				{
@@ -45,7 +45,7 @@ const bool& AnimationComponent::Play(const int key, const bool loop, const bool 
 			//If the priority animation is done, remove it
 			if (this->animations[key]->Play(loop))
 			{
-				this->priorityAnimation = NULL;
+				this->priorityAnimation = nullptr;
 			}
 		}
 	}
@@ -59,7 +59,7 @@ const bool& AnimationComponent::Play(const int key, const bool loop, const bool 
 
  		if (this->lastAnimation != this->animations[key])
 		{
-			if (this->lastAnimation == NULL)
+			if (this->lastAnimation == nullptr)
 				this->lastAnimation = this->animations[key];
 			else
 			{
@@ -74,7 +74,7 @@ const bool& AnimationComponent::Play(const int key, const bool loop, const bool 
 	return this->animations[key]->IsDone();
 }
 
-const bool& AnimationComponent::Play(const int key, const float& modifier, const float& modifier_max, const bool loop, const bool priority)
+bool AnimationComponent::Play(int key, float modifier, float modifier_max, bool loop, bool priority)
 {
 	if (this->priorityAnimation) //If there is a priority animation
 	{

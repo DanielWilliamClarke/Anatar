@@ -1,26 +1,24 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
 class Animation
 {
 public:
-
 	Animation(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Texture> textureSheet,
 		float frameDuration, int startFrameX, int startFrameY, int framesX, int framesY, int width, int height);
 
 	virtual ~Animation() = default;
 
-	const bool& IsDone() const;
-	const bool& Play(const bool loop = true);
-	const bool& Play(float modPercent, const bool loop = true);
+	[[nodiscard]] bool IsDone() const;
+    bool Play(bool loop = true);
+    bool Play(float modPercent, bool loop = true);
 	void Reset();
 
 private:
-	void NextFrame(const bool loop);
+	void NextFrame(bool loop);
 
 	//Variables
 	std::shared_ptr<sf::Sprite> sprite;
@@ -37,4 +35,4 @@ private:
 	bool done;
 };
 
-#endif //ANIMATION_H
+#endif

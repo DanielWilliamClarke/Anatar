@@ -1,18 +1,16 @@
 #ifndef INERT_WEAPON_COMPONENT_H
 #define INERT_WEAPON_COMPONENT_H
 
-
 #include "i_weapon_component.h"
 
 class InertWeaponComponent : public IWeaponComponent
 {
 public:
 	InertWeaponComponent() = default;
-	virtual ~InertWeaponComponent() = default;
+	~InertWeaponComponent() override = default;
 
-	virtual void Fire(sf::Vector2f position, BulletConfig& config) override {};
-
+	void Fire(sf::Vector2f position, BulletConfig& config) override {};
 private:
 };
 
-#endif //INERT_WEAPON_COMPONENT_H
+#endif

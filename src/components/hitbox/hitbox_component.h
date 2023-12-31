@@ -11,14 +11,14 @@ class IRenderer;
 class HitboxComponent : public IHitboxComponent
 {
 public:
-	HitboxComponent(sf::Color colour);
-	virtual ~HitboxComponent() = default;
+	explicit HitboxComponent(sf::Color colour);
+	~HitboxComponent() override = default;
 
-	virtual void Update(sf::Vector2f position) override;
-	virtual void Draw(std::shared_ptr<IRenderer> renderer) override;
+	void Update(sf::Vector2f position) override;
+    void Draw(const std::shared_ptr<IRenderer>& renderer) override;
 
-	virtual void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override;
-	virtual sf::FloatRect Get() const override;
+	void Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) override;
+	sf::FloatRect Get() const override;
 private:
 	sf::RectangleShape hitbox;
 	float offsetX;

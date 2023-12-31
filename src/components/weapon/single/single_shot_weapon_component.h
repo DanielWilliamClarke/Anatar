@@ -1,7 +1,6 @@
 #ifndef SINGLE_SHOT_WEAPON_COMPONENT_H
 #define SINGLE_SHOT_WEAPON_COMPONENT_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -14,9 +13,9 @@ class SingleShotWeaponComponent: public IWeaponComponent
 {
 public:
 	SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay);
-	virtual ~SingleShotWeaponComponent() = default;
+	~SingleShotWeaponComponent() override = default;
 
-	virtual void Fire(sf::Vector2f position, BulletConfig& config) override;
+	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;

@@ -8,8 +8,8 @@ class IPlayerAttributeComponent: public IAttributeComponent
 {
 public:
 	IPlayerAttributeComponent() = default;
-	virtual ~IPlayerAttributeComponent() = default;
+	~IPlayerAttributeComponent() override = default;
 	virtual void Update(float dt) = 0;
 };
 
-#endif // I_ATTRBUTE_COMPONENT_H
+#endif

@@ -1,7 +1,6 @@
 #ifndef SINGLE_SHOT_WEAPON_COMPONENT_FACTORY_H
 #define SINGLE_SHOT_WEAPON_COMPONENT_FACTORY_H
 
-
 #include "components/weapon/i_weapon_component_factory.h"
 #include "bullet/i_bullet_factory.h"
 
@@ -10,16 +9,15 @@
 class SingleShotWeaponComponentFactory: public IWeaponComponentFactory
 {
 public:
-	SingleShotWeaponComponentFactory(std::shared_ptr<IBulletFactory> factory)
+	explicit SingleShotWeaponComponentFactory(std::shared_ptr<IBulletFactory> factory)
 		: factory(factory)
 	{}
 
-	virtual ~SingleShotWeaponComponentFactory() = default;
+	~SingleShotWeaponComponentFactory() override = default;
 
-	virtual std::shared_ptr<IWeaponComponent> Construct(std::shared_ptr<IBulletSystem> bulletSystem, float delay) const override {
+    std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>& bulletSystem, float delay) const override {
 		return std::make_shared<SingleShotWeaponComponent>(bulletSystem, factory, delay);
 	};
-
 private:
 	std::shared_ptr<IBulletFactory> factory;
 };

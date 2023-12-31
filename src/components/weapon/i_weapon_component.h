@@ -1,7 +1,6 @@
 #ifndef I_WEAPON_COMPONENT_H
 #define I_WEAPON_COMPONENT_H
 
-
 #include <SFML/Graphics.hpp>
 
 struct BulletConfig;
@@ -16,4 +15,4 @@ public:
 	virtual void Cease() {};
 };
 
-#endif //I_WEAPON_COMPONENT_H
+#endif

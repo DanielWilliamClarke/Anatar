@@ -22,7 +22,7 @@ std::shared_ptr<sf::Vector2f> CollisionDetectionComponent::DetectCollision(const
 	return nullptr;
 }
 
-bool CollisionDetectionComponent::DetechIntersection(const sf::FloatRect& boxA, const sf::FloatRect& boxB) const
+bool CollisionDetectionComponent::DetectIntersection(const sf::FloatRect& boxA, const sf::FloatRect& boxB) const
 {
 	return boxA.intersects(boxB);
 }

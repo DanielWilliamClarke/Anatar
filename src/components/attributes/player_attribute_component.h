@@ -1,7 +1,6 @@
 #ifndef PLAYER_ATTRBUTE_COMPONENT_H
 #define PLAYER_ATTRBUTE_COMPONENT_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -30,14 +29,13 @@ public:
         PlayerAttributeConfig config
     );
 
-    virtual ~PlayerAttributeComponent() = default;
+    ~PlayerAttributeComponent() override = default;
 
-	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
-	virtual bool IsDead() const override;
+	void TakeDamage(float damage, sf::Vector2f& impactPoint) override;
+    [[nodiscard]] bool IsDead() const override;
 
-	virtual void Update(float dt) override;
-	virtual void RegisterKill(float score) override;
-
+	void Update(float dt) override;
+	void RegisterKill(float score) override;
 private:
 
 	std::shared_ptr<IPlayerHud> hud;
@@ -55,4 +53,4 @@ private:
 	float shieldRechargeDelay;
 };
 
-#endif //PLAYER_ATTRBUTE_COMPONENT_H
+#endif

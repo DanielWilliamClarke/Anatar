@@ -20,7 +20,7 @@ RadialBeamWeaponComponent::RadialBeamWeaponComponent(std::shared_ptr<IBulletSyst
 
 void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {
-	if (!beams.size())
+	if (beams.empty())
 	{
 		auto angleBetween = 0.0f;
 		if (numBeams > 1)

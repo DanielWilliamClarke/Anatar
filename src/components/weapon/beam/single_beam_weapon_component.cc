@@ -37,6 +37,7 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	}
 }
 
-void SingleBeamWeaponComponent::Cease() {
+void SingleBeamWeaponComponent::Cease()
+{
 	beam->Cease();
 }

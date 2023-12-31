@@ -17,9 +17,9 @@ public:
 		offsetAngle(offsetAngle)
 	{}
 
-	virtual ~BurstShotWeaponComponentFactory() = default;
+	~BurstShotWeaponComponentFactory() override = default;
 
-	virtual std::shared_ptr<IWeaponComponent> Construct(std::shared_ptr<IBulletSystem> bulletSystem, float delay) const override {
+    [[nodiscard]] std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>&  bulletSystem, float delay) const override {
 		return std::make_shared<BurstShotWeaponComponent>(bulletSystem, factory, numBullets, delay, arcAngle, offsetAngle);
 	};
 
@@ -30,4 +30,4 @@ private:
 	float offsetAngle;
 };
 
-#endif //BURST_SHOT_WEAPON_COMPONENT_FACTORY_H
+#endif

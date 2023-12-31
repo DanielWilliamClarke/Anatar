@@ -40,7 +40,7 @@ Player::Player(
 				return this->DetectCollision(position, ray, velocity);
 			})
 			.Inject([this](sf::FloatRect& area) -> bool {
-				return this->collisionDetectionComponent->DetechIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
+				return this->collisionDetectionComponent->DetectIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
 			}));
 }
 

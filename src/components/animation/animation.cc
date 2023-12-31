@@ -12,12 +12,12 @@ Animation::Animation(std::shared_ptr<sf::Sprite> sprite, std::shared_ptr<sf::Tex
 	this->sprite->setTextureRect(this->startRect);
 }
 
-const bool& Animation::IsDone() const
+bool Animation::IsDone() const
 {
 	return this->done;
 }
 
-const bool& Animation::Play(const bool loop)
+bool Animation::Play(bool loop)
 {
 	if (clockAnimate.getElapsedTime().asSeconds() >= this->frameDuration)
 	{
@@ -27,7 +27,7 @@ const bool& Animation::Play(const bool loop)
 	return this->done;
 }
 
-const bool& Animation::Play(float modPercent, const bool loop)
+bool Animation::Play(float modPercent, bool loop)
 {
 	if (modPercent < 0.5f)
 	{

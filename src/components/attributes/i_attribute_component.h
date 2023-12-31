@@ -26,7 +26,7 @@ public:
 	IAttributeComponent() = default;
 	virtual ~IAttributeComponent() = default;
 	virtual void TakeDamage(float damage, sf::Vector2f& impactPoint) = 0;
-	virtual bool IsDead() const = 0;
+	[[nodiscard]] virtual bool IsDead() const = 0;
 	virtual void RegisterKill(float score) = 0;
 };
 

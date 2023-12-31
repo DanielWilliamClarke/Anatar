@@ -18,9 +18,9 @@ public:
 		coolDown(0)
 	{}
 
-	virtual ~RadialBeamWeaponComponentFactory() = default;
+	~RadialBeamWeaponComponentFactory() override = default;
 
-	virtual std::shared_ptr<IWeaponComponent> Construct(std::shared_ptr<IBulletSystem> bulletSystem, float delay) const override {
+    std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>& bulletSystem, float delay) const override {
 		return std::make_shared<RadialBeamWeaponComponent>(bulletSystem, factory, duration, delay, arcAngle, numBeams);
 	};
 
@@ -32,4 +32,4 @@ private:
 	float numBeams;
 };
 
-#endif //RADIAL_BEAM_WEAPON_COMPONENT_FACTORY_H
+#endif

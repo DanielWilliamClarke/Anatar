@@ -15,12 +15,13 @@ void HitboxComponent::Update(sf::Vector2f position)
 	this->hitbox.setPosition(position.x + this->offsetX, position.y + this->offsetY);
 }
 
-void HitboxComponent::Draw(std::shared_ptr<IRenderer> renderer)
+void HitboxComponent::Draw(const std::shared_ptr<IRenderer>& renderer)
 {
 	renderer->GetDebugTarget().draw(this->hitbox);
 }
 
-void HitboxComponent::Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height) {
+void HitboxComponent::Set(sf::Vector2f position, float offsetX, float offsetY, float width, float height)
+{
 	this->offsetX = offsetX;
 	this->offsetY = offsetY;
 
@@ -28,6 +29,7 @@ void HitboxComponent::Set(sf::Vector2f position, float offsetX, float offsetY, f
 	this->hitbox.setSize(sf::Vector2f(width, height));
 }
 
-sf::FloatRect HitboxComponent::Get() const {
+sf::FloatRect HitboxComponent::Get() const
+{
 	return this->hitbox.getGlobalBounds();
 }
