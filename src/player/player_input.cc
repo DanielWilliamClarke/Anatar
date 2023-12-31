@@ -1,6 +1,6 @@
 #include "player_input.h"
 
-const Input PlayerInput::SampleInput() const {
+Input PlayerInput::SampleInput() {
 
 	Input in;
 

@@ -1,22 +1,19 @@
 #ifndef PLAYER_INPUT_H
 #define PLAYER_INPUT_H
 
-
 #include <SFML/Graphics.hpp>
 
 struct Input 
 {
 	sf::Vector2f movement;
-	bool falling;
-	bool fire;
+	bool falling{};
+	bool fire{};
 };
 
 class PlayerInput
 {
 public:
-	PlayerInput() = default;
-	virtual ~PlayerInput() = default;
-	const Input SampleInput() const;
+	[[nodiscard]] static Input SampleInput() ;
 };
 
-#endif //PLAYER_INPUT_H
+#endif

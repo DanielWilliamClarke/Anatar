@@ -30,7 +30,8 @@ public:
 		std::unordered_map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 		std::shared_ptr<IPlayerMovementComponent> movementComponent,
 		std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
-		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent);
+		std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent
+    );
 	virtual ~Player() = default;
 	virtual void Update(const CollisionQuadTree& quadTree, Input& in, float dt);
 	virtual void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const override;
