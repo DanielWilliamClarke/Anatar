@@ -32,14 +32,14 @@ Player::Player(
 
 	this->mediators = std::make_shared<CollisionMediators>(
 		CollisionMediators()
-			.Inject([this](float damage, sf::Vector2f position) -> bool {
+			.SetCollisionResolver([this](float damage, sf::Vector2f position) -> bool {
 				this->attributeComponent->TakeDamage(damage, position);
 				return this->attributeComponent->IsDead();
 			})
-			.Inject([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
+			.SetPointTest([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
 				return this->DetectCollision(position, ray, velocity);
 			})
-			.Inject([this](sf::FloatRect& area) -> bool {
+			.SetZoneTest([this](sf::FloatRect& area) -> bool {
 				return this->collisionDetectionComponent->DetectIntersection(area, this->GetObject(PlayerObjects::SHIP)->GetHitbox());
 			}));
 }
@@ -108,12 +108,12 @@ const unsigned int Player::CalculateDirection(sf::Vector2f position, sf::Vector2
 void Player::InitBullets()
 {
 	auto mediators = BulletMediators()
-		.Inject([this](bool kill, float damage) {
+		.SetBulletResolver([this](bool kill, float damage) {
 			if (kill) {
 				this->attributeComponent->RegisterKill(damage);
 			}
 		})
-		.Inject([this]() -> sf::Vector2f {
+		.SetPositionSampler([this]() -> sf::Vector2f {
 			auto ship = this->GetObject(PlayerObjects::SHIP)->GetSprite();
 			auto bounds = ship->getLocalBounds();
 			auto position = ship->getPosition();
@@ -122,17 +122,17 @@ void Player::InitBullets()
 		});
 
 	this->bulletConfigs[PlayerObjects::SHIP] = std::make_shared<BulletConfig>(
-		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
+		mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
 		this->GetTag(), 
 		sf::Color::Cyan, 60.0f, 0.0f, 100.0f, AFFINITY::RIGHT, false, 15.0f, 0.5f);
 
 	this->bulletConfigs[PlayerObjects::TURRET] = std::make_shared<BulletConfig>(
-		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
+		mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
 		this->GetTag(),
 		sf::Color::Yellow, 90.0f, 1.0f, 400.0f, AFFINITY::RIGHT, false, 5.0f);
 
 	this->bulletConfigs[PlayerObjects::GLOWIE] = std::make_shared<BulletConfig>(
-		mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
+		mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
 		this->GetTag(),
 		sf::Color::Green, 75.0f, 5.0f, 400.0f, AFFINITY::RIGHT, false, 25.0f, 3.0f);
 }

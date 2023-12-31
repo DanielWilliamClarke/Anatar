@@ -14,22 +14,23 @@ class IRenderer;
 
 enum class AFFINITY :int { LEFT = -1, RIGHT = 1 };
 
-struct BulletMediators {
+struct BulletMediators
+{
 	std::function<void(bool, float)> resolver;
 	std::function<sf::Vector2f(void)> positionSampler;
 	std::function<std::shared_ptr<sf::Shape>(void)> shapeBuilder;
 
-	BulletMediators Inject(std::function<void(bool, float)> r) {
+	BulletMediators SetBulletResolver(std::function<void(bool, float)> r) {
 		this->resolver = r;
 		return *this;
 	}
 
-	BulletMediators Inject(std::function<sf::Vector2f(void)> p) {
+	BulletMediators SetPositionSampler(std::function<sf::Vector2f(void)> p) {
 		this->positionSampler = p;
 		return *this;
 	}
 
-	BulletMediators Inject(std::function<std::shared_ptr<sf::Shape>(void)> s) {
+	BulletMediators SetShapeBuilder(std::function<std::shared_ptr<sf::Shape>(void)> s) {
 		this->shapeBuilder = s;
 		return *this;
 	}

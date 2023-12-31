@@ -27,14 +27,14 @@ Enemy::Enemy(
 
 	this->mediators = std::make_shared<CollisionMediators>(
 		CollisionMediators()
-			.Inject([this](float damage, sf::Vector2f position) -> bool {
+			.SetCollisionResolver([this](float damage, sf::Vector2f position) -> bool {
 				this->attributeComponent->TakeDamage(damage, position);
 				return this->attributeComponent->IsDead();
 			})
-			.Inject([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
+			.SetPointTest([this](sf::Vector2f position, sf::Vector2f velocity, bool ray) -> std::shared_ptr<sf::Vector2f> {
 				return this->DetectCollision(position, ray, velocity);
 			})
-			.Inject([this](sf::FloatRect& area) -> bool {
+			.SetZoneTest([this](sf::FloatRect& area) -> bool {
 				return this->collisionDetectionComponent->DetectIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox());
 			}));
 }
@@ -69,9 +69,9 @@ void Enemy::InitBullets()
 {
 	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
 		BulletMediators()
-			.Inject([=](bool kill, float damage) {})
-			.Inject([this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); })
-			.Inject([=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
+			.SetBulletResolver([=](bool kill, float damage) {})
+			.SetPositionSampler([this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); })
+			.SetShapeBuilder([=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
 		this->GetTag(),
 		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
 }

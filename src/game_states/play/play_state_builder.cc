@@ -70,19 +70,19 @@ std::shared_ptr<Player> PlayStateBuilder::BuildPlayer(std::shared_ptr<IBulletSys
 	auto attenuation = 50.0f;
 
 	auto mediators = BulletMediators()
-		.Inject([](bool kill, float damage) {})
-		.Inject([]() -> sf::Vector2f { return sf::Vector2f(); });
+		.SetBulletResolver([](bool kill, float damage) {})
+		.SetPositionSampler([]() -> sf::Vector2f { return sf::Vector2f(); });
 
 	auto playerDamageEffects = std::make_shared<DamageEffects>(
 		debrisGenerator,
 		std::make_shared<BulletConfig>(
-			mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
+			mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
 			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::RIGHT, false, 0.0f, 7.0f),
 		std::make_shared<BulletConfig>(
-			mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f),
 		std::make_shared<BulletConfig>(
-			mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", sheildDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::RIGHT, false, 0.0f, 0.3f));
 
 	auto attributeComponent = std::make_shared<PlayerAttributeComponent>(hud, playerDamageEffects, PlayerAttributeConfig(100.0f, 50.0f, 10.0f, 3.0f));
@@ -103,16 +103,16 @@ std::shared_ptr<EnemySystem> PlayStateBuilder::BuildEnemySystem(std::shared_ptr<
 	auto attenuation = 50.0f;
 
 	auto mediators = BulletMediators()
-		.Inject([](bool kill, float damage) {})
-		.Inject([]() -> sf::Vector2f { return {}; });
+		.SetBulletResolver([](bool kill, float damage) {})
+		.SetPositionSampler([]() -> sf::Vector2f { return {}; });
 
 	auto enemyDamageEffects = std::make_shared<DamageEffects>(
 		debrisGenerator,
 		std::make_shared<BulletConfig>(
-			mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
+			mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(2.0f, 3); }),
 			"debris", healthDamageColor, attenuation / 2, 0.0f, 20.0f, AFFINITY::LEFT, false, 0.0f, 0.7f),
 		std::make_shared<BulletConfig>(
-			mediators.Inject([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
+			mediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(0.0f, 3); }),
 			"debris", healthDamageColor, attenuation, 0.0f, 50.0f, AFFINITY::LEFT, false, 0.0f, 0.3f),
 		nullptr);
 
