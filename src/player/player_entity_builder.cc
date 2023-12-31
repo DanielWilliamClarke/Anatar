@@ -5,7 +5,7 @@
 #include "util/i_texture_atlas.h"
 #include "components/animation/animation_component.h"
 #include "components/hitbox/hitbox_component.h"
-#include <components\hitbox\inert_hitbox_component.h>
+#include "components/hitbox/inert_hitbox_component.h"
 #include "components/movement/offset_movement_component.h"
 #include "components/movement/orbital_movement_component.h"
 #include "components/weapon/single/single_shot_weapon_component.h"
