@@ -23,13 +23,13 @@
 ### Next up 2024
 
 - [ ] Modernise code to c++20 (ranges etc)
-- [ ] Swap Cmake for bazel
 - [ ] Configuration based entities (build entities from json configs)
 - [ ] Configuration based levels (enemy waves, level background etc)
 - [ ] smarter enemy motion
 - [ ] Buffs, Debuffs, and weapon upgrades 
 - [ ] Greater control over weapons (weapon selection? multiple weapons controlled via number keys?)
 - [ ] perhaps play with play rotation
+- [ ] Buy Aseprite and build some own sprites 
 
 ### Gameplay
 
