@@ -9,6 +9,7 @@
 #include "enemy.h"
 
 #include "bullet/i_bullet_system.h"
+#include "components/weapon/i_weapon_component.h"
 
 class IWeaponComponentFactory;
 class ILocalMovementComponent;

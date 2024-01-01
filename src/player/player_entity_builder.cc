@@ -70,7 +70,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildShip(std::shared_ptr<sf:
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(shipSprite->getOrigin());
 
 	auto beamFactory = std::make_shared<BeamFactory>(rayCaster, this->bounds, 0.5f);
-	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, 2.0f, 1.0f);
+	auto weaponComponent = std::make_shared<SingleBeamWeaponComponent>(bulletSystem, beamFactory, WeaponSlot::ONE, 2.0f, 1.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, shipSprite);
@@ -139,7 +139,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildTurret(std::shared_ptr<s
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(offset);
 
 	auto projectileFactory = std::make_shared<HomingProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 2.0f, 0.0f, 10.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::TWO, 2.0f, 0.0f, 10.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
@@ -173,7 +173,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildGlowie(std::shared_ptr<s
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSprite->getOrigin(), 75.0f, -100.0f);
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, 15.0f, 10.0f, 90.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::THREE, 15.0f, 10.0f, 90.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return  std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);

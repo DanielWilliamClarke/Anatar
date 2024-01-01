@@ -47,7 +47,7 @@ std::shared_ptr<IWeaponComponent> PlayStateBuilder::BuildDebrisSystem(std::share
 	auto factory = std::make_shared<DebrisFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, randGenerator, 5.0f);
+	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, randGenerator, WeaponSlot::ONE, 5.0f);
 }
 
 std::shared_ptr<IPlayerHud> PlayStateBuilder::BuildPlayerHud() const
@@ -71,7 +71,7 @@ std::shared_ptr<Player> PlayStateBuilder::BuildPlayer(std::shared_ptr<IBulletSys
 
 	auto mediators = BulletMediators()
 		.SetBulletResolver([](bool kill, float damage) {})
-		.SetPositionSampler([]() -> sf::Vector2f { return sf::Vector2f(); });
+		.SetPositionSampler([]() -> sf::Vector2f { return {}; });
 
 	auto playerDamageEffects = std::make_shared<DamageEffects>(
 		debrisGenerator,

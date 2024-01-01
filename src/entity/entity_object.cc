@@ -4,6 +4,7 @@
 #include "components/hitbox/i_hitbox_component.h"
 #include "components/movement/i_local_movement_component.h"
 #include "components/weapon/i_weapon_component.h"
+#include "player/player_input.h"
 
 #include "renderer/i_renderer.h"
 
@@ -29,8 +30,13 @@ EntityObject::~EntityObject()
 void EntityObject::Update(EntityUpdate update, float dt) const
 {
 	this->sprite->setPosition(this->movementComponent->Integrate(update.position, dt));
+    auto slot = this->weaponComponent->getSlot();
 
-	if (update.fire) 
+    if (
+        update.input.fire &&
+        update.input.triggers.contains(slot) &&
+        update.input.triggers.at(slot)
+    )
 	{
 		this->weaponComponent->Fire(this->sprite->getPosition(), update.bulletConfig);
 	}

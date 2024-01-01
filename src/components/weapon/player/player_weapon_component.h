@@ -13,6 +13,8 @@ public:
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
+    [[ nodiscard ]] WeaponSlot getSlot() const override;
+
 private:
 	std::shared_ptr<IWeaponComponent> weaponComponent;
 

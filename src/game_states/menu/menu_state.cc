@@ -25,7 +25,7 @@ void MenuState::TearDown()
 	std::cout << "menu tearing down" << std::endl;
 }
 
-void MenuState::Update(float dt) 
+void MenuState::Update(float dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 	{

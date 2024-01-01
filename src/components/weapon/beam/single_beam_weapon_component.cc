@@ -7,10 +7,21 @@
 #include "bullet/bullet.h"
 #include "bullet/types/beam.h"
 
-SingleBeamWeaponComponent::SingleBeamWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float duration, float coolDown)
-	: bulletSystem(bulletSystem), factory(factory), duration(duration), coolDown(coolDown), accumulator(0.0f), beam(nullptr)
-{
-}
+SingleBeamWeaponComponent::SingleBeamWeaponComponent(
+    std::shared_ptr<IBulletSystem> bulletSystem,
+    std::shared_ptr<IBulletFactory> factory,
+    WeaponSlot slot,
+    float duration,
+    float coolDown
+)
+	: IWeaponComponent(slot),
+    bulletSystem(bulletSystem),
+    factory(factory),
+    duration(duration),
+    coolDown(coolDown),
+    accumulator(0.0f),
+    beam(nullptr)
+{}
 
 void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {

@@ -67,10 +67,10 @@ void Player::Update(const CollisionQuadTree& quadTree, Input& in, float dt)
 	auto glowieConfig = this->bulletConfigs.at(PlayerObjects::GLOWIE);
 
 	Entity::Update({
-		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in.fire, false) },
-		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in.fire) },
-		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in.fire) },
-		{ PlayerObjects::GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in.fire) }
+		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in, false) },
+		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in) },
+		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in) },
+		{ PlayerObjects::GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in) }
 	}, dt);
 
 	this->attributeComponent->Update(dt);

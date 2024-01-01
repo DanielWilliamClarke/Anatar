@@ -6,11 +6,12 @@
 class InertWeaponComponent : public IWeaponComponent
 {
 public:
-	InertWeaponComponent() = default;
+    InertWeaponComponent()
+        : IWeaponComponent(WeaponSlot::NONE)
+    {};
 	~InertWeaponComponent() override = default;
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override {};
-private:
 };
 
 #endif

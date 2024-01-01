@@ -6,14 +6,23 @@
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
 
-BurstShotWeaponComponent::BurstShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float numBullets, float delay, float arcAngle, float offsetAngle)
-	: bulletSystem(bulletSystem),
-	factory(factory),
-	arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
-	offsetAngle(AngleConversion::ToRadians(offsetAngle)),
-	delay(delay),
-	numBullets(numBullets),
-	accumulator(0.0f)
+BurstShotWeaponComponent::BurstShotWeaponComponent(
+    std::shared_ptr<IBulletSystem> bulletSystem,
+    std::shared_ptr<IBulletFactory> factory,
+    WeaponSlot slot,
+    float numBullets,
+    float delay,
+    float arcAngle,
+    float offsetAngle
+)
+	:  IWeaponComponent(slot),
+      bulletSystem(bulletSystem),
+      factory(factory),
+      arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
+      offsetAngle(AngleConversion::ToRadians(offsetAngle)),
+      delay(delay),
+      numBullets(numBullets),
+      accumulator(0.0f)
 {}
 
 void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)

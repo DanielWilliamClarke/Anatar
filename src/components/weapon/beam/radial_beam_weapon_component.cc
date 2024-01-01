@@ -7,16 +7,24 @@
 #include "bullet/bullet.h"
 #include "bullet/types/beam.h"
 
-RadialBeamWeaponComponent::RadialBeamWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float duration, float coolDown, float arcAngle, float numBeams)
-	: bulletSystem(bulletSystem),
-	factory(factory),
-	arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
-	duration(duration),
-	coolDown(coolDown),
-	numBeams(numBeams),
-	accumulator(0.0f)
-{
-}
+RadialBeamWeaponComponent::RadialBeamWeaponComponent(
+    std::shared_ptr<IBulletSystem> bulletSystem,
+    std::shared_ptr<IBulletFactory> factory,
+    WeaponSlot slot,
+    float duration,
+    float coolDown,
+    float arcAngle,
+    float numBeams
+)
+    : IWeaponComponent(slot),
+      bulletSystem(bulletSystem),
+      factory(factory),
+      arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
+      duration(duration),
+      coolDown(coolDown),
+      numBeams(numBeams),
+      accumulator(0.0f)
+{}
 
 void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {

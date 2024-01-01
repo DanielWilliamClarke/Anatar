@@ -6,8 +6,14 @@
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
 
-RandomShotWeaponComponent::RandomShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, std::shared_ptr<IRandomNumberSource<int>> randSource, float numBullets)
-	: bulletSystem(bulletSystem), factory(factory), randSource(randSource), numBullets(numBullets)
+RandomShotWeaponComponent::RandomShotWeaponComponent(
+    std::shared_ptr<IBulletSystem> bulletSystem,
+    std::shared_ptr<IBulletFactory> factory,
+    std::shared_ptr<IRandomNumberSource<int>> randSource,
+    WeaponSlot slot,
+    float numBullets
+)
+	: IWeaponComponent(slot), bulletSystem(bulletSystem), factory(factory), randSource(randSource), numBullets(numBullets)
 {}
 
 void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)

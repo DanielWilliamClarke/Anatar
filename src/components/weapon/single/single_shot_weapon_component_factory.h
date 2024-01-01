@@ -15,8 +15,8 @@ public:
 
 	~SingleShotWeaponComponentFactory() override = default;
 
-    std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>& bulletSystem, float delay) const override {
-		return std::make_shared<SingleShotWeaponComponent>(bulletSystem, factory, delay);
+    [[nodiscard]] std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>& bulletSystem, WeaponSlot slot, float delay) const override {
+		return std::make_shared<SingleShotWeaponComponent>(bulletSystem, factory, slot, delay);
 	};
 private:
 	std::shared_ptr<IBulletFactory> factory;

@@ -4,8 +4,13 @@
 #include "bullet/i_bullet_system.h"
 #include "bullet/bullet.h"
 
-SingleShotWeaponComponent::SingleShotWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float delay)
-	: bulletSystem(bulletSystem), factory(factory), delay(delay), accumulator(0.0f)
+SingleShotWeaponComponent::SingleShotWeaponComponent(
+    std::shared_ptr<IBulletSystem> bulletSystem,
+    std::shared_ptr<IBulletFactory> factory,
+    WeaponSlot slot,
+    float delay
+)
+	: IWeaponComponent(slot), bulletSystem(bulletSystem), factory(factory), delay(delay), accumulator(0.0f)
 {}
 
 void SingleShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)

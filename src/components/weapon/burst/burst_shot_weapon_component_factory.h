@@ -19,8 +19,8 @@ public:
 
 	~BurstShotWeaponComponentFactory() override = default;
 
-    [[nodiscard]] std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>&  bulletSystem, float delay) const override {
-		return std::make_shared<BurstShotWeaponComponent>(bulletSystem, factory, numBullets, delay, arcAngle, offsetAngle);
+    [[nodiscard]] std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>&  bulletSystem, WeaponSlot slot, float delay) const override {
+		return std::make_shared<BurstShotWeaponComponent>(bulletSystem, factory, slot, numBullets, delay, arcAngle, offsetAngle);
 	};
 
 private:

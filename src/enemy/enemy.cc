@@ -12,6 +12,7 @@
 
 #include "bullet/collision.h"
 #include "bullet/bullet.h"
+#include "player/player_input.h"
 
 Enemy::Enemy(
 	std::unordered_map<EnemyObjects, std::shared_ptr<EntityObject>> objects,
@@ -46,6 +47,10 @@ void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 		this->InitBullets();
 	}
 
+    Input input;
+    input.fire = true;
+    input.triggers.insert({WeaponSlot::ONE, true});
+
 	const auto position = this->globalMovementComponent->Integrate(dt);
 	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
 	auto extent = sf::Vector2f(position.x + bounds.width, position.y + bounds.height);
@@ -55,7 +60,7 @@ void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 
 	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
 	Entity::Update({
-		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config) },
+		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config, input) },
 	}, dt);
 }
 

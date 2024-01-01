@@ -14,7 +14,15 @@ class Beam;
 class RadialBeamWeaponComponent : public IWeaponComponent
 {
 public:
-	RadialBeamWeaponComponent(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IBulletFactory> factory, float duration, float coolDown, float arcAngle, float numBeams);
+	RadialBeamWeaponComponent(
+        std::shared_ptr<IBulletSystem> bulletSystem,
+        std::shared_ptr<IBulletFactory> factory,
+        WeaponSlot slot,
+        float duration,
+        float coolDown,
+        float arcAngle,
+        float numBeams
+    );
 	~RadialBeamWeaponComponent() override = default;
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override;

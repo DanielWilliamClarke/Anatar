@@ -91,7 +91,7 @@ EntityManifest<EnemyObjects> EnemyTypeFactory::BuildEnemy(EnemyConfig config, st
 		spriteFrameSize.x,
 		spriteFrameSize.y);
 
-	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, config.weaponConfig.delay);
+	auto weaponComponent = config.weaponConfig.weaponComponentFactory->Construct(config.weaponConfig.bulletSystem, WeaponSlot::ONE, config.weaponConfig.delay);
 
 	return EntityManifest<EnemyObjects>{
 		{

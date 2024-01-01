@@ -1,8 +1,13 @@
 #include "player_weapon_component.h"
 
 PlayerWeaponComponent::PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent)
-	: weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
+	: IWeaponComponent(WeaponSlot::NONE), weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
 {}
+
+WeaponSlot PlayerWeaponComponent::getSlot() const
+{
+    return this->weaponComponent->getSlot();
+}
 
 void PlayerWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {
