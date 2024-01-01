@@ -67,11 +67,21 @@ void Enemy::Draw(const std::shared_ptr<IRenderer>& renderer, float interp) const
 
 void Enemy::InitBullets()
 {
+    auto bulletMediators = BulletMediators()
+        .SetBulletResolver([=](bool kill, float damage) {})
+        .SetPositionSampler([this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); })
+        .SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); });
+
 	this->bulletConfigs[EnemyObjects::ENEMY] = std::make_shared<BulletConfig>(
-		BulletMediators()
-			.SetBulletResolver([=](bool kill, float damage) {})
-			.SetPositionSampler([this]() -> sf::Vector2f { return this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getPosition(); })
-			.SetShapeBuilder([=](void) -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 3); }),
+        bulletMediators,
 		this->GetTag(),
-		sf::Color::Red, 150.0f, 10.0f, 350.0f, AFFINITY::LEFT, false, 1.0f, 3.0f);
+		sf::Color::Red,
+        150.0f,
+        10.0f,
+        350.0f,
+        AFFINITY::LEFT,
+        false,
+        1.0f,
+        3.0f
+    );
 }
