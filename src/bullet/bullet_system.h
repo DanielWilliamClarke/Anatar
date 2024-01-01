@@ -26,7 +26,6 @@ public:
 	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
 
 private:
-
 	void AddBullet(const std::shared_ptr<Bullet>& bullet);
 	void EraseBullets();
 	static void ResolveCollisions(const std::vector<std::shared_ptr<Collision>>& collisions) ;

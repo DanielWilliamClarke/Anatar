@@ -1,5 +1,7 @@
 #include "homing_projectile.h"
 
+#include <range/v3/algorithm.hpp>
+
 #include "util/math_utils.h"
 
 #include "renderer/i_renderer.h"
@@ -32,18 +34,22 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const
 		this->position.x - (distance / 2),
 		this->position.y - (distance / 2),
 		distance,
-		distance);
+		distance
+    );
 	auto query = RectangleQuery(this->zone);
 
 	std::vector<std::shared_ptr<Collision>> collisions;
-	quadTree->Query(&query, collisions,
+	quadTree->Query(
+        &query,
+        collisions,
 		[this](const auto& point) -> std::shared_ptr<Collision> {
 			if (point->tag != this->GetTag() && point->payload->zoneTest(this->zone))
 			{
 				return std::make_shared<Collision>(this->shared_from_this(), point);
 			}
 			return nullptr;
-		});
+		}
+    );
 
 	this->line = {};
 	std::vector<std::shared_ptr<Collision>> fineTuned;
@@ -68,12 +74,14 @@ std::vector<std::shared_ptr<Collision>> HomingProjectile::DetectCollisions(const
 		if (!this->spent)
 		{
 			// find closest
-			std::sort(collisions.begin(), collisions.end(),
+			ranges::sort(
+                collisions,
 				[this](const auto& a, const auto& b) -> bool {
 					auto aDist = Dimensions::ManhattanDistance(this->position, a->target->position);
 					auto bDist = Dimensions::ManhattanDistance(this->position, b->target->position);
 					return aDist < bDist;
-				});
+				}
+            );
 
 			// Potential modes identified
 			// Evadable

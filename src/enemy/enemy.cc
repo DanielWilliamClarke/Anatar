@@ -1,18 +1,13 @@
-#define _USE_MATH_DEFINES
-#include <cmath>
-
-#include "enemy.h"
+ #include "enemy.h"
 
 #include "entity/entity_object.h"
 #include "quad_tree/quad_tree.h"
-#include "util/i_ray_caster.h"
 
 #include "components/movement/i_global_movement_component.h"
 #include "components/collision_detection/i_collision_detection_component.h"
 
 #include "bullet/collision.h"
 #include "bullet/bullet.h"
-#include "player/player_input.h"
 
 Enemy::Enemy(
 	std::unordered_map<EnemyObjects, std::shared_ptr<EntityObject>> objects,
@@ -24,7 +19,10 @@ Enemy::Enemy(
 	: Entity<EnemyObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "enemy" }
 {
 	this->GetObject(EnemyObjects::ENEMY)->GetSprite()->setPosition(initialPosition);
-	this->globalMovementComponent->SetEntityAttributes(initialPosition, this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds());
+	this->globalMovementComponent->SetEntityAttributes(
+        initialPosition,
+        this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getGlobalBounds()
+    );
 
 	this->mediators = std::make_shared<CollisionMediators>(
 		CollisionMediators()
@@ -37,7 +35,8 @@ Enemy::Enemy(
 			})
 			.SetZoneTest([this](sf::FloatRect& area) -> bool {
 				return this->collisionDetectionComponent->DetectIntersection(area, this->GetObject(EnemyObjects::ENEMY)->GetHitbox());
-			}));
+			})
+    );
 }
 
 void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
@@ -47,9 +46,10 @@ void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 		this->InitBullets();
 	}
 
-    Input input;
-    input.fire = true;
-    input.triggers.insert({WeaponSlot::ONE, true});
+    WeaponStateConfig weaponState {
+        {{WeaponSlot::ONE, true}},
+        true,
+    };
 
 	const auto position = this->globalMovementComponent->Integrate(dt);
 	auto bounds = this->GetObject(EnemyObjects::ENEMY)->GetSprite()->getLocalBounds();
@@ -60,7 +60,7 @@ void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 
 	auto config = this->bulletConfigs.at(EnemyObjects::ENEMY);
 	Entity::Update({
-		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config, input) },
+		{ EnemyObjects::ENEMY, EntityUpdate(position, IDLE, *config, weaponState) },
 	}, dt);
 }
 

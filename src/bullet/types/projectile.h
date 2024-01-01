@@ -21,7 +21,7 @@ public:
 
 	void Update(float dt, float worldSpeed) override;
 	void Draw(const std::shared_ptr<IRenderer>& renderer, float interp) override;
-	virtual std::vector<std::shared_ptr<Collision>> DetectCollisions(const CollisionQuadTree& quadTree) override;
+	std::vector<std::shared_ptr<Collision>> DetectCollisions(const CollisionQuadTree& quadTree) override;
 
 protected:
 	std::shared_ptr<sf::Shape> round; // Holds the bullet shape / position etc

@@ -37,7 +37,8 @@ void Projectile::Update(float dt, float worldSpeed)
 			this->round->setFillColor(sf::Color(
 				(sf::Uint8)((sf::Color::Transparent.r - config.color.r) * localPercentage + config.color.r),
 				(sf::Uint8)((sf::Color::Transparent.g - config.color.g) * localPercentage + config.color.g),
-				(sf::Uint8)((sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b)));
+				(sf::Uint8)((sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b))
+            );
 		}
 
 		if (this->accumulator >= config.lifeTime)
@@ -65,17 +66,21 @@ std::vector<std::shared_ptr<Collision>> Projectile::DetectCollisions(const Colli
 	std::vector<std::shared_ptr<Collision>> collisions;
 	auto query = RectangleQuery(this->round->getGlobalBounds());
 
-	quadTree->Query(&query, collisions,
+	quadTree->Query(
+        &query,
+        collisions,
 		[this](std::shared_ptr<Point<CollisionMediators>> point) -> std::shared_ptr<Collision> {
 			if (point->tag != this->GetTag())
 			{
 				auto collision = point->payload->pointTest(this->position, this->velocity, false);
-				if (collision) {
+				if (collision)
+                {
 					return std::make_shared<Collision>(this->shared_from_this(), point, *collision);
 				}
 			}
 			return nullptr;
-		});
+		}
+    );
 
 	if (collisions.size() && !config.penetrating)
 	{

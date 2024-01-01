@@ -36,7 +36,8 @@ void Game::InitWindow()
 		//sf::VideoMode::getFullscreenModes()[0],
 		"Space Shooter",
 		sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close,
-		settings);
+		settings
+    );
 
 	auto view = this->window->getView();
 	auto viewCenter = view.getCenter();
@@ -45,7 +46,8 @@ void Game::InitWindow()
 		viewCenter.x - viewSize.x / 2, // left
 		viewCenter.y - viewSize.y / 2, // top
 		viewSize.x,
-		viewSize.y);
+		viewSize.y
+    );
 
 	auto glowRenderer = std::make_shared<GlowShaderRenderer>(viewSize);
 	this->renderer = std::make_shared<CompositeRenderer>(glowRenderer, viewSize);
@@ -76,7 +78,8 @@ void Game::InitGameStates()
 {
 	auto menuState = std::make_shared<MenuState>();
 	auto playState = std::make_shared<PlayState>(
-		std::make_unique<PlayStateBuilder>(this->bounds, this->textureAtlas));
+		std::make_unique<PlayStateBuilder>(this->bounds, this->textureAtlas)
+    );
 
 	menuState->AddTransition(GameStates::PLAY, playState);
 	playState->AddTransition(GameStates::MENU, menuState);

@@ -26,10 +26,10 @@ Input PlayerInput::SampleInput()
         this->input.movement.x = 1;
 	}
 
-    this->input.fire = false;
+    this->input.weaponState.fire = false;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        this->input.fire = true;
+        this->input.weaponState.fire = true;
     }
 
     // process triggers
@@ -62,12 +62,12 @@ void PlayerInput::processTrigger (sf::Keyboard::Key key, WeaponSlot slot)
     if (previousKeyState && !newKeyState)
     {
         // key has been released
-        if (!this->input.triggers.contains(slot))
+        if (!this->input.weaponState.triggers.contains(slot))
         {
-            this->input.triggers.insert({slot, false});
+            this->input.weaponState.triggers.insert({slot, false});
         }
 
-        this->input.triggers[slot] = !this->input.triggers[slot];
+        this->input.weaponState.triggers[slot] = !this->input.weaponState.triggers[slot];
     }
 
     // set new key state

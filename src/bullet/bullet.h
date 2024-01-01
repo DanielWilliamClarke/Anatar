@@ -118,4 +118,4 @@ protected:
 	float maxFadeout;
 };
 
-#endif // BULLET_H
+#endif

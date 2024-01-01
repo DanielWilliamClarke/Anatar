@@ -38,9 +38,10 @@ struct Collision {
 	Collision(
 		std::shared_ptr<Bullet> bullet,
 		std::shared_ptr<Point<CollisionMediators>> target,
-		sf::Vector2f collisionPosition = sf::Vector2f())
+		sf::Vector2f collisionPosition = sf::Vector2f()
+    )
 		: bullet(bullet), target(target), collisionPosition(collisionPosition)
 	{}
 };
 
-#endif // BULLET_H
+#endif

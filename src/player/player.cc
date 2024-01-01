@@ -23,8 +23,11 @@ Player::Player(
 	std::unordered_map<PlayerObjects, std::shared_ptr<EntityObject>> objects,
 	std::shared_ptr<IPlayerMovementComponent> globalMovementComponent,
 	std::shared_ptr<IPlayerAttributeComponent> attributeComponent,
-	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent)
-	: Entity<PlayerObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" }, movementComponent(globalMovementComponent), attributeComponent(attributeComponent)
+	std::shared_ptr<ICollisionDetectionComponent> collisionDetectionComponent
+)
+	: Entity<PlayerObjects>{ objects, globalMovementComponent, attributeComponent, collisionDetectionComponent, "player" },
+        movementComponent(globalMovementComponent),
+        attributeComponent(attributeComponent)
 {
 	auto shipSprite = this->GetObject(PlayerObjects::SHIP)->GetSprite();
 	shipSprite->setPosition(this->movementComponent->GetCenter());
@@ -67,10 +70,10 @@ void Player::Update(const CollisionQuadTree& quadTree, Input& in, float dt)
 	auto glowieConfig = this->bulletConfigs.at(PlayerObjects::GLOWIE);
 
 	Entity::Update({
-		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in, false) },
-		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in) },
-		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in) },
-		{ PlayerObjects::GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in) }
+		{ PlayerObjects::SHIP, EntityUpdate(position, direction, *shipConfig, in.weaponState, false) },
+		{ PlayerObjects::EXHAUST,  EntityUpdate(position, IDLE, *shipConfig, in.weaponState) },
+		{ PlayerObjects::TURRET,  EntityUpdate(position, IDLE, *turrentConfig, in.weaponState) },
+		{ PlayerObjects::GLOWIE,  EntityUpdate(position, IDLE, *glowieConfig, in.weaponState) }
 	}, dt);
 
 	this->attributeComponent->Update(dt);
@@ -123,7 +126,9 @@ void Player::InitBullets()
 		});
 
 	this->bulletConfigs[PlayerObjects::SHIP] = std::make_shared<BulletConfig>(
-        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f)); }),
+        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> {
+            return std::make_shared<sf::RectangleShape>(sf::Vector2f(20.0f, 4.0f));
+        }),
         this->GetTag(),
         sf::Color::Cyan,
         60.0f,
@@ -136,7 +141,9 @@ void Player::InitBullets()
     );
 
 	this->bulletConfigs[PlayerObjects::TURRET] = std::make_shared<BulletConfig>(
-        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(4.0f, 4); }),
+        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> {
+            return std::make_shared<sf::CircleShape>(4.0f, 4);
+        }),
         this->GetTag(),
         sf::Color::Yellow,
         90.0f,
@@ -148,7 +155,9 @@ void Player::InitBullets()
     );
 
 	this->bulletConfigs[PlayerObjects::GLOWIE] = std::make_shared<BulletConfig>(
-        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> { return std::make_shared<sf::CircleShape>(5.0f, 5); }),
+        bulletMediators.SetShapeBuilder([=]() -> std::shared_ptr<sf::Shape> {
+            return std::make_shared<sf::CircleShape>(5.0f, 5);
+        }),
         this->GetTag(),
         sf::Color::Green,
         75.0f,

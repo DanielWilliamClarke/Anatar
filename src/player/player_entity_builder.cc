@@ -139,7 +139,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildTurret(std::shared_ptr<s
 	auto movementComponent = std::make_shared<OffSetMovementComponent>(offset);
 
 	auto projectileFactory = std::make_shared<HomingProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::TWO, 2.0f, 0.0f, 10.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::TWO, 1.0f, 0.0f, 0.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);
@@ -173,7 +173,7 @@ std::shared_ptr<EntityObject> PlayerEntityBuilder::BuildGlowie(std::shared_ptr<s
 	auto movementComponent = std::make_shared<OrbitalMovementComponent>(shipSprite->getOrigin(), 75.0f, -100.0f);
 
 	auto projectileFactory = std::make_shared<ProjectileFactory>();
-	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::THREE, 15.0f, 10.0f, 90.0f);
+	auto weaponComponent = std::make_shared<BurstShotWeaponComponent>(bulletSystem, projectileFactory, WeaponSlot::THREE, 25.0f, 5.0f, 360.0f);
 	auto playerWeaponComponent = std::make_shared<PlayerWeaponComponent>(weaponComponent);
 
 	return  std::make_shared<EntityObject>(animationComponent, hitboxComponent, movementComponent, playerWeaponComponent, sprite);

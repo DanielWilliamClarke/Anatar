@@ -6,9 +6,6 @@
 
 #include "i_bullet_factory.h"
 
-#include "components/weapon/i_weapon_component.h"
-#include "components/hitbox/i_hitbox_component.h"
-
 #include "quad_tree/quad_tree.h"
 #include "util/container_utils.h"
 #include "util/i_threaded_workload.h"

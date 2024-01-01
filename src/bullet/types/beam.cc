@@ -58,7 +58,8 @@ void Beam::Update(float dt, float worldSpeed)
 			this->round->setFillColor(sf::Color(
 				(sf::Uint8)((sf::Color::Transparent.r - config.color.r) * localPercentage + config.color.r),
 				(sf::Uint8)((sf::Color::Transparent.g - config.color.g) * localPercentage + config.color.g),
-				(sf::Uint8)((sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b)));
+				(sf::Uint8)((sf::Color::Transparent.b - config.color.b) * localPercentage + config.color.b))
+            );
 		}
 
 		if (this->accumulator >= config.lifeTime)

@@ -33,9 +33,9 @@ void EntityObject::Update(EntityUpdate update, float dt) const
     auto slot = this->weaponComponent->getSlot();
 
     if (
-        update.input.fire &&
-        update.input.triggers.contains(slot) &&
-        update.input.triggers.at(slot)
+        update.weaponState.fire &&
+        update.weaponState.triggers.contains(slot) &&
+        update.weaponState.triggers.at(slot)
     )
 	{
 		this->weaponComponent->Fire(this->sprite->getPosition(), update.bulletConfig);

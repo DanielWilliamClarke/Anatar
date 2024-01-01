@@ -6,7 +6,6 @@
 #include "quad_tree/quad_tree.h"
 #include "enemy.h"
 #include "i_enemy_type_factory.h"
-#include "entity/entity_object.h"
 #include "entity/entity.h"
 #include "bullet/collision.h"
 
@@ -29,22 +28,18 @@ void EnemySystem::Update(const CollisionQuadTree& quadTree, float dt)
 		}
 	}
 
-	if (this->accumulator >= this->maxInterval) {
+	if (this->accumulator >= this->maxInterval)
+    {
 		this->accumulator -= this->maxInterval;
 	}
 
 	// Remove enemies
-
-	enemies.erase(
-		std::remove_if(
-			enemies.begin(), enemies.end(),
-			[=](std::shared_ptr<Entity<EnemyObjects>> e) -> bool {
-				auto enemySprite = e->GetObject(EnemyObjects::ENEMY)->GetSprite();
-				auto enemyBounds = enemySprite->getGlobalBounds();
-				auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
-				return enemyX <= 0 || e->HasDied();
-			}),
-		enemies.end());
+    std::erase_if(enemies, [=](const std::shared_ptr<Entity<EnemyObjects>>& e) -> bool {
+        auto enemySprite = e->GetObject(EnemyObjects::ENEMY)->GetSprite();
+        auto enemyBounds = enemySprite->getGlobalBounds();
+        auto enemyX = enemySprite->getPosition().x + enemyBounds.width;
+        return enemyX <= 0 || e->HasDied();
+    });
 
 	// Update all remaining enemies
 	for (auto& e : enemies)
