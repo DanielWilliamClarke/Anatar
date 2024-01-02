@@ -47,7 +47,7 @@ std::shared_ptr<IWeaponComponent> PlayStateBuilder::BuildDebrisSystem(std::share
 	auto factory = std::make_shared<DebrisFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, randGenerator, WeaponSlot::ONE, 5.0f);
+	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, nullptr, randGenerator, WeaponSlot::ONE, 5.0f);
 }
 
 std::shared_ptr<IPlayerHud> PlayStateBuilder::BuildPlayerHud() const
@@ -60,9 +60,14 @@ std::shared_ptr<PlayerInput> PlayStateBuilder::BuildPlayerInput() const
 	return std::make_shared<PlayerInput>();
 }
 
-std::shared_ptr<Player> PlayStateBuilder::BuildPlayer(std::shared_ptr<IBulletSystem> bulletSystem, std::shared_ptr<IWeaponComponent> debrisGenerator, std::shared_ptr<IPlayerHud> hud, float worldSpeed) const {
-
-	auto playerBuilder = std::make_shared<PlayerEntityBuilder>(this->textureAtlas, bulletSystem, this->bounds);
+std::shared_ptr<Player> PlayStateBuilder::BuildPlayer(
+        std::shared_ptr<IBulletSystem> bulletSystem,
+        std::shared_ptr<IWeaponComponent> debrisGenerator,
+        std::shared_ptr<IPlayerHud> hud,
+        float worldSpeed
+) const
+{
+	auto playerBuilder = std::make_shared<PlayerEntityBuilder>(this->textureAtlas, bulletSystem, hud, this->bounds);
 	auto movementComponent = std::make_shared<PlayerMovementComponent>(this->bounds, worldSpeed);
 
 	auto healthDamageColor = sf::Color(248, 99, 0, 255);

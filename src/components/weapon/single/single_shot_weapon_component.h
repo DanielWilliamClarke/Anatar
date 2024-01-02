@@ -15,14 +15,15 @@ public:
 	SingleShotWeaponComponent(
         std::shared_ptr<IBulletSystem> bulletSystem,
         std::shared_ptr<IBulletFactory> factory,
+        std::shared_ptr<IPlayerHud> hud,
         WeaponSlot slot,
         float delay
     );
 
 	~SingleShotWeaponComponent() override = default;
 
+    [[nodiscard]] WeaponState getWeaponState() const override;
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
-
 private:
 	std::shared_ptr<IBulletSystem> bulletSystem;
 	std::shared_ptr<IBulletFactory> factory;
@@ -31,4 +32,4 @@ private:
 	float delay;
 };
 
-#endif //SINGLE_SHOT_WEAPON_COMPONENT_H
+#endif

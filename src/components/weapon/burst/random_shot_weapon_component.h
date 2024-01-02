@@ -16,6 +16,7 @@ public:
 	RandomShotWeaponComponent(
         std::shared_ptr<IBulletSystem> bulletSystem,
         std::shared_ptr<IBulletFactory> factory,
+        std::shared_ptr<IPlayerHud> hud,
         std::shared_ptr<IRandomNumberSource<int>> randSource,
         WeaponSlot slot,
         float numBullets
@@ -23,6 +24,7 @@ public:
 
 	~RandomShotWeaponComponent() override = default;
 
+    [[nodiscard]] WeaponState getWeaponState() const override;
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:

@@ -33,7 +33,7 @@ Input PlayerInput::SampleInput()
     }
 
     // process triggers
-    this->processTrigger(sf::Keyboard::Num1, WeaponSlot::ONE);
+    this->processTrigger(sf::Keyboard::Num1, WeaponSlot::ONE, true);
     this->processTrigger(sf::Keyboard::Num2, WeaponSlot::TWO);
     this->processTrigger(sf::Keyboard::Num3, WeaponSlot::THREE);
     this->processTrigger(sf::Keyboard::Num4, WeaponSlot::FOUR);
@@ -48,12 +48,12 @@ Input PlayerInput::SampleInput()
 	return this->input;
 }
 
-void PlayerInput::processTrigger (sf::Keyboard::Key key, WeaponSlot slot)
+void PlayerInput::processTrigger (sf::Keyboard::Key key, WeaponSlot slot, bool defaultState)
 {
     // check if key is pressed
     if(!this->pressed.contains(key))
     {
-        this->pressed.insert({key, false});
+        this->pressed.insert({key, defaultState});
     }
 
     // we detect a release event state: t1: on -> t2: off

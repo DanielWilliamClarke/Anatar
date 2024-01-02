@@ -3,18 +3,19 @@
 #include "util/math_utils.h"
 
 #include "bullet/i_bullet_system.h"
-#include "bullet/i_bullet_system.h"
 #include "bullet/bullet.h"
 #include "bullet/types/beam.h"
+#include "ui/i_player_hud.h"
 
 SingleBeamWeaponComponent::SingleBeamWeaponComponent(
     std::shared_ptr<IBulletSystem> bulletSystem,
     std::shared_ptr<IBulletFactory> factory,
+    std::shared_ptr<IPlayerHud> hud,
     WeaponSlot slot,
     float duration,
     float coolDown
 )
-	: IWeaponComponent(slot),
+	: IWeaponComponent(hud, slot),
     bulletSystem(bulletSystem),
     factory(factory),
     duration(duration),
@@ -31,7 +32,8 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		sf::Vector2f velocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
 		auto traj = BulletTrajectory(position, velocity, config.speed);
 		beam = std::dynamic_pointer_cast<Beam>(
-			this->bulletSystem->FireBullet(factory, traj, config));
+			this->bulletSystem->FireBullet(factory, traj, config)
+        );
 	}
 
 	this->accumulator += this->clock.restart().asSeconds();
@@ -51,4 +53,14 @@ void SingleBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 void SingleBeamWeaponComponent::Cease()
 {
 	beam->Cease();
+}
+
+WeaponState SingleBeamWeaponComponent::getWeaponState() const
+{
+    return {
+        "Beam",
+        this->duration + this->coolDown,
+        this->accumulator,
+        true
+    };
 }

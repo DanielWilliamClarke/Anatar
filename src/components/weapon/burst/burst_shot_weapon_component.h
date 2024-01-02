@@ -16,6 +16,7 @@ public:
 	BurstShotWeaponComponent(
         std::shared_ptr<IBulletSystem> bulletSystem,
         std::shared_ptr<IBulletFactory> factory,
+        std::shared_ptr<IPlayerHud> hud,
         WeaponSlot slot,
         float numBullets,
         float delay,
@@ -24,6 +25,7 @@ public:
     );
 	~BurstShotWeaponComponent() override = default;
 
+    [[nodiscard]] WeaponState getWeaponState() const override;
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:

@@ -5,17 +5,19 @@
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
+#include "ui/i_player_hud.h"
 
 BurstShotWeaponComponent::BurstShotWeaponComponent(
     std::shared_ptr<IBulletSystem> bulletSystem,
     std::shared_ptr<IBulletFactory> factory,
+    std::shared_ptr<IPlayerHud> hud,
     WeaponSlot slot,
     float numBullets,
     float delay,
     float arcAngle,
     float offsetAngle
 )
-	:  IWeaponComponent(slot),
+	:  IWeaponComponent(hud, slot),
       bulletSystem(bulletSystem),
       factory(factory),
       arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
@@ -48,4 +50,14 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 			theta += angleBetween;
 		}
 	}
+}
+
+WeaponState BurstShotWeaponComponent::getWeaponState() const
+{
+    return {
+        "BurstShot",
+        this->delay,
+        this->accumulator,
+        true,
+    };
 }

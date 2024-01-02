@@ -14,6 +14,7 @@ public:
 
 	[[nodiscard]] virtual std::shared_ptr<IWeaponComponent> Construct(
         const std::shared_ptr<IBulletSystem>& bulletSystem,
+        const std::shared_ptr<IPlayerHud>& hud,
         WeaponSlot slot,
         float delay
     ) const = 0;

@@ -7,24 +7,18 @@
 struct BulletConfig;
 struct Input;
 
-struct WeaponStateConfig
-{
-    std::unordered_map<WeaponSlot, bool> triggers{};
-    bool fire;
-};
-
 struct EntityUpdate 
 {
 	sf::Vector2f position;
 	int direction;
 	bool loop;
-    WeaponStateConfig& weaponState;
+    WeaponTriggerState& weaponState;
 	BulletConfig& bulletConfig;
 
 	EntityUpdate(sf::Vector2f position,
 		int direction,
 		BulletConfig& bulletConfig,
-        WeaponStateConfig& weaponState,
+        WeaponTriggerState& weaponState,
 		bool loop = true
     )
 		: position(position), direction(direction), bulletConfig(bulletConfig), weaponState(weaponState), loop(loop)

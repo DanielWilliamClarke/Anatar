@@ -10,7 +10,7 @@ struct Input
 {
 	sf::Vector2f movement;
 	bool falling{};
-    WeaponStateConfig weaponState;
+    WeaponTriggerState weaponState;
 };
 
 class PlayerInput
@@ -21,7 +21,7 @@ public:
 	[[nodiscard]] Input SampleInput();
 
 private:
-    void processTrigger (sf::Keyboard::Key key, WeaponSlot slot);
+    void processTrigger (sf::Keyboard::Key key, WeaponSlot slot, bool defaultState = false);
 
 private:
     std::unordered_map<sf::Keyboard::Key, bool> pressed;

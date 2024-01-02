@@ -8,12 +8,16 @@
 class PlayerWeaponComponent : public IWeaponComponent
 {
 public:
-	explicit PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent);
+	explicit PlayerWeaponComponent(
+        std::shared_ptr<IWeaponComponent> weaponComponent,
+        std::shared_ptr<IPlayerHud> hud
+    );
 	~PlayerWeaponComponent() override = default;
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
     [[ nodiscard ]] WeaponSlot getSlot() const override;
+    [[nodiscard]] WeaponState getWeaponState() const override;
 
 private:
 	std::shared_ptr<IWeaponComponent> weaponComponent;
@@ -22,6 +26,7 @@ private:
 	float gunTemp;
 	float gunReload;
 	float gunReloadTime;
+    bool canFire;
 };
 
 #endif //PLAYER_WEAPON_COMPONENT_H

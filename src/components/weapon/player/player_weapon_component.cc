@@ -1,7 +1,12 @@
 #include "player_weapon_component.h"
 
-PlayerWeaponComponent::PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent)
-	: IWeaponComponent(WeaponSlot::NONE), weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
+#include "ui/i_player_hud.h"
+
+PlayerWeaponComponent::PlayerWeaponComponent(
+    std::shared_ptr<IWeaponComponent> weaponComponent,
+    std::shared_ptr<IPlayerHud> hud
+)
+	: IWeaponComponent(hud, WeaponSlot::NONE), weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
 {}
 
 WeaponSlot PlayerWeaponComponent::getSlot() const
@@ -13,11 +18,11 @@ void PlayerWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 {
 	auto elapsedTime = this->clockFire.restart().asSeconds();
 
-	bool canFire = false;
+	this->canFire = false;
 	gunReloadTime -= elapsedTime;
 	if (gunReloadTime <= 0.0f)
 	{
-		canFire = true;
+		this->canFire = true;
 	}
 
 	gunTemp -= elapsedTime * 10.0f;
@@ -37,4 +42,14 @@ void PlayerWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 
 		weaponComponent->Fire(position, config);
 	}
+}
+
+WeaponState PlayerWeaponComponent::getWeaponState() const
+{
+    return {
+        this->weaponComponent->getWeaponState().type,
+        100.0f,
+        this->gunTemp,
+        this->canFire,
+    };
 }

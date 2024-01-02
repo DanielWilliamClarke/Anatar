@@ -41,6 +41,7 @@ void EntityObject::Update(EntityUpdate update, float dt) const
 		this->weaponComponent->Fire(this->sprite->getPosition(), update.bulletConfig);
 	}
 
+    this->weaponComponent->Update(update.weaponState);
 	this->animationComponent->Play(update.direction, update.loop);
 	this->hitboxComponent->Update(this->sprite->getPosition());
 }

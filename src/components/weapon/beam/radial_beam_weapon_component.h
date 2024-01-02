@@ -17,6 +17,7 @@ public:
 	RadialBeamWeaponComponent(
         std::shared_ptr<IBulletSystem> bulletSystem,
         std::shared_ptr<IBulletFactory> factory,
+        std::shared_ptr<IPlayerHud> hud,
         WeaponSlot slot,
         float duration,
         float coolDown,
@@ -25,6 +26,7 @@ public:
     );
 	~RadialBeamWeaponComponent() override = default;
 
+    [[nodiscard]] WeaponState getWeaponState() const override;
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 	void Cease() override;
 

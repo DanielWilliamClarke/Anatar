@@ -37,7 +37,6 @@ public:
 	void Update(float dt) override;
 	void RegisterKill(float score) override;
 private:
-
 	std::shared_ptr<IPlayerHud> hud;
 	std::shared_ptr<DamageEffects> damageEffects;
 

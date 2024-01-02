@@ -6,6 +6,7 @@
 #include "ui/i_player_hud.h"
 #include "components/weapon/i_weapon_component.h"
 #include "bullet/bullet.h"
+#include "ui/player_hud.h"
 
 PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> hud, std::shared_ptr<DamageEffects> damageEffects, PlayerAttributeConfig config)
 	: hud(hud),
@@ -23,8 +24,10 @@ PlayerAttributeComponent::PlayerAttributeComponent(std::shared_ptr<IPlayerHud> h
 void PlayerAttributeComponent::Update(float dt)
 {
 	this->accumulator += dt;
-	if (this->accumulator >= this->shieldRechargeDelay &&
-		this->shields < this->maxShields)
+	if (
+        this->accumulator >= this->shieldRechargeDelay &&
+		this->shields < this->maxShields
+    )
 	{
 		auto shieldRechargeIncremenet = this->shieldRecharge * dt;
 		if (this->maxShields < shieldRechargeIncremenet + this->shields)
@@ -37,7 +40,15 @@ void PlayerAttributeComponent::Update(float dt)
 		}
 	}
 
-	this->hud->Update(this->health, this->maxHealth, this->shields, this->maxShields, this->score);
+    PlayerAttributeUpdate update{
+        this->health,
+        this->maxHealth,
+        this->shields,
+        this->maxShields,
+        this->score
+    };
+
+	this->hud->Update(update);
 }
 
 void PlayerAttributeComponent::RegisterKill(float score)

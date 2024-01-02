@@ -20,8 +20,13 @@ public:
 
 	~RadialBeamWeaponComponentFactory() override = default;
 
-    std::shared_ptr<IWeaponComponent> Construct(const std::shared_ptr<IBulletSystem>& bulletSystem, WeaponSlot slot, float delay) const override {
-		return std::make_shared<RadialBeamWeaponComponent>(bulletSystem, factory, slot, duration, delay, arcAngle, numBeams);
+    std::shared_ptr<IWeaponComponent> Construct(
+        const std::shared_ptr<IBulletSystem>& bulletSystem,
+        const std::shared_ptr<IPlayerHud>& hud,
+        WeaponSlot slot,
+        float delay
+    ) const override {
+		return std::make_shared<RadialBeamWeaponComponent>(bulletSystem, factory, hud, slot, duration, delay, arcAngle, numBeams);
 	};
 
 private:

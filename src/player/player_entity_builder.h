@@ -15,7 +15,12 @@ class RayCaster;
 class PlayerEntityBuilder : public IEntityObjectBuilder<PlayerObjects>, public Player
 {
 public:
-	PlayerEntityBuilder(std::shared_ptr<ITextureAtlas> textureAtlas, std::shared_ptr<IBulletSystem> bulletSystem, sf::FloatRect bounds);
+	PlayerEntityBuilder(
+        std::shared_ptr<ITextureAtlas> textureAtlas,
+        std::shared_ptr<IBulletSystem> bulletSystem,
+        std::shared_ptr<IPlayerHud> hud,
+        sf::FloatRect bounds
+    );
 	virtual ~PlayerEntityBuilder() = default;
 	virtual EntityManifest<PlayerObjects> Build() override;
 private:
@@ -27,6 +32,7 @@ private:
 	std::shared_ptr<RayCaster> rayCaster;
 	std::shared_ptr<ITextureAtlas> textureAtlas;
 	std::shared_ptr<IBulletSystem> bulletSystem;
+    std::shared_ptr<IPlayerHud> hud;
 
 	sf::FloatRect bounds;
 };

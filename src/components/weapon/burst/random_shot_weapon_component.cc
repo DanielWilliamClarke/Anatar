@@ -5,15 +5,17 @@
 #include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
+#include "ui/i_player_hud.h"
 
 RandomShotWeaponComponent::RandomShotWeaponComponent(
     std::shared_ptr<IBulletSystem> bulletSystem,
     std::shared_ptr<IBulletFactory> factory,
+    std::shared_ptr<IPlayerHud> hud,
     std::shared_ptr<IRandomNumberSource<int>> randSource,
     WeaponSlot slot,
     float numBullets
 )
-	: IWeaponComponent(slot), bulletSystem(bulletSystem), factory(factory), randSource(randSource), numBullets(numBullets)
+	: IWeaponComponent(hud, slot), bulletSystem(bulletSystem), factory(factory), randSource(randSource), numBullets(numBullets)
 {}
 
 void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
@@ -26,4 +28,14 @@ void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		auto traj = BulletTrajectory(position, arcVelocity, speed);
 		this->bulletSystem->FireBullet(factory, traj, config);
 	}
+}
+
+WeaponState RandomShotWeaponComponent::getWeaponState() const
+{
+    return {
+        "RandomShot",
+        1.0,
+        0.0,
+        true
+    };
 }

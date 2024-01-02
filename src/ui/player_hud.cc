@@ -23,11 +23,11 @@ PlayerHud::PlayerHud(sf::FloatRect bounds)
 	shieldBar.setPosition(margin, bounds.height - shieldBarBounds.height - margin * 2.5f);
 }
 
-void PlayerHud::Update(float health, float maxHealth, float shields, float maxShields, float score)
+void PlayerHud::Update(PlayerAttributeUpdate& attributeUpdate)
 {
 	auto barMaxWidth = bounds.width - (margin * 2);
 
-	auto healthPercentage = health / maxHealth;
+	auto healthPercentage = attributeUpdate.health / attributeUpdate.maxHealth;
 	healthBar.setSize(sf::Vector2f(barMaxWidth * healthPercentage, 15.0f));
 	if (healthPercentage > 0.5f)
 	{
@@ -38,7 +38,7 @@ void PlayerHud::Update(float health, float maxHealth, float shields, float maxSh
 		healthBar.setFillColor(BlendColor(sf::Color::Yellow, sf::Color::Red, (healthPercentage - 0.0f) / (0.5f - 0.0f)));
 	}
 
-	auto shieldPercentage = shields / maxShields;
+	auto shieldPercentage = attributeUpdate.shields / attributeUpdate.maxShields;
 	shieldBar.setSize(sf::Vector2f(barMaxWidth * shieldPercentage, 10.0f));
 	if (shieldPercentage > 0.5f)
 	{
@@ -49,14 +49,19 @@ void PlayerHud::Update(float health, float maxHealth, float shields, float maxSh
 		shieldBar.setFillColor(BlendColor(sf::Color(8, 146, 208), sf::Color::Red, (shieldPercentage - 0.0f) / (0.5f - 0.0f)));
 	}
 
-	playerText.setString("Health: " + std::to_string((int)health) + " - Shields: " + std::to_string((int)shields));
+	playerText.setString("Health: " + std::to_string((int)attributeUpdate.health) + " - Shields: " + std::to_string((int)attributeUpdate.shields));
 	auto playerBounds = playerText.getLocalBounds();
 	auto textHeight = bounds.height - playerBounds.height - margin * 4.0f;
 	playerText.setPosition(margin, textHeight);
 
-	scoreText.setString("Score: " + std::to_string((int)score));
+	scoreText.setString("Score: " + std::to_string((int)attributeUpdate.score));
 	auto scoreBounds = scoreText.getLocalBounds();
 	scoreText.setPosition(bounds.width - scoreBounds.width - margin, textHeight);
+}
+
+void PlayerHud::Update(WeaponTriggerState& triggerState, WeaponState& weaponState)
+{
+
 }
 
 void PlayerHud::Draw(const std::shared_ptr<IRenderer>& renderer) const

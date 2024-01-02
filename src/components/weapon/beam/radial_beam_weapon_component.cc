@@ -1,22 +1,24 @@
 #include "radial_beam_weapon_component.h"
 
-#include "util/math_utils.h"
+#include <range/v3/algorithm.hpp>
 
-#include "bullet/i_bullet_system.h"
+#include "util/math_utils.h"
 #include "bullet/i_bullet_system.h"
 #include "bullet/bullet.h"
 #include "bullet/types/beam.h"
+#include "ui/i_player_hud.h"
 
 RadialBeamWeaponComponent::RadialBeamWeaponComponent(
     std::shared_ptr<IBulletSystem> bulletSystem,
     std::shared_ptr<IBulletFactory> factory,
+    std::shared_ptr<IPlayerHud> hud,
     WeaponSlot slot,
     float duration,
     float coolDown,
     float arcAngle,
     float numBeams
 )
-    : IWeaponComponent(slot),
+    : IWeaponComponent(hud, slot),
       bulletSystem(bulletSystem),
       factory(factory),
       arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
@@ -44,7 +46,8 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
 
 			auto beam = std::dynamic_pointer_cast<Beam>(
-				this->bulletSystem->FireBullet(factory, traj, config));
+				this->bulletSystem->FireBullet(factory, traj, config)
+            );
 
 			beams.push_back(beam);
 			theta += angleBetween;
@@ -55,31 +58,41 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 	this->accumulator += this->clock.restart().asSeconds();
 	if (this->accumulator < this->duration)
 	{
-		for (auto beam : beams)
-		{
-			if (!beam->isSpent())
-			{
-				beam->Reignite();
-			}
-		}
+        ranges::for_each(beams, [=](std::shared_ptr<Beam>& b) {
+            if (!b->isSpent())
+            {
+                b->Reignite();
+            }
+        });
 		return;
 	}
 
 	// Clear any spent beams
-	this->beams.erase(
-		std::remove_if(
-			this->beams.begin(), this->beams.end(),
-			[=](std::shared_ptr<Beam>& b) -> bool {
-				return b->isSpent();
-			}),
-		this->beams.end());
+    std::erase_if(this->beams, [=](std::shared_ptr<Beam>& b) -> bool {
+        return b->isSpent();
+    });
 
-	if (!beams.size() && this->accumulator > this->duration + config.lifeTime + this->coolDown)
+	if (
+        beams.empty() &&
+        this->accumulator > this->duration + config.lifeTime + this->coolDown
+    )
 	{
 		this->accumulator = 0;
 	}
 }
 
 void RadialBeamWeaponComponent::Cease() {
-	std::for_each(beams.begin(), beams.end(), [=](std::shared_ptr<Beam>& b) { b->Cease(); });
+	ranges::for_each(beams, [=](std::shared_ptr<Beam>& b) {
+        b->Cease();
+    });
+}
+
+WeaponState RadialBeamWeaponComponent::getWeaponState() const
+{
+    return {
+        "MultiBeam",
+        this->duration + this->coolDown,
+        this->accumulator,
+        true
+    };
 }

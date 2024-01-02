@@ -46,7 +46,7 @@ void Enemy::Update(const CollisionQuadTree& quadTree, float dt)
 		this->InitBullets();
 	}
 
-    WeaponStateConfig weaponState {
+    WeaponTriggerState weaponState {
         {{WeaponSlot::ONE, true}},
         true,
     };
