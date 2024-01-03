@@ -25,6 +25,7 @@
 #include "bullet/bullet_system.h"
 #include "util/ray_caster.h"
 #include "player/player_input.h"
+#include "components/weapon/burst/random_shot_weapon_component_factory.h"
 
 PlayStateBuilder::PlayStateBuilder(sf::FloatRect bounds, std::shared_ptr<ITextureAtlas> textureAtlas)
   	: bounds(bounds), textureAtlas(textureAtlas)
@@ -47,7 +48,9 @@ std::shared_ptr<IWeaponComponent> PlayStateBuilder::BuildDebrisSystem(std::share
 	auto factory = std::make_shared<DebrisFactory>();
 	auto seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 	auto randGenerator = std::make_shared<RandomNumberMersenneSource<int>>(seed);
-	return std::make_shared<RandomShotWeaponComponent>(bulletSystem, factory, nullptr, randGenerator, WeaponSlot::ONE, 5.0f);
+
+    auto weaponFactory = std::make_shared<RandomShotWeaponComponentFactory>(factory, randGenerator, 5.0f);
+    return weaponFactory->Construct(bulletSystem, nullptr, WeaponSlot::ONE, 0.0f);
 }
 
 std::shared_ptr<IPlayerHud> PlayStateBuilder::BuildPlayerHud() const

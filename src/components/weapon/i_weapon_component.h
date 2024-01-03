@@ -2,17 +2,9 @@
 #define I_WEAPON_COMPONENT_H
 
 #include <SFML/Graphics.hpp>
+#include "components/weapon/accessors/weapon_accessors.h"
 
 struct BulletConfig;
-class IPlayerHud;
-
-enum WeaponSlot : unsigned int {
-    NONE = 999,
-    ONE = 1,
-    TWO = 2,
-    THREE = 3,
-    FOUR = 4,
-};
 
 struct WeaponTriggerState
 {
@@ -29,13 +21,10 @@ struct WeaponState
 };
 
 class IWeaponComponent
+    : public WeaponHudAccess,
+      public WeaponSlotAccess
 {
 public:
-    IWeaponComponent(
-        std::shared_ptr<IPlayerHud> hud,
-        WeaponSlot slot
-    );
-
 	virtual ~IWeaponComponent() = default;
 
     [[nodiscard]] virtual WeaponState getWeaponState() const = 0;
@@ -44,10 +33,6 @@ public:
     virtual void Fire(sf::Vector2f position, BulletConfig& config) = 0;
     void Update(WeaponTriggerState& triggerState);
     virtual void Cease();
-
-protected:
-    std::shared_ptr<IPlayerHud> hud;
-    WeaponSlot slot;
 };
 
 #endif

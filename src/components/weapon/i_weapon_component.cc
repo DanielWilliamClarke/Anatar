@@ -1,13 +1,6 @@
 #include "i_weapon_component.h"
 #include "ui/i_player_hud.h"
 
-IWeaponComponent::IWeaponComponent(
-    std::shared_ptr<IPlayerHud> hud,
-    WeaponSlot slot
-)
-    : hud(hud), slot(slot)
-{}
-
 WeaponSlot IWeaponComponent::getSlot() const
 {
     return this->slot;

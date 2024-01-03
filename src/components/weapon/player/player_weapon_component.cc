@@ -2,11 +2,8 @@
 
 #include "ui/i_player_hud.h"
 
-PlayerWeaponComponent::PlayerWeaponComponent(
-    std::shared_ptr<IWeaponComponent> weaponComponent,
-    std::shared_ptr<IPlayerHud> hud
-)
-	: IWeaponComponent(hud, WeaponSlot::NONE), weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
+PlayerWeaponComponent::PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent)
+	: weaponComponent(weaponComponent), gunTemp(0.0f), gunReload(0.2f), gunReloadTime(0.0f)
 {}
 
 WeaponSlot PlayerWeaponComponent::getSlot() const

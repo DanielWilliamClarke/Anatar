@@ -9,19 +9,12 @@
 #include "ui/i_player_hud.h"
 
 RadialBeamWeaponComponent::RadialBeamWeaponComponent(
-    std::shared_ptr<IBulletSystem> bulletSystem,
-    std::shared_ptr<IBulletFactory> factory,
-    std::shared_ptr<IPlayerHud> hud,
-    WeaponSlot slot,
     float duration,
     float coolDown,
     float arcAngle,
     float numBeams
 )
-    : IWeaponComponent(hud, slot),
-      bulletSystem(bulletSystem),
-      factory(factory),
-      arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
+    : arcAngle(numBeams > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
       duration(duration),
       coolDown(coolDown),
       numBeams(numBeams),
@@ -46,7 +39,7 @@ void RadialBeamWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
 
 			auto beam = std::dynamic_pointer_cast<Beam>(
-				this->bulletSystem->FireBullet(factory, traj, config)
+				this->bulletSystem->FireBullet(this->bulletFactory, traj, config)
             );
 
 			beams.push_back(beam);

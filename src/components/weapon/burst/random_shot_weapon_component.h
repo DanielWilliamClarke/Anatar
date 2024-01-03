@@ -10,15 +10,14 @@
 class IBulletSystem;
 class IBulletFactory;
 
-class RandomShotWeaponComponent : public IWeaponComponent
+class RandomShotWeaponComponent
+    : public IWeaponComponent,
+      public WeaponBulletSystemAccess,
+      public WeaponBulletFactoryAccess
 {
 public:
 	RandomShotWeaponComponent(
-        std::shared_ptr<IBulletSystem> bulletSystem,
-        std::shared_ptr<IBulletFactory> factory,
-        std::shared_ptr<IPlayerHud> hud,
         std::shared_ptr<IRandomNumberSource<int>> randSource,
-        WeaponSlot slot,
         float numBullets
     );
 
@@ -28,8 +27,6 @@ public:
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
-	std::shared_ptr<IBulletSystem> bulletSystem;
-	std::shared_ptr<IBulletFactory> factory;
 	std::shared_ptr<IRandomNumberSource<int>> randSource;
 	float numBullets;
 };

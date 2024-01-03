@@ -20,8 +20,16 @@ public:
         const std::shared_ptr<IPlayerHud>& hud,
         WeaponSlot slot,
         float delay
-    ) const override {
-		return std::make_shared<SingleShotWeaponComponent>(bulletSystem, factory, hud, slot, delay);
+    ) const override
+    {
+        auto component = std::make_shared<SingleShotWeaponComponent>(delay);
+
+        component->setBulletSystem(bulletSystem);
+        component->setBulletFactory(factory);
+        component->setHud(hud);
+        component->setSlot(slot);
+
+        return component;
 	};
 private:
 	std::shared_ptr<IBulletFactory> factory;

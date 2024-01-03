@@ -11,14 +11,13 @@ class IBulletSystem;
 class IBulletFactory;
 class Beam;
 
-class RadialBeamWeaponComponent : public IWeaponComponent
+class RadialBeamWeaponComponent
+    : public IWeaponComponent,
+      public WeaponBulletSystemAccess,
+      public WeaponBulletFactoryAccess
 {
 public:
 	RadialBeamWeaponComponent(
-        std::shared_ptr<IBulletSystem> bulletSystem,
-        std::shared_ptr<IBulletFactory> factory,
-        std::shared_ptr<IPlayerHud> hud,
-        WeaponSlot slot,
         float duration,
         float coolDown,
         float arcAngle,
@@ -31,8 +30,6 @@ public:
 	void Cease() override;
 
 private:
-	std::shared_ptr<IBulletSystem> bulletSystem;
-	std::shared_ptr<IBulletFactory> factory;
 	std::vector<std::shared_ptr<Beam>> beams;
 
 	float arcAngle;

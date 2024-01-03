@@ -11,14 +11,13 @@ class IBulletSystem;
 class IBulletFactory;
 class Beam;
 
-class SingleBeamWeaponComponent : public IWeaponComponent
+class SingleBeamWeaponComponent
+    : public IWeaponComponent,
+      public WeaponBulletSystemAccess,
+      public WeaponBulletFactoryAccess
 {
 public:
 	SingleBeamWeaponComponent(
-        std::shared_ptr<IBulletSystem> bulletSystem,
-        std::shared_ptr<IBulletFactory> factory,
-        std::shared_ptr<IPlayerHud> hud,
-        WeaponSlot slot,
         float duration,
         float coolDown
     );
@@ -29,10 +28,7 @@ public:
 	void Cease() override;
 
 private:
-	std::shared_ptr<IBulletSystem> bulletSystem;
-	std::shared_ptr<IBulletFactory> factory;
-	std::shared_ptr<Beam> beam;
-
+    std::shared_ptr<Beam> beam;
 	sf::Clock clock;
 	float accumulator;
 	float duration;

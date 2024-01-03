@@ -4,14 +4,13 @@
 #include <memory>
 
 #include "components/weapon/i_weapon_component.h"
+#include "components/weapon/accessors/weapon_accessors.h"
 
-class PlayerWeaponComponent : public IWeaponComponent
+class PlayerWeaponComponent
+    : public IWeaponComponent
 {
 public:
-	explicit PlayerWeaponComponent(
-        std::shared_ptr<IWeaponComponent> weaponComponent,
-        std::shared_ptr<IPlayerHud> hud
-    );
+	explicit PlayerWeaponComponent(std::shared_ptr<IWeaponComponent> weaponComponent);
 	~PlayerWeaponComponent() override = default;
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
@@ -29,4 +28,4 @@ private:
     bool canFire;
 };
 
-#endif //PLAYER_WEAPON_COMPONENT_H
+#endif

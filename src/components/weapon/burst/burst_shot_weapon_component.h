@@ -10,14 +10,13 @@
 class IBulletSystem;
 class IBulletFactory;
 
-class BurstShotWeaponComponent : public IWeaponComponent
+class BurstShotWeaponComponent
+    : public IWeaponComponent,
+      public WeaponBulletSystemAccess,
+      public WeaponBulletFactoryAccess
 {
 public:
 	BurstShotWeaponComponent(
-        std::shared_ptr<IBulletSystem> bulletSystem,
-        std::shared_ptr<IBulletFactory> factory,
-        std::shared_ptr<IPlayerHud> hud,
-        WeaponSlot slot,
         float numBullets,
         float delay,
         float arcAngle,
@@ -29,9 +28,6 @@ public:
 	void Fire(sf::Vector2f position, BulletConfig& config) override;
 
 private:
-	std::shared_ptr<IBulletSystem> bulletSystem;
-	std::shared_ptr<IBulletFactory> factory;
-
 	float arcAngle;
 	float offsetAngle;
 	float numBullets;

@@ -8,14 +8,10 @@
 #include "ui/i_player_hud.h"
 
 RandomShotWeaponComponent::RandomShotWeaponComponent(
-    std::shared_ptr<IBulletSystem> bulletSystem,
-    std::shared_ptr<IBulletFactory> factory,
-    std::shared_ptr<IPlayerHud> hud,
     std::shared_ptr<IRandomNumberSource<int>> randSource,
-    WeaponSlot slot,
     float numBullets
 )
-	: IWeaponComponent(hud, slot), bulletSystem(bulletSystem), factory(factory), randSource(randSource), numBullets(numBullets)
+	: randSource(randSource), numBullets(numBullets)
 {}
 
 void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
@@ -26,7 +22,7 @@ void RandomShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config
 		auto speed = config.speed * (float)randSource->Generate(50, 250) / 100;
 		sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
 		auto traj = BulletTrajectory(position, arcVelocity, speed);
-		this->bulletSystem->FireBullet(factory, traj, config);
+		this->bulletSystem->FireBullet(this->bulletFactory, traj, config);
 	}
 }
 

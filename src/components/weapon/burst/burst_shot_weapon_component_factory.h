@@ -25,7 +25,14 @@ public:
         WeaponSlot slot,
         float delay
     ) const override {
-		return std::make_shared<BurstShotWeaponComponent>(bulletSystem, factory, hud, slot, numBullets, delay, arcAngle, offsetAngle);
+        auto component = std::make_shared<BurstShotWeaponComponent>(numBullets, delay, arcAngle, offsetAngle);
+
+        component->setBulletSystem(bulletSystem);
+        component->setBulletFactory(factory);
+        component->setHud(hud);
+        component->setSlot(slot);
+
+        return component;
 	};
 
 private:

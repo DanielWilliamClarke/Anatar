@@ -2,25 +2,16 @@
 
 #include "util/math_utils.h"
 
-#include "bullet/i_bullet_system.h"
 #include "bullet/i_bullet_factory.h"
 #include "bullet/bullet.h"
-#include "ui/i_player_hud.h"
 
 BurstShotWeaponComponent::BurstShotWeaponComponent(
-    std::shared_ptr<IBulletSystem> bulletSystem,
-    std::shared_ptr<IBulletFactory> factory,
-    std::shared_ptr<IPlayerHud> hud,
-    WeaponSlot slot,
     float numBullets,
     float delay,
     float arcAngle,
     float offsetAngle
 )
-	:  IWeaponComponent(hud, slot),
-      bulletSystem(bulletSystem),
-      factory(factory),
-      arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
+	: arcAngle(numBullets > 1 ? AngleConversion::ToRadians(arcAngle) : 0.0f),
       offsetAngle(AngleConversion::ToRadians(offsetAngle)),
       delay(delay),
       numBullets(numBullets),
@@ -46,7 +37,7 @@ void BurstShotWeaponComponent::Fire(sf::Vector2f position, BulletConfig& config)
 		{
 			sf::Vector2f arcVelocity(std::cos(theta) * (float)config.affinity, std::sin(theta));
 			auto traj = BulletTrajectory(position, -arcVelocity, config.speed);
-			this->bulletSystem->FireBullet(factory, traj, config);
+			this->bulletSystem->FireBullet(this->bulletFactory, traj, config);
 			theta += angleBetween;
 		}
 	}

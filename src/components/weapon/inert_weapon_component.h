@@ -6,13 +6,10 @@
 class InertWeaponComponent : public IWeaponComponent
 {
 public:
-    InertWeaponComponent()
-        : IWeaponComponent(nullptr, WeaponSlot::NONE)
-    {};
+    InertWeaponComponent() = default;
 	~InertWeaponComponent() override = default;
 
 	void Fire(sf::Vector2f position, BulletConfig& config) override {};
-
     [[nodiscard]] WeaponState getWeaponState() const override {
         return {
             "Inert",
